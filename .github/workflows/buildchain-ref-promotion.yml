@@ -24,7 +24,7 @@ on:
 
 permissions:
   contents: write
-  actions: read
+  actions: write
   checks: write
   issues: write
   id-token: write
