@@ -80,4 +80,7 @@ jobs:
       release-passport-kfd-3-artifact-witness-jsons: .buildchain/release-inputs/kfd-3-artifact.json
       github-release: true
       github-release-notes: Buildchain-managed Agent Hub Demo release evidence and Release Passport.
-      dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs['dry-run'] == 'true' }}
+      # Buildchain v2 only auto-seals release-candidate publication admission for
+      # an exact npm target. Agent Hub Demo is GitHub-Release-only, so keep the
+      # canonical planner fail-closed until Buildchain owns that provider lane.
+      dry-run: true

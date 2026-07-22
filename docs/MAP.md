@@ -26,7 +26,8 @@
 - `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
 - `.github/workflows/verify.yml` — stable protected-branch check surface.
 - `.github/workflows/buildchain-ref-promotion.yml` — thin Buildchain-owned
-  channel promotion and GitHub Release entrypoint.
+  promotion planner; dry-run-only until Buildchain supports sealed
+  GitHub-Release-only admission.
 - `scripts/qualify-release.mjs` — offline fail-closed mutation oracle.
 - `scripts/qualify-buildchain-release.mjs` — product-specific KFD evidence run
   inside the Buildchain release-candidate lifecycle.
