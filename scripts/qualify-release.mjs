@@ -192,8 +192,9 @@ writeJson(mutatedDeclaration, declaration);
     "buildchain", "kfd", "hub", "inspect", "--cwd", cwd,
     "--declaration", mutatedDeclaration, "--for", "agent", "--json",
   ]);
-  const stderr = result.stderr || result.error?.message || "";
-  const matched = result.status !== 0 && stderr.includes("kfd-agent-hub-declaration-invalid");
+  const stderr = result.stderr || "";
+  const diagnostic = [stderr, result.stdout || "", result.error?.message || ""].join("\n");
+  const matched = result.status !== 0 && diagnostic.includes("kfd-agent-hub-declaration-invalid");
   cases.push({
     id: "declaration-contract-drift",
     category: "declaration",
