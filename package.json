@@ -14,6 +14,7 @@
     "demo": "node src/cli.js demo",
     "inspect": "node src/adapter.js inspect",
     "prepare:release-evidence": "node scripts/prepare-release-evidence.mjs",
+    "qualify:buildchain-release": "node scripts/qualify-buildchain-release.mjs",
     "qualify:passport": "node scripts/qualify-passport.mjs",
     "qualify:release": "node scripts/qualify-release.mjs",
     "runtime100": "node src/adapter.js run --scenario runtime-100",

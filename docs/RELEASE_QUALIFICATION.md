@@ -1,10 +1,12 @@
 # Release qualification
 
-The release workflow starts from a fresh GitHub checkout, installs the exact
-public npm dependency graph, runs the product tests and 100-delivery soak,
-builds the product artifact, and runs the public Buildchain Agent Hub gate. It
-then produces KFD-1, KFD-2, KFD-3, Agent Hub, mutation, and Release Passport
-evidence before uploading a checksummed asset bundle.
+The Buildchain release-candidate workflow starts from a fresh GitHub checkout,
+installs the exact public npm dependency graph, runs the product tests and
+100-delivery soak, builds the product artifact, and runs the public Agent Hub
+gate. It produces KFD-1, KFD-2, KFD-3, Agent Hub, and mutation evidence. After
+a reviewed channel pull request is merged, Buildchain owns version-state
+mutation, publish-gate locking, exact and floating refs, Release Passport
+generation, and GitHub Release publication.
 
 ## Reproduce locally
 
@@ -44,12 +46,13 @@ evidence, and next action. The workflow fails unless all twelve are rejected.
 
 ## Release assets
 
-Tagged releases publish a prerelease containing the product artifact, Agent Hub
+Buildchain-managed releases publish the product artifact, Agent Hub
 report/evidence/verification/adoption lock, KFD witnesses and public claim,
-mutation report, Release Passport, and `SHA256SUMS`. The workflow independently
-verifies the Release Passport before upload. The bundle includes every sibling
-evidence document referenced by the Passport so a downloaded directory can be
-verified without the source checkout.
+mutation report, publish evidence, and Release Passport. Exact prerelease and
+release tags are immutable evidence; floating tags remain Buildchain-owned
+channel refs. The bundle includes every sibling evidence document referenced by
+the Passport so a downloaded directory can be verified without the source
+checkout.
 
 ## Claim and nonclaims
 
