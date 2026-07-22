@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-kfd-3-surface-registry",
+  "product": {
+    "name": "Agent Hub Demo"
+  },
+  "registryPath": ".buildchain/kfd/kfd-3/surfaces.json",
+  "surfaces": [
+    {
+      "id": "doc:agents.md",
+      "kind": "documentation",
+      "name": "AGENTS.md",
+      "visibility": "public",
+      "participantFacing": true,
+      "state": "declared",
+      "sourcePath": "AGENTS.md",
+      "artifactPath": "AGENTS.md",
+      "evidencePath": "AGENTS.md",
+      "detectionMethod": "documentation-scan",
+      "policy": {},
+      "facts": {
+        "path": "AGENTS.md",
+        "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+      },
+      "declaration": {
+        "owner": "product",
+        "source": "buildchain kfd 3 register"
+      }
+    },
+    {
+      "id": "doc:docs/map.md",
+      "kind": "documentation",
+      "name": "docs/MAP.md",
+      "visibility": "public",
+      "participantFacing": true,
+      "state": "declared",
+      "sourcePath": "docs/MAP.md",
+      "artifactPath": "docs/MAP.md",
+      "evidencePath": "docs/MAP.md",
+      "detectionMethod": "documentation-scan",
+      "policy": {},
+      "facts": {
+        "path": "docs/MAP.md",
+        "sha256": "856e574e6e2b55a8875ebddd08806e61a353d1cee2feca138c6c80501b442bbf"
+      },
+      "declaration": {
+        "owner": "product",
+        "source": "buildchain kfd 3 register"
+      }
+    },
+    {
+      "id": "doc:docs/release_qualification.md",
+      "kind": "documentation",
+      "name": "docs/RELEASE_QUALIFICATION.md",
+      "visibility": "public",
+      "participantFacing": true,
+      "state": "declared",
+      "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+      "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+      "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+      "detectionMethod": "documentation-scan",
+      "policy": {},
+      "facts": {
+        "path": "docs/RELEASE_QUALIFICATION.md",
+        "sha256": "225e96483e876a761032d78a8d31c89cc6a8aa85b4f1435490274bddccb742b0"
+      },
+      "declaration": {
+        "owner": "product",
+        "source": "buildchain kfd 3 register"
+      }
+    },
+    {
+      "id": "doc:readme.md",
+      "kind": "documentation",
+      "name": "README.md",
+      "visibility": "public",
+      "participantFacing": true,
+      "state": "declared",
+      "sourcePath": "README.md",
+      "artifactPath": "README.md",
+      "evidencePath": "README.md",
+      "detectionMethod": "documentation-scan",
+      "policy": {},
+      "facts": {
+        "path": "README.md",
+        "sha256": "b651978922d963512f98f0b884f3b54c387ae78b5043c5e0e60058a55d3b2bb4"
+      },
+      "declaration": {
+        "owner": "product",
+        "source": "buildchain kfd 3 register"
+      }
+    }
+  ],
+  "policy": {
+    "detectedButUnregistered": "warn",
+    "declaredButMissing": "fail"
+  }
+}
