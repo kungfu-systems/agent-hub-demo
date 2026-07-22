@@ -1,0 +1,89 @@
+name: Buildchain Ref Promotion
+
+on:
+  workflow_run:
+    workflows: ["Verify"]
+    branches:
+      - "alpha/v*/v*"
+      - "release/v*/v*"
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Verified alpha/release commit to promote; defaults to the current workflow ref SHA
+        required: false
+        default: ""
+      target-ref:
+        description: Buildchain channel branch to promote
+        required: true
+        default: alpha/v0/v0.1
+      dry-run:
+        description: Only print planned ref and release updates
+        required: true
+        default: "true"
+
+permissions:
+  contents: write
+  actions: read
+  checks: write
+  issues: write
+  id-token: write
+
+jobs:
+  reject-manual-apply:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs['dry-run'] != 'true' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Reject manual apply
+        run: |
+          echo "::error::Manual Buildchain ref promotion is limited to dry-run."
+          echo "::error::Merge through alpha/release and let a successful Verify workflow_run promote refs."
+          exit 1
+
+  promote:
+    if: >-
+      ${{
+        (github.event_name == 'workflow_dispatch' && inputs['dry-run'] == 'true') ||
+        (
+          github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'push'
+        )
+      }}
+    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v2
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+    with:
+      target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
+      target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+      package-manager: npm
+      artifact-name: agent-hub-demo
+      release-candidate-workflow-file: build.yml
+      release-candidate-workflow-name: Build
+      required-status-check: "check / check"
+      branch-protection-bypass-users: kungfu-origin
+      artifact-patterns: |
+        agent-hub-demo-linux-x64-*
+        agent-hub-demo-macos-*
+        agent-hub-demo-windows-x64-*
+      required-artifact-count: 3
+      publish-artifact-kind: custom
+      publish-target: github-release
+      publish-required-artifacts-json: >-
+        [{"group":"release","kind":"github-release","name":"agent-hub-demo","ref_template":"v{version}"}]
+      publish-package-main: "@kungfu-tech/agent-hub-demo"
+      trusted-publishing: false
+      release-passport: true
+      release-passport-product-name: Agent Hub Demo
+      release-passport-kfd-1-witness-jsons: .buildchain/release-inputs/kfd-1-witness.json
+      release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
+      release-passport-kfd-3-prebuild-witness-jsons: .buildchain/release-inputs/kfd-3-prebuild.json
+      release-passport-kfd-3-artifact-witness-jsons: .buildchain/release-inputs/kfd-3-artifact.json
+      publication-auto-admission: true
+      publication-auto-no-gate: true
+      publication-publisher-workflow-path: .github/workflows/buildchain-ref-promotion.yml
+      publication-product: Agent Hub Demo
+      publication-target: github-release:kungfu-systems/agent-hub-demo
+      publication-package-name: "@kungfu-tech/agent-hub-demo"
+      github-release: true
+      github-release-notes: Buildchain-managed Agent Hub Demo release evidence and Release Passport.
+      dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs['dry-run'] == 'true' }}
