@@ -62,7 +62,7 @@
       "policy": {},
       "facts": {
         "path": "docs/RELEASE_QUALIFICATION.md",
-        "sha256": "225e96483e876a761032d78a8d31c89cc6a8aa85b4f1435490274bddccb742b0"
+        "sha256": "c35ef40d93c7a206216be4d477c28dcf8b1b9898144f6732307ad85c557d93f2"
       },
       "declaration": {
         "owner": "product",

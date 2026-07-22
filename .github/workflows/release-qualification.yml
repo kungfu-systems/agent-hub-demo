@@ -146,9 +146,13 @@ jobs:
           cp .buildchain/release-qualification/kfd-3-artifact.json "${asset_dir}/"
           cp .buildchain/release-qualification/qualification-report.json "${asset_dir}/"
           cp .buildchain/release-qualification/passport-qualification.json "${asset_dir}/"
+          cp .buildchain/release-passport/agent-index.json "${asset_dir}/"
           cp .buildchain/release-passport/buildchain.release.json "${asset_dir}/"
           cp .buildchain/release-passport/artifact-evidence.json "${asset_dir}/"
           cp .buildchain/release-passport/check-report.json "${asset_dir}/"
+          cp .buildchain/release-passport/impact.json "${asset_dir}/"
+          cp .buildchain/release-passport/llms.txt "${asset_dir}/"
+          cp .buildchain/release-passport/product-mechanism.json "${asset_dir}/"
           (
             cd "${asset_dir}"
             sha256sum ./* > SHA256SUMS
