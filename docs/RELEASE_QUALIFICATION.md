@@ -47,7 +47,9 @@ evidence, and next action. The workflow fails unless all twelve are rejected.
 Tagged releases publish a prerelease containing the product artifact, Agent Hub
 report/evidence/verification/adoption lock, KFD witnesses and public claim,
 mutation report, Release Passport, and `SHA256SUMS`. The workflow independently
-verifies the Release Passport before upload.
+verifies the Release Passport before upload. The bundle includes every sibling
+evidence document referenced by the Passport so a downloaded directory can be
+verified without the source checkout.
 
 ## Claim and nonclaims
 
