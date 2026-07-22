@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      buildchain-ref:
+        description: Temporary Buildchain runtime ref for trusted manual validation
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
+    with:
+      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
+      node-version: "22"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm test && npm run runtime100
+      kfd-agent-hub: auto
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo
+      artifact-paths: |
+        dist
+        .buildchain/artifacts

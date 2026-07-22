@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: KFD protocol proposals and counterevidence
+    url: https://github.com/kungfu-systems/kfd/issues/new/choose
+    about: Use KFD governance for protocol semantics, schemas, and conformance policy.
+  - name: Buildchain workflow issues
+    url: https://github.com/kungfu-systems/buildchain/issues/new/choose
+    about: Report reusable workflow, Passport, and release orchestration problems upstream.

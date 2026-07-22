@@ -1,0 +1,22 @@
+schema = 1
+
+[project]
+type = "package"
+name = "agent-hub-demo"
+
+[version]
+required = true
+
+[[version.files]]
+type = "json"
+path = "package.json"
+key = "version"
+
+[lifecycle.install]
+command = "npm ci --registry=https://registry.npmjs.org/"
+
+[lifecycle.build]
+command = "npm run build"
+
+[lifecycle.verify]
+command = "npm run check"
