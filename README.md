@@ -51,6 +51,18 @@ The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json
 runs the fixed public KFD Hub suite against the real adapter, and writes its
 lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`.
 
+Run the release qualification after that positive gate:
+
+```bash
+npm run qualify:release
+```
+
+The qualification oracle performs twelve deliberate offline mutations across
+the declaration, adapter artifact, report and roots, policy scope, and
+export/import result. Every case must fail closed with a stable machine error
+and an explicit owner, evidence pointer, and next action. See
+[`docs/RELEASE_QUALIFICATION.md`](docs/RELEASE_QUALIFICATION.md).
+
 ## Agent adapter
 
 The adapter uses the public KFD Agent Hub JSONL stdio envelopes:
@@ -89,6 +101,8 @@ hosted operation are outside the current claim.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) covers local development and DCO.
 - [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json) is the one
   builder-owned adoption declaration.
+- [`.buildchain/kfd/kfd-2/registry.json`](.buildchain/kfd/kfd-2/registry.json)
+  declares the limited public release claim and residual risk.
 - [`src/hub.js`](src/hub.js) is the product implementation.
 - [`src/adapter.js`](src/adapter.js) is the black-box KFD adapter.
 

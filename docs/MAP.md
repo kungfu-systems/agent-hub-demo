@@ -17,8 +17,16 @@
 ## Build and review
 
 - `.buildchain/kfd/agent-hub.json` — the single adoption declaration.
+- `.buildchain/kfd/kfd-2/registry.json` — product-owned public release claim,
+  audit boundary, responsibility, and residual risk.
+- `.buildchain/kfd/kfd-3/surfaces.json` — registered public collaboration
+  surfaces used by the release witness.
 - `.buildchain/buildchain.toml` — lifecycle commands.
 - `.github/workflows/build.yml` — public Buildchain consumer workflow.
+- `.github/workflows/release-qualification.yml` — clean-clone qualification,
+  Release Passport verification, public asset upload, and tagged prerelease.
+- `scripts/qualify-release.mjs` — offline fail-closed mutation oracle.
+- `docs/RELEASE_QUALIFICATION.md` — exact release evidence and claim limits.
 - `CONTRIBUTING.md` — contribution, DCO, and upstream-boundary guidance.
 
 ## Evidence boundary
