@@ -21,12 +21,17 @@
   audit boundary, responsibility, and residual risk.
 - `.buildchain/kfd/kfd-3/surfaces.json` — registered public collaboration
   surfaces used by the release witness.
-- `.buildchain/buildchain.toml` — lifecycle commands.
-- `.github/workflows/build.yml` — public Buildchain consumer workflow.
-- `.github/workflows/release-qualification.yml` — clean-clone qualification,
-  Release Passport verification, public asset upload, and tagged prerelease.
+- `.buildchain/buildchain.toml` — semver/auto version state and lifecycle
+  commands.
+- `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
+- `.github/workflows/verify.yml` — stable protected-branch check surface.
+- `.github/workflows/buildchain-ref-promotion.yml` — thin Buildchain-owned
+  channel promotion and GitHub Release entrypoint.
 - `scripts/qualify-release.mjs` — offline fail-closed mutation oracle.
+- `scripts/qualify-buildchain-release.mjs` — product-specific KFD evidence run
+  inside the Buildchain release-candidate lifecycle.
 - `docs/RELEASE_QUALIFICATION.md` — exact release evidence and claim limits.
+- `docs/versioning.md` — active Buildchain line and KFD-1 version-impact log.
 - `CONTRIBUTING.md` — contribution, DCO, and upstream-boundary guidance.
 
 ## Evidence boundary

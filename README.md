@@ -98,6 +98,8 @@ hosted operation are outside the current claim.
 ## Project map
 
 - [`docs/MAP.md`](docs/MAP.md) routes product users and reviewers.
+- [`docs/versioning.md`](docs/versioning.md) records the Buildchain release line
+  and version-impact decisions.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) covers local development and DCO.
 - [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json) is the one
   builder-owned adoption declaration.
