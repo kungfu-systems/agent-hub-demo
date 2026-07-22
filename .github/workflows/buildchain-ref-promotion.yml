@@ -78,12 +78,6 @@ jobs:
       release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
       release-passport-kfd-3-prebuild-witness-jsons: .buildchain/release-inputs/kfd-3-prebuild.json
       release-passport-kfd-3-artifact-witness-jsons: .buildchain/release-inputs/kfd-3-artifact.json
-      publication-auto-admission: true
-      publication-auto-no-gate: true
-      publication-publisher-workflow-path: .github/workflows/buildchain-ref-promotion.yml
-      publication-product: Agent Hub Demo
-      publication-target: github-release:kungfu-systems/agent-hub-demo
-      publication-package-name: "@kungfu-tech/agent-hub-demo"
       github-release: true
       github-release-notes: Buildchain-managed Agent Hub Demo release evidence and Release Passport.
       dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs['dry-run'] == 'true' }}
