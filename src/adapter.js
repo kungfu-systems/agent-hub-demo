@@ -2,6 +2,7 @@
 import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { createInterface } from "node:readline";
+import { pathToFileURL } from "node:url";
 
 import { adapterArtifact } from "./artifact.js";
 import { digest } from "./canonical.js";
@@ -222,7 +223,11 @@ async function jsonl(root) {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+export function isMainModule(moduleUrl, argvPath, toFileUrl = pathToFileURL) {
+  return typeof argvPath === "string" && moduleUrl === toFileUrl(argvPath).href;
+}
+
+if (isMainModule(import.meta.url, process.argv[1])) {
   const command = process.argv[2] ?? "jsonl";
   const root = resolve(arg("--root", `.demo/adapter-${process.pid}`));
   mkdirSync(root, { recursive: true });

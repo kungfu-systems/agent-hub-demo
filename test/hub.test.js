@@ -5,7 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { digest } from "../src/canonical.js";
-import { handshake, respond } from "../src/adapter.js";
+import { handshake, isMainModule, respond } from "../src/adapter.js";
 import { runCoreDemo, runRuntime100 } from "../src/scenarios.js";
 
 function temporary(name) {
@@ -53,6 +53,19 @@ test("adapter uses the frozen request and response envelope contracts", () => {
   assert.equal(response.contract, "kfd.agent-hub-adapter-response/v1");
   assert.equal(response.code, "adapter-ready");
   assert.equal(response.hubs.length, 2);
+});
+
+test("adapter main-module detection uses a standard Windows file URL", () => {
+  const argvPath = String.raw`D:\a\agent-hub-demo\agent-hub-demo\src\adapter.js`;
+  const moduleUrl = "file:///D:/a/agent-hub-demo/agent-hub-demo/src/adapter.js";
+  const windowsPathToFileURL = (value) => {
+    assert.equal(value, argvPath);
+    return new URL(moduleUrl);
+  };
+
+  assert.equal(isMainModule(moduleUrl, argvPath, windowsPathToFileURL), true);
+  assert.notEqual(`file://${argvPath}`, moduleUrl);
+  assert.equal(isMainModule(moduleUrl, undefined, windowsPathToFileURL), false);
 });
 
 test("product-local 100-delivery soak admits every delivery", () => {
