@@ -41,6 +41,16 @@ npm run runtime100
 
 This soak does not replace or qualify the separate KFD Runtime 100 profile.
 
+Run the public Buildchain first-class Agent Hub gate separately:
+
+```bash
+npx --yes --package @kungfu-tech/buildchain@2.14.14 buildchain kfd hub test --for agent
+```
+
+The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
+runs the fixed public KFD Hub suite against the real adapter, and writes its
+lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`.
+
 ## Agent adapter
 
 The adapter uses the public KFD Agent Hub JSONL stdio envelopes:
