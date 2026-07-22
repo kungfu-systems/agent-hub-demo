@@ -6,7 +6,12 @@ installs the exact public npm dependency graph, runs the product tests and
 gate. It produces KFD-1, KFD-2, KFD-3, Agent Hub, and mutation evidence. After
 a reviewed channel pull request is merged, Buildchain owns version-state
 mutation, publish-gate locking, exact and floating refs, Release Passport
-generation, and GitHub Release publication.
+generation, and GitHub Release publication. The current Buildchain v2 automatic
+admission path is npm-specific, while this repository is GitHub-Release-only.
+The checked-in promotion workflow therefore invokes the canonical Buildchain
+planner in dry-run mode and performs no publication mutation. A real publish
+must remain fail-closed until Buildchain exposes a sealed matching provider
+lane; repository-owned tag or release fallbacks are forbidden.
 
 ## Reproduce locally
 
@@ -46,7 +51,8 @@ evidence, and next action. The workflow fails unless all twelve are rejected.
 
 ## Release assets
 
-Buildchain-managed releases publish the product artifact, Agent Hub
+When the matching Buildchain publication lane is available, Buildchain-managed
+releases publish the product artifact, Agent Hub
 report/evidence/verification/adoption lock, KFD witnesses and public claim,
 mutation report, publish evidence, and Release Passport. Exact prerelease and
 release tags are immutable evidence; floating tags remain Buildchain-owned
