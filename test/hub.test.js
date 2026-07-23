@@ -85,6 +85,8 @@ test("product-local 100-delivery soak admits every delivery", () => {
 
 test("publishable Buildchain artifacts never host Hub runtime identities", () => {
   const declaration = JSON.parse(readFileSync(new URL("../.buildchain/kfd/agent-hub.json", import.meta.url)));
+  const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url)));
+  assert.equal(declaration.adapter.version, packageJson.version);
   const strings = [];
   JSON.stringify(declaration, (_key, value) => {
     if (typeof value === "string") strings.push(value);
@@ -170,18 +172,10 @@ test("release publication separates Buildchain artifact IDs from product targets
   );
 });
 
-test("release publication separates Buildchain artifact IDs from product targets", () => {
-  assert.deepEqual(releasePlatforms, [
-    { artifact: "linux-x64", target: "linux-x64" },
-    { artifact: "macos", target: "macos-arm64" },
-    { artifact: "windows-x64", target: "windows-x64" },
-  ]);
-  assert.equal(
-    matchesPayload(
-      "/payloads/agent-hub-demo-macos-123/dist/agent-hub-demo-macos-arm64",
-      "macos",
-      "/dist/agent-hub-demo-macos-arm64",
-    ),
-    true,
+test("release recovery rematerializes ephemeral Passport inputs", () => {
+  const workflow = readFileSync(
+    new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
+    "utf8",
   );
+  assert.match(workflow, /publish-rematerialize-on-resume: true/);
 });
