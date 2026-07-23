@@ -1,21 +1,22 @@
 # Release qualification
 
-The Buildchain release-candidate workflow starts from a fresh GitHub checkout,
-installs the exact public npm dependency graph, runs the product tests and
-100-delivery soak, builds the product artifact, and runs the public Agent Hub
-gate. It produces KFD-1, KFD-2, KFD-3, Agent Hub, and mutation evidence. After
-a reviewed channel pull request is merged, Buildchain owns version-state
-mutation, publish-gate locking, exact and floating refs, Release Passport
-generation, and GitHub Release publication. The current Buildchain v2 automatic
-admission path is npm-specific, while this repository is GitHub-Release-only.
-The checked-in promotion workflow therefore invokes the canonical Buildchain
-planner in dry-run mode and performs no publication mutation. A real publish
-must remain fail-closed until Buildchain exposes a sealed matching provider
-lane; repository-owned tag or release fallbacks are forbidden.
+The Buildchain release-candidate workflow starts from a fresh GitHub checkout
+on Linux x64, macOS arm64, and Windows x64. Every runner installs the exact
+public npm dependency graph, runs the product tests and 100-delivery soak,
+builds a Node SEA executable, smoke-tests that executable without npm, and runs
+the public Agent Hub gate. Each payload contains a platform manifest and
+KFD-1/KFD-2/KFD-3 evidence.
+
+After a reviewed channel pull request is merged, Buildchain owns version-state
+mutation, publish-gate locking, exact and floating refs, sealed GitHub Release
+admission, Release Passport generation, and immutable asset upload. The
+publication target must equal
+`github-release:kungfu-systems/agent-hub-demo`; an empty npm package identity is
+required. Repository-owned tag or release fallbacks remain forbidden.
 
 ## Reproduce locally
 
-Requirements: Node.js 22 or newer, npm, and Git.
+Requirements: Node.js 24 or newer, npm, and Git.
 
 ```bash
 npm ci --registry=https://registry.npmjs.org/
@@ -51,14 +52,14 @@ evidence, and next action. The workflow fails unless all twelve are rejected.
 
 ## Release assets
 
-When the matching Buildchain publication lane is available, Buildchain-managed
-releases publish the product artifact, Agent Hub
-report/evidence/verification/adoption lock, KFD witnesses and public claim,
-mutation report, publish evidence, and Release Passport. Exact prerelease and
-release tags are immutable evidence; floating tags remain Buildchain-owned
-channel refs. The bundle includes every sibling evidence document referenced by
-the Passport so a downloaded directory can be verified without the source
-checkout.
+Buildchain-managed releases publish three standalone executables, their
+per-platform checksum and binary manifest, `SHA256SUMS`, the product artifact,
+Agent Hub report/evidence/verification/adoption lock, all platform KFD-1 and
+KFD-3 witnesses, the KFD-2 public claim, mutation report, publish evidence, and
+Release Passport. Exact prerelease and release tags are immutable evidence;
+floating tags remain Buildchain-owned channel refs. The bundle includes every
+sibling evidence document referenced by the Passport so a downloaded directory
+can be verified without the source checkout.
 
 ## Claim and nonclaims
 

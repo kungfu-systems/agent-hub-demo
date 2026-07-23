@@ -19,7 +19,7 @@
   "claims": [
     {
       "id": "first-party-clean-room-structural-independence",
-      "statement": "The first-party demo uses two independently initialized file-backed content-addressed Hub stores and preserves the exact public KFD Agent Hub profile roots exercised by the release qualification workflow.",
+      "statement": "The first-party demo uses two independently initialized file-backed content-addressed Hub stores, embeds the exact public KFD Agent Hub profile facts into three standalone platform binaries, and binds those binaries to one Buildchain Release Passport.",
       "category": "first-party-structure",
       "source": {
         "path": "README.md"
@@ -32,13 +32,21 @@
         {
           "path": ".buildchain/kfd/agent-hub.json",
           "description": "Pinned public KFD Agent Hub declaration and exact tested capability scope."
+        },
+        {
+          "path": "scripts/build-binary.mjs",
+          "description": "Node SEA build and smoke-verification entrypoint used independently on Linux, macOS, and Windows runners."
+        },
+        {
+          "path": ".github/workflows/buildchain-ref-promotion.yml",
+          "description": "Buildchain-owned publication authority, KFD witness collection, GitHub Release, and Release Passport route."
         }
       ],
       "artifacts": [
         {
-          "name": "Agent Hub adapter",
-          "path": "src/adapter.js",
-          "expectedPackagePath": "src/adapter.js"
+          "name": "Standalone binary builder",
+          "path": "scripts/build-binary.mjs",
+          "expectedPackagePath": "scripts/build-binary.mjs"
         }
       ],
       "verification": {
@@ -46,11 +54,12 @@
         "expectedResult": "pass"
       },
       "auditBoundary": {
-        "scope": "First-party agent-hub-demo source, generated product artifact, and the exact KFD Agent Hub 20-vector suite pinned by the public dependency lock.",
+        "scope": "First-party agent-hub-demo source, Linux x64, macOS arm64, and Windows x64 standalone binaries, generated release evidence, and the exact KFD Agent Hub 20-vector suite pinned by the public dependency lock.",
         "enumerability": "closed-world",
         "exclusions": [
           "Third-party Hub implementations",
           "Network transports and hosted services",
+          "Operating systems and architectures outside the three declared release targets",
           "Performance, security, or production certification"
         ]
       },

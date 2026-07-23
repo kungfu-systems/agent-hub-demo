@@ -26,7 +26,7 @@ jobs:
     uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
-      node-version: "22"
+      node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
       verify-command: npm run check && npm run qualify:buildchain-release
