@@ -15,6 +15,7 @@ import {
   matchesPayload,
   releasePlatforms,
 } from "../scripts/release-platforms.mjs";
+import { evaluatePublicationQualification } from "../scripts/qualify-publication.mjs";
 
 function temporary(name) {
   return mkdtempSync(join(tmpdir(), `agent-hub-demo-${name}-`));
@@ -179,4 +180,30 @@ test("release recovery rematerializes ephemeral Passport inputs", () => {
   );
   assert.match(workflow, /release-candidate-promote\.yml@v2\.14\.17-alpha\.8/);
   assert.match(workflow, /publish-rematerialize-on-resume: true/);
+});
+
+test("publication qualification binds binaries to the exact governed version", () => {
+  const base = {
+    capability: {
+      target: "github-release:kungfu-systems/agent-hub-demo",
+      capabilityIds: ["github-release"],
+      version: "0.2.0-alpha.7",
+    },
+    packageJson: {
+      private: true,
+      version: "0.2.0-alpha.7",
+    },
+    missing: [],
+  };
+  assert.equal(evaluatePublicationQualification(base).allow, true);
+  assert.equal(
+    evaluatePublicationQualification({
+      ...base,
+      capability: {
+        ...base.capability,
+        version: "0.2.0-alpha.8",
+      },
+    }).allow,
+    false,
+  );
 });
