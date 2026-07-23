@@ -53,3 +53,4 @@ not commit transaction output or bypass the promotion gate.
 | --- | --- | --- | --- | --- |
 | 2026-07-22 | Adopt canonical Buildchain semver/auto governance | `v0.1` | patch | Release governance and CI ownership change without widening the public Agent Hub runtime contract. The existing `v0.1.0-alpha.0` tag remains immutable; promotion stays dry-run-only while the GitHub-Release admission lane is unavailable. |
 | 2026-07-23 | Publish standalone binary reference release | `v0.2` | minor | The new public CLI and binary distribution demonstrate Linux, macOS, and Windows executables plus KFD-1/2/3 and Release Passport evidence while keeping the existing Hub protocol and explicit non-certification boundary. |
+| 2026-07-23 | Separate transaction version from embedded protocol facts | `v0.2` | patch | Package version state now enters source commands and SEA binaries directly, while generated KFD and adapter facts remain stable during Buildchain version verification. |
