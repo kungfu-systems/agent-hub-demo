@@ -16,14 +16,27 @@
   "state_ref": "buildchain/release-state/0-2-0-alpha-3",
   "state_path": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-state/v0.2.0-alpha.3.json",
   "evidence_path": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-evidence/v0.2.0-alpha.3/evidence.json",
-  "state": "publishing",
-  "previous_state": "prepared",
+  "state": "published",
+  "previous_state": "publishing",
   "actor": "kungfu-origin",
   "run_id": "30001115717",
   "superseded_by": "",
   "failure": "",
-  "artifacts": [],
-  "evidence": [],
+  "artifacts": [
+    {
+      "group": "release",
+      "kind": "github-release",
+      "name": "agent-hub-demo",
+      "ref": "v0.2.0-alpha.3",
+      "digest": "sha256:14ccfbec8f8f830686d3e986866e66937a68cc4b37d8822ea4a1c8a967866252",
+      "role": "",
+      "required": true
+    }
+  ],
+  "evidence": [
+    ".buildchain/release-evidence/v0.2.0-alpha.3/evidence.json",
+    ".buildchain/release-evidence/v0.2.0-alpha.3/dist-tag-evidence.json"
+  ],
   "created_at": "2026-07-23T10:58:27.313Z",
-  "updated_at": "2026-07-23T10:58:28.831Z"
+  "updated_at": "2026-07-23T10:58:32.748Z"
 }
