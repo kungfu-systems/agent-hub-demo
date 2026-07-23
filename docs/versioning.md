@@ -32,9 +32,25 @@ and exact caller-bound GitHub Release targets. Agent Hub Demo uses only
 and a credentialless product predicate. Manual promotion remains dry-run-only;
 successful Verify runs on reviewed alpha/release channel commits may publish.
 
+## Version transaction boundary
+
+`package.json` and its lockfile are the product version state. Source-mode
+commands and standalone binaries read that state through `src/product.js`;
+the SEA build bundles the exact transaction version. Generated protocol facts
+therefore bind the public KFD profile and stable adapter implementation sources,
+but deliberately exclude both the product version and `package.json`.
+
+This separation is a release invariant. After Buildchain selects a version,
+`npm run check` may rebuild ignored artifacts, but it must not rewrite tracked
+protocol facts. A promotion diagnosis such as `Version verification changed
+files outside version state` means the generator crossed this boundary. Fix
+the source/generator ownership and repeat the protected dev-to-alpha flow; do
+not commit transaction output or bypass the promotion gate.
+
 ## Decision log
 
 | Date | Decision | Line | Impact | Rationale |
 | --- | --- | --- | --- | --- |
 | 2026-07-22 | Adopt canonical Buildchain semver/auto governance | `v0.1` | patch | Release governance and CI ownership change without widening the public Agent Hub runtime contract. The existing `v0.1.0-alpha.0` tag remains immutable; promotion stays dry-run-only while the GitHub-Release admission lane is unavailable. |
 | 2026-07-23 | Publish standalone binary reference release | `v0.2` | minor | The new public CLI and binary distribution demonstrate Linux, macOS, and Windows executables plus KFD-1/2/3 and Release Passport evidence while keeping the existing Hub protocol and explicit non-certification boundary. |
+| 2026-07-23 | Separate transaction version from embedded protocol facts | `v0.2` | patch | Package version state now enters source commands and SEA binaries directly, while generated KFD and adapter facts remain stable during Buildchain version verification. |
