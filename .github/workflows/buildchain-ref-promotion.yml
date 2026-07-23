@@ -79,7 +79,10 @@ jobs:
         .buildchain/release-inputs/kfd-1-witness-macos-arm64.json
         .buildchain/release-inputs/kfd-1-witness-windows-x64.json
       release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
-      release-passport-kfd-3-prebuild-witness-jsons: .buildchain/release-inputs/kfd-3-prebuild.json
+      release-passport-kfd-3-prebuild-witness-jsons: |
+        .buildchain/release-inputs/kfd-3-prebuild-linux-x64.json
+        .buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json
+        .buildchain/release-inputs/kfd-3-prebuild-windows-x64.json
       release-passport-kfd-3-artifact-witness-jsons: |
         .buildchain/release-inputs/kfd-3-artifact-linux-x64.json
         .buildchain/release-inputs/kfd-3-artifact-macos-arm64.json

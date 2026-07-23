@@ -48,6 +48,14 @@ function copyTo(source, directory, name = basename(source)) {
   return target;
 }
 
+function copyJsonTo(source, directory, name, transform) {
+  const target = resolve(directory, name);
+  const value = JSON.parse(readFileSync(source, "utf8"));
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, `${JSON.stringify(transform(value), null, 2)}\n`);
+  return target;
+}
+
 mkdirSync(inputRoot, { recursive: true });
 mkdirSync(passportRoot, { recursive: true });
 copyTo(
@@ -63,15 +71,6 @@ copyTo(
   inputRoot,
   "kfd-2-claim.json",
 );
-copyTo(
-  payloadFile(
-    "linux-x64",
-    "/.buildchain/release-qualification/kfd-3-prebuild.json",
-  ),
-  inputRoot,
-  "kfd-3-prebuild.json",
-);
-
 for (const { artifact, target } of releasePlatforms) {
   const extension = target === "windows-x64" ? ".exe" : "";
   const binaryName = `agent-hub-demo-${target}${extension}`;
@@ -89,21 +88,52 @@ for (const { artifact, target } of releasePlatforms) {
     passportRoot,
     `binary-${target}.json`,
   );
-  copyTo(
+  copyJsonTo(
     payloadFile(
       artifact,
       "/.buildchain/release-qualification/kfd-1-witness.json",
     ),
     inputRoot,
     `kfd-1-witness-${target}.json`,
+    (witness) => ({
+      ...witness,
+      id: `${witness.id}-${target}`,
+      contractWorld: witness.contractWorld
+        ? { ...witness.contractWorld, id: `${witness.contractWorld.id}-${target}` }
+        : witness.contractWorld,
+      surfaces: (witness.surfaces || []).map((surface) => ({
+        ...surface,
+        artifactPath: `.buildchain/release-passport/${basename(surface.artifactPath)}`,
+      })),
+    }),
   );
-  copyTo(
+  copyJsonTo(
+    payloadFile(
+      artifact,
+      "/.buildchain/release-qualification/kfd-3-prebuild.json",
+    ),
+    inputRoot,
+    `kfd-3-prebuild-${target}.json`,
+    (witness) => ({
+      ...witness,
+      id: `${witness.id}-${target}`,
+    }),
+  );
+  copyJsonTo(
     payloadFile(
       artifact,
       "/.buildchain/release-qualification/kfd-3-artifact.json",
     ),
     inputRoot,
     `kfd-3-artifact-${target}.json`,
+    (witness) => ({
+      ...witness,
+      id: `${witness.id}-${target}`,
+      artifact: {
+        ...witness.artifact,
+        path: `.buildchain/release-passport/${basename(witness.artifact?.path || binaryName)}`,
+      },
+    }),
   );
 }
 
@@ -129,10 +159,6 @@ const publicAssets = [
     "kfd-1-gate-linux-x64.json",
   ],
   [
-    "/.buildchain/release-qualification/kfd-3-prebuild.json",
-    "kfd-3-prebuild.json",
-  ],
-  [
     "/.buildchain/release-qualification/qualification-report.json",
     "qualification-report.json",
   ],
@@ -144,6 +170,10 @@ copyTo(resolve(inputRoot, "kfd-2-claim.json"), passportRoot);
 for (const { target } of releasePlatforms) {
   copyTo(
     resolve(inputRoot, `kfd-1-witness-${target}.json`),
+    passportRoot,
+  );
+  copyTo(
+    resolve(inputRoot, `kfd-3-prebuild-${target}.json`),
     passportRoot,
   );
   copyTo(
