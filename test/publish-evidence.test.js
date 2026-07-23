@@ -130,10 +130,12 @@ test("publish evidence pairs platform KFD witnesses with exact public assets", (
     assert.equal(kfd1.id, `agent-hub-demo-product-artifact-${target}`);
     assert.deepEqual(
       kfd1.surfaces.map((surface) => surface.artifactPath),
-      [
-        ".buildchain/release-passport/agent-hub-demo.json",
-        `.buildchain/release-passport/${binaryName}`,
-      ],
+      target === "linux-x64"
+        ? [
+            ".buildchain/release-passport/agent-hub-demo.json",
+            `.buildchain/release-passport/${binaryName}`,
+          ]
+        : [`.buildchain/release-passport/${binaryName}`],
     );
     assert.equal(prebuild.id, `kfd-3-surface-registry-${target}`);
     assert.equal(artifact.id, prebuild.id);
