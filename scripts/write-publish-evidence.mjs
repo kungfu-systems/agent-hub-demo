@@ -109,6 +109,8 @@ for (const { artifact, target } of releasePlatforms) {
         )
         .map((surface) => ({
           ...surface,
+          sourcePath: "",
+          sourceSha256: "",
           artifactPath: `.buildchain/release-passport/${basename(surface.artifactPath)}`,
         })),
     }),
