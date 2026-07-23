@@ -35,17 +35,17 @@
           {
             "kind": "standalone-binary",
             "platform": "linux-x64",
-            "pathGlob": "agent-hub-demo-linux-x64"
+            "pathGlob": "dist/agent-hub-demo-linux-x64"
           },
           {
             "kind": "standalone-binary",
             "platform": "macos-arm64",
-            "pathGlob": "agent-hub-demo-macos-arm64"
+            "pathGlob": "dist/agent-hub-demo-macos-arm64"
           },
           {
             "kind": "standalone-binary",
             "platform": "windows-x64",
-            "pathGlob": "agent-hub-demo-windows-x64.exe"
+            "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
           }
         ]
       },

@@ -124,6 +124,14 @@ test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
     cli.distribution.artifacts.map((entry) => entry.platform),
     ["linux-x64", "macos-arm64", "windows-x64"],
   );
+  assert.deepEqual(
+    cli.distribution.artifacts.map((entry) => entry.pathGlob),
+    [
+      "dist/agent-hub-demo-linux-x64",
+      "dist/agent-hub-demo-macos-arm64",
+      "dist/agent-hub-demo-windows-x64.exe",
+    ],
+  );
 });
 
 test("release publication separates Buildchain artifact IDs from product targets", () => {
