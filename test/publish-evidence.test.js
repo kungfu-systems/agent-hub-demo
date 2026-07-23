@@ -137,6 +137,8 @@ test("publish evidence pairs platform KFD witnesses with exact public assets", (
           ]
         : [`.buildchain/release-passport/${binaryName}`],
     );
+    assert.ok(kfd1.surfaces.every((surface) => surface.sourcePath === ""));
+    assert.ok(kfd1.surfaces.every((surface) => surface.sourceSha256 === ""));
     assert.equal(prebuild.id, `kfd-3-surface-registry-${target}`);
     assert.equal(artifact.id, prebuild.id);
     assert.equal(artifact.collaborationInterfaceDigest, prebuild.collaborationInterfaceDigest);
