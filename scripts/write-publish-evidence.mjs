@@ -101,10 +101,16 @@ for (const { artifact, target } of releasePlatforms) {
       contractWorld: witness.contractWorld
         ? { ...witness.contractWorld, id: `${witness.contractWorld.id}-${target}` }
         : witness.contractWorld,
-      surfaces: (witness.surfaces || []).map((surface) => ({
-        ...surface,
-        artifactPath: `.buildchain/release-passport/${basename(surface.artifactPath)}`,
-      })),
+      surfaces: (witness.surfaces || [])
+        .filter(
+          (surface) =>
+            target === "linux-x64" ||
+            basename(surface.artifactPath) !== "agent-hub-demo.json",
+        )
+        .map((surface) => ({
+          ...surface,
+          artifactPath: `.buildchain/release-passport/${basename(surface.artifactPath)}`,
+        })),
     }),
   );
   copyJsonTo(
