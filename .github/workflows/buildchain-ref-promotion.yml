@@ -49,7 +49,7 @@ jobs:
           github.event.workflow_run.event == 'push'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v2-alpha
+    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v2.14.17-alpha.6
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
