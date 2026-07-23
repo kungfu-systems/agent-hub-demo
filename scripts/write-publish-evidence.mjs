@@ -8,12 +8,12 @@ import {
   writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
+import { matchesPayload, releasePlatforms } from "./release-platforms.mjs";
 
 const root = process.cwd();
 const payloadRoot = resolve(root, ".buildchain/release-candidate/payloads");
 const inputRoot = resolve(root, ".buildchain/release-inputs");
 const passportRoot = resolve(root, ".buildchain/release-passport");
-const platforms = ["linux-x64", "macos-arm64", "windows-x64"];
 
 function filesUnder(directory) {
   const files = [];
@@ -29,14 +29,13 @@ function filesUnder(directory) {
 }
 
 const payloadFiles = filesUnder(payloadRoot);
-function payloadFile(platform, suffix) {
+function payloadFile(artifact, suffix) {
   const matches = payloadFiles.filter(
-    (path) =>
-      path.includes(`agent-hub-demo-${platform}-`) && path.endsWith(suffix),
+    (path) => matchesPayload(path, artifact, suffix),
   );
   if (matches.length !== 1) {
     throw new Error(
-      `expected one ${platform} release-candidate file ending ${suffix}, found ${matches.length}`,
+      `expected one ${artifact} release-candidate file ending ${suffix}, found ${matches.length}`,
     );
   }
   return matches[0];
@@ -73,38 +72,38 @@ copyTo(
   "kfd-3-prebuild.json",
 );
 
-for (const platform of platforms) {
-  const extension = platform === "windows-x64" ? ".exe" : "";
-  const binaryName = `agent-hub-demo-${platform}${extension}`;
-  copyTo(payloadFile(platform, `/dist/${binaryName}`), passportRoot, binaryName);
+for (const { artifact, target } of releasePlatforms) {
+  const extension = target === "windows-x64" ? ".exe" : "";
+  const binaryName = `agent-hub-demo-${target}${extension}`;
+  copyTo(payloadFile(artifact, `/dist/${binaryName}`), passportRoot, binaryName);
   copyTo(
-    payloadFile(platform, `/dist/${binaryName}.sha256`),
+    payloadFile(artifact, `/dist/${binaryName}.sha256`),
     passportRoot,
     `${binaryName}.sha256`,
   );
   copyTo(
     payloadFile(
-      platform,
-      `/.buildchain/artifacts/binary-${platform}.json`,
+      artifact,
+      `/.buildchain/artifacts/binary-${target}.json`,
     ),
     passportRoot,
-    `binary-${platform}.json`,
+    `binary-${target}.json`,
   );
   copyTo(
     payloadFile(
-      platform,
+      artifact,
       "/.buildchain/release-qualification/kfd-1-witness.json",
     ),
     inputRoot,
-    `kfd-1-witness-${platform}.json`,
+    `kfd-1-witness-${target}.json`,
   );
   copyTo(
     payloadFile(
-      platform,
+      artifact,
       "/.buildchain/release-qualification/kfd-3-artifact.json",
     ),
     inputRoot,
-    `kfd-3-artifact-${platform}.json`,
+    `kfd-3-artifact-${target}.json`,
   );
 }
 
@@ -142,13 +141,13 @@ for (const [suffix, name] of publicAssets) {
   copyTo(payloadFile("linux-x64", suffix), passportRoot, name);
 }
 copyTo(resolve(inputRoot, "kfd-2-claim.json"), passportRoot);
-for (const platform of platforms) {
+for (const { target } of releasePlatforms) {
   copyTo(
-    resolve(inputRoot, `kfd-1-witness-${platform}.json`),
+    resolve(inputRoot, `kfd-1-witness-${target}.json`),
     passportRoot,
   );
   copyTo(
-    resolve(inputRoot, `kfd-3-artifact-${platform}.json`),
+    resolve(inputRoot, `kfd-3-artifact-${target}.json`),
     passportRoot,
   );
 }

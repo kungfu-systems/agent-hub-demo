@@ -9,6 +9,10 @@ import test from "node:test";
 import { digest } from "../src/canonical.js";
 import { handshake, isMainModule, respond } from "../src/adapter.js";
 import { runCoreDemo, runRuntime100 } from "../src/scenarios.js";
+import {
+  matchesPayload,
+  releasePlatforms,
+} from "../scripts/release-platforms.mjs";
 
 function temporary(name) {
   return mkdtempSync(join(tmpdir(), `agent-hub-demo-${name}-`));
@@ -119,5 +123,21 @@ test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
   assert.deepEqual(
     cli.distribution.artifacts.map((entry) => entry.platform),
     ["linux-x64", "macos-arm64", "windows-x64"],
+  );
+});
+
+test("release publication separates Buildchain artifact IDs from product targets", () => {
+  assert.deepEqual(releasePlatforms, [
+    { artifact: "linux-x64", target: "linux-x64" },
+    { artifact: "macos", target: "macos-arm64" },
+    { artifact: "windows-x64", target: "windows-x64" },
+  ]);
+  assert.equal(
+    matchesPayload(
+      "/payloads/agent-hub-demo-macos-123/dist/agent-hub-demo-macos-arm64",
+      "macos",
+      "/dist/agent-hub-demo-macos-arm64",
+    ),
+    true,
   );
 });
