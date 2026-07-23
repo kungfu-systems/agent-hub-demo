@@ -34,11 +34,13 @@ successful Verify runs on reviewed alpha/release channel commits may publish.
 
 ## Version transaction boundary
 
-`package.json` and its lockfile are the product version state. Source-mode
-commands and standalone binaries read that state through `src/product.js`;
-the SEA build bundles the exact transaction version. Generated protocol facts
-therefore bind the public KFD profile and stable adapter implementation sources,
-but deliberately exclude both the product version and `package.json`.
+`package.json`, its lockfile, and the Agent Hub declaration's
+`adapter.version` are the product version state. Buildchain updates both
+configured JSON keys in one version-state commit. Source-mode commands and
+standalone binaries read the package state through `src/product.js`; the SEA
+build bundles the exact transaction version. Generated protocol facts therefore
+bind the public KFD profile and stable adapter implementation sources, but
+deliberately exclude both the product version and `package.json`.
 
 This separation is a release invariant. After Buildchain selects a version,
 `npm run check` may rebuild ignored artifacts, but it must not rewrite tracked
@@ -54,3 +56,4 @@ not commit transaction output or bypass the promotion gate.
 | 2026-07-22 | Adopt canonical Buildchain semver/auto governance | `v0.1` | patch | Release governance and CI ownership change without widening the public Agent Hub runtime contract. The existing `v0.1.0-alpha.0` tag remains immutable; promotion stays dry-run-only while the GitHub-Release admission lane is unavailable. |
 | 2026-07-23 | Publish standalone binary reference release | `v0.2` | minor | The new public CLI and binary distribution demonstrate Linux, macOS, and Windows executables plus KFD-1/2/3 and Release Passport evidence while keeping the existing Hub protocol and explicit non-certification boundary. |
 | 2026-07-23 | Separate transaction version from embedded protocol facts | `v0.2` | patch | Package version state now enters source commands and SEA binaries directly, while generated KFD and adapter facts remain stable during Buildchain version verification. |
+| 2026-07-23 | Version the Agent Hub declaration atomically | `v0.2` | patch | The KFD conformance declaration now advances with `package.json`, so promotion-time verification binds the exact public adapter version instead of a stale prerelease. |
