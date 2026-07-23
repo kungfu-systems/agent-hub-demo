@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "version": "0.2.0-alpha.4",
+  "channel": "alpha",
+  "source_sha": "807946aba0c63c4f91143cdb7138ae26aeda188a",
+  "release_sha": "f70855b07d0bb0118d1aa6e32b92379801cf6b4b",
+  "target_ref": "alpha/v0/v0.2",
+  "release_material_sha": "f70855b07d0bb0118d1aa6e32b92379801cf6b4b",
+  "publish_tooling_sha": "f70855b07d0bb0118d1aa6e32b92379801cf6b4b",
+  "artifacts": [
+    {
+      "group": "release",
+      "kind": "github-release",
+      "name": "agent-hub-demo",
+      "ref": "v0.2.0-alpha.4",
+      "digest": "sha256:e1f86bd728c10ac0f94b8f0bf53277d0546454e23ad2eee8e93fcad463603bbe"
+    }
+  ]
+}
