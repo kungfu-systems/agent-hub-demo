@@ -120,7 +120,7 @@ export const EMBEDDED_ADAPTER_ARTIFACT = Object.freeze({
   "files": [
     {
       "path": "package.json",
-      "sha256": "25d0e2ba68fb2f081a3d8daea4151f117864f345bb801c4e1b06d93e81247ede"
+      "sha256": "72a952fb180e2b2857e7fbc206346e8f9a39d9eccdfb00b3b35f589d5f2fc9c7"
     },
     {
       "path": "src/adapter.js",
@@ -155,5 +155,5 @@ export const EMBEDDED_ADAPTER_ARTIFACT = Object.freeze({
       "sha256": "5df9ca254303a007171e39910379ca11a45f96d448204d165d061e840ea30788"
     }
   ],
-  "root": "sha256:546078d094dafd0f969faf68c09cbb204aa42a0c750897e6e5ef954dc0d2c140"
+  "root": "sha256:66928d144257401789d7769fba4380be8ea1b66e7947977577474d07d924254c"
 });
