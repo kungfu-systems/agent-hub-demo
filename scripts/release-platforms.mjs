@@ -5,7 +5,9 @@ export const releasePlatforms = [
 ];
 
 export function matchesPayload(path, artifact, suffix) {
+  const normalized = path.replaceAll("\\", "/");
   return (
-    path.includes(`agent-hub-demo-${artifact}-`) && path.endsWith(suffix)
+    normalized.includes(`agent-hub-demo-${artifact}-`) &&
+    normalized.endsWith(suffix)
   );
 }
