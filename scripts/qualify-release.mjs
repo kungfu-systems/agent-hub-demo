@@ -16,6 +16,10 @@ const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
 const buildchainVersion = "2.14.15";
+const npmExecPath = process.env.npm_execpath || "";
+const npxCli = npmExecPath.replace(/npm-cli\.js$/, "npx-cli.js");
+const npxCommand = npxCli !== npmExecPath ? process.execPath : "npx";
+const npxPrefix = npxCli !== npmExecPath ? [npxCli] : [];
 const work = mkdtempSync(join(tmpdir(), "agent-hub-release-qualification-"));
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -186,12 +190,15 @@ const declaration = readJson(declarationPath);
 declaration.contract = "kungfu-buildchain-kfd-agent-hub-adoption/v0";
 writeJson(mutatedDeclaration, declaration);
 {
-  const result = run("npx", [
+  const result = run(npxCommand, [
+    ...npxPrefix,
     "--yes", "--package", `@kungfu-tech/buildchain@${buildchainVersion}`,
     "buildchain", "kfd", "hub", "inspect", "--cwd", cwd,
     "--declaration", mutatedDeclaration, "--for", "agent", "--json",
   ]);
-  const matched = result.status !== 0 && result.stderr.includes("kfd-agent-hub-declaration-invalid");
+  const stderr = result.stderr || "";
+  const diagnostic = [stderr, result.stdout || "", result.error?.message || ""].join("\n");
+  const matched = result.status !== 0 && diagnostic.includes("kfd-agent-hub-declaration-invalid");
   cases.push({
     id: "declaration-contract-drift",
     category: "declaration",
@@ -202,7 +209,7 @@ writeJson(mutatedDeclaration, declaration);
       verifier: `@kungfu-tech/buildchain@${buildchainVersion} kfd hub inspect`,
       expectedCheck: "kfd-agent-hub-declaration-invalid",
       exitCode: result.status,
-      stderr: result.stderr.trim(),
+      stderr: stderr.trim(),
     },
     nextStep: "Restore the public Buildchain Agent Hub adoption contract.",
   });

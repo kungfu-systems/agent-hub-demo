@@ -6,6 +6,8 @@ name = "agent-hub-demo"
 
 [version]
 required = true
+strategy = "semver"
+next = "auto"
 
 [[version.files]]
 type = "json"
@@ -20,3 +22,6 @@ command = "npm run build"
 
 [lifecycle.verify]
 command = "npm run check"
+
+[lifecycle.publish]
+command = "node scripts/write-publish-evidence.mjs"

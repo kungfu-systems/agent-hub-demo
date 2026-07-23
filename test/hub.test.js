@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { digest } from "../src/canonical.js";
@@ -85,4 +87,37 @@ test("publishable Buildchain artifacts never host Hub runtime identities", () =>
   for (const value of strings) {
     assert.doesNotMatch(value, /\.buildchain\/artifacts/);
   }
+});
+
+test("public CLI exposes the same embedded facts used by standalone binaries", () => {
+  const run = (command) => {
+    const result = spawnSync(
+      process.execPath,
+      [fileURLToPath(new URL("../src/cli.js", import.meta.url)), command, "--json"],
+      { encoding: "utf8" },
+    );
+    assert.equal(result.status, 0, result.stderr);
+    return JSON.parse(result.stdout);
+  };
+  assert.equal(run("version").product, "agent-hub-demo");
+  assert.equal(run("self-verify").ok, true);
+  const description = run("self-describe");
+  assert.deepEqual(description.kfd.standards, ["KFD-1", "KFD-2", "KFD-3"]);
+  assert.equal(description.runtimeDependency, "none");
+});
+
+test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
+  const registry = JSON.parse(
+    readFileSync(
+      new URL("../.buildchain/kfd/kfd-3/surfaces.json", import.meta.url),
+    ),
+  );
+  const cli = registry.surfaces.find(
+    (entry) => entry.id === "cli:agent-hub-demo",
+  );
+  assert.equal(cli.kind, "cli");
+  assert.deepEqual(
+    cli.distribution.artifacts.map((entry) => entry.platform),
+    ["linux-x64", "macos-arm64", "windows-x64"],
+  );
 });
