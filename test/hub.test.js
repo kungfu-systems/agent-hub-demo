@@ -8,6 +8,8 @@ import test from "node:test";
 
 import { digest } from "../src/canonical.js";
 import { handshake, isMainModule, respond } from "../src/adapter.js";
+import { adapterArtifact } from "../src/artifact.js";
+import { PRODUCT_VERSION } from "../src/product.js";
 import { runCoreDemo, runRuntime100 } from "../src/scenarios.js";
 import {
   matchesPayload,
@@ -134,12 +136,22 @@ test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
   );
 });
 
-test("release checks regenerate embedded facts after Buildchain versions the package", () => {
+test("release version state does not rewrite embedded protocol facts", () => {
   const packageJson = JSON.parse(
     readFileSync(new URL("../package.json", import.meta.url)),
   );
+  const generatedFacts = readFileSync(
+    new URL("../src/generated-facts.js", import.meta.url),
+    "utf8",
+  );
   assert.equal(packageJson.scripts.precheck, "npm run generate:embedded");
   assert.equal(packageJson.scripts.pretest, "npm run check:embedded");
+  assert.equal(PRODUCT_VERSION, packageJson.version);
+  assert.doesNotMatch(generatedFacts, /PRODUCT_VERSION/);
+  assert.equal(
+    adapterArtifact().files.some((entry) => entry.path === "package.json"),
+    false,
+  );
 });
 
 test("release publication separates Buildchain artifact IDs from product targets", () => {
