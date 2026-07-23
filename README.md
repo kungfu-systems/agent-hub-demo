@@ -62,12 +62,15 @@ This soak does not replace or qualify the separate KFD Runtime 100 profile.
 Run the public Buildchain first-class Agent Hub gate separately:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@2.14.15 buildchain kfd hub test --for agent
+npx --yes --package @kungfu-tech/buildchain@2.14.17-alpha.5 buildchain kfd hub test --for agent
 ```
 
 The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
 runs the fixed public KFD Hub suite against the real adapter, and writes its
-lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`.
+lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`. The
+prerelease version is pinned deliberately: it is the same public Buildchain
+contract used by this release line, including the KFD-3 distribution-artifact
+binding required by the three standalone binaries.
 
 Run the release qualification after that positive gate:
 
@@ -125,7 +128,7 @@ publishes the executables and `SHA256SUMS`, and emits
 `buildchain.release.json`. Verify a downloaded release directory independently:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@2 buildchain verify release-passport buildchain.release.json --json
+npx --yes --package @kungfu-tech/buildchain@2.14.17-alpha.5 buildchain verify release-passport buildchain.release.json --json
 shasum -a 256 -c SHA256SUMS
 ```
 
