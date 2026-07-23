@@ -32,6 +32,21 @@ and exact caller-bound GitHub Release targets. Agent Hub Demo uses only
 and a credentialless product predicate. Manual promotion remains dry-run-only;
 successful Verify runs on reviewed alpha/release channel commits may publish.
 
+## Version transaction boundary
+
+`package.json` and its lockfile are the product version state. Source-mode
+commands and standalone binaries read that state through `src/product.js`;
+the SEA build bundles the exact transaction version. Generated protocol facts
+therefore bind the public KFD profile and stable adapter implementation sources,
+but deliberately exclude both the product version and `package.json`.
+
+This separation is a release invariant. After Buildchain selects a version,
+`npm run check` may rebuild ignored artifacts, but it must not rewrite tracked
+protocol facts. A promotion diagnosis such as `Version verification changed
+files outside version state` means the generator crossed this boundary. Fix
+the source/generator ownership and repeat the protected dev-to-alpha flow; do
+not commit transaction output or bypass the promotion gate.
+
 ## Decision log
 
 | Date | Decision | Line | Impact | Rationale |
