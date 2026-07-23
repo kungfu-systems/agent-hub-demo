@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-artifact-evidence",
+  "repository": "kungfu-systems/agent-hub-demo",
+  "release": {
+    "tag": "v0.2.0-alpha.7",
+    "sourceSha": "a7c6ee5cb4276ae36190487231a8bb80eb4f280b"
+  },
+  "generatedAt": "2026-07-23T12:28:02.726Z",
+  "runner": {
+    "kind": "github-hosted",
+    "os": "Linux",
+    "arch": "X64",
+    "labels": [],
+    "image": "ubuntu24"
+  },
+  "workflow": {
+    "name": "Buildchain Ref Promotion",
+    "runId": "30006895668",
+    "runAttempt": "1",
+    "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30006895668"
+  },
+  "artifacts": []
+}

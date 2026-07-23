@@ -1,0 +1,120 @@
+{
+  "id": "first-party-clean-room-structural-independence",
+  "public": true,
+  "claim": "The first-party demo uses two independently initialized file-backed content-addressed Hub stores, embeds the exact public KFD Agent Hub profile facts into three standalone platform binaries, and binds those binaries to one Buildchain Release Passport.",
+  "sourceBindings": [
+    {
+      "role": "claim-source",
+      "kind": "file",
+      "path": "README.md",
+      "sha256": "c1ccb29efd4e985a219560f836cd138d7dfdaa94a3151b337075a6ab28cef5fa"
+    }
+  ],
+  "machineEvidence": [
+    {
+      "type": "file",
+      "pointer": {
+        "kind": "file",
+        "path": "test/hub.test.js",
+        "sha256": "733cfb3557667de4aabdff7aa77195bca6dcf4fd22d18cd6608b03fe44cb288a"
+      },
+      "description": "First-party behavioral tests for independent Hub state, delivery, conflict visibility, and export/import drift rejection."
+    },
+    {
+      "type": "file",
+      "pointer": {
+        "kind": "file",
+        "path": ".buildchain/kfd/agent-hub.json",
+        "sha256": "b17d52212c8c9291dcf684dea1997b3dc651f5400a05ca02843fbe3537df7b38"
+      },
+      "description": "Pinned public KFD Agent Hub declaration and exact tested capability scope."
+    },
+    {
+      "type": "file",
+      "pointer": {
+        "kind": "file",
+        "path": "scripts/build-binary.mjs",
+        "sha256": "968998f62d19a84da3a621e06dd54bff69cd3b54184ecdce94670db65b0603d2"
+      },
+      "description": "Node SEA build and smoke-verification entrypoint used independently on Linux, macOS, and Windows runners."
+    },
+    {
+      "type": "file",
+      "pointer": {
+        "kind": "file",
+        "path": ".github/workflows/buildchain-ref-promotion.yml",
+        "sha256": "95ae56e8e4e91bd49b93d924a5355ef27a515863274e3d770d24f29b2a161e77"
+      },
+      "description": "Buildchain-owned publication authority, KFD witness collection, GitHub Release, and Release Passport route."
+    }
+  ],
+  "hashes": {
+    "registrySha256": "5bd33b5e50bb57c46536e953012840509aa9415efbf6172a13a09468670f104b",
+    "sourceSha256": "c1ccb29efd4e985a219560f836cd138d7dfdaa94a3151b337075a6ab28cef5fa",
+    "evidenceSha256": [
+      {
+        "path": "test/hub.test.js",
+        "sha256": "733cfb3557667de4aabdff7aa77195bca6dcf4fd22d18cd6608b03fe44cb288a"
+      },
+      {
+        "path": ".buildchain/kfd/agent-hub.json",
+        "sha256": "b17d52212c8c9291dcf684dea1997b3dc651f5400a05ca02843fbe3537df7b38"
+      },
+      {
+        "path": "scripts/build-binary.mjs",
+        "sha256": "968998f62d19a84da3a621e06dd54bff69cd3b54184ecdce94670db65b0603d2"
+      },
+      {
+        "path": ".github/workflows/buildchain-ref-promotion.yml",
+        "sha256": "95ae56e8e4e91bd49b93d924a5355ef27a515863274e3d770d24f29b2a161e77"
+      }
+    ],
+    "artifactSha256": [
+      {
+        "path": "scripts/build-binary.mjs",
+        "sha256": "968998f62d19a84da3a621e06dd54bff69cd3b54184ecdce94670db65b0603d2"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "name": "Standalone binary builder",
+      "path": "scripts/build-binary.mjs",
+      "sha256": "968998f62d19a84da3a621e06dd54bff69cd3b54184ecdce94670db65b0603d2",
+      "expectedPackagePath": "scripts/build-binary.mjs"
+    }
+  ],
+  "verification": {
+    "result": "passed-with-residual-risk",
+    "command": "npm run qualify:release",
+    "expectedResult": "pass"
+  },
+  "auditBoundary": {
+    "scope": "First-party agent-hub-demo source, Linux x64, macOS arm64, and Windows x64 standalone binaries, generated release evidence, and the exact KFD Agent Hub 20-vector suite pinned by the public dependency lock.",
+    "enumerability": "closed-world",
+    "exclusions": [
+      "Third-party Hub implementations",
+      "Network transports and hosted services",
+      "Operating systems and architectures outside the three declared release targets",
+      "Performance, security, or production certification"
+    ]
+  },
+  "responsibility": {
+    "sourceOwner": "kungfu-systems/agent-hub-demo maintainers",
+    "verificationOwner": "Public KFD and Buildchain verifiers",
+    "releaseDecisionOwner": "kungfu-systems release maintainers"
+  },
+  "residualRisk": [
+    {
+      "id": "declared-first-party-boundary",
+      "definedBy": "https://kfd.libkungfu.dev/schemas/kfd-2/trust-taxonomy.schema.json#/$defs/residualRisk",
+      "riskType": "partial-machine-coverage-risk",
+      "trustImpact": "downgrade-warning",
+      "machineProvability": "not-exhaustively-enumerable",
+      "agentAction": "accept-with-warning",
+      "reason": "Passing evidence does not establish general interoperability or certification beyond the declared first-party clean-room boundary.",
+      "owner": "kungfu-systems/agent-hub-demo maintainers"
+    }
+  ],
+  "canonicalStatus": "audited"
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-release-check-report",
+  "checkedAt": "2026-07-23T12:28:03.113Z",
+  "ok": true,
+  "trust": "pass",
+  "surfaceImpactRequirement": {
+    "required": false,
+    "type": "alpha",
+    "reason": "surfaceImpacts[] is optional for alpha, local, and legacy passport contexts",
+    "channel": "alpha",
+    "targetRef": "alpha/v0/v0.2"
+  },
+  "completeness": {
+    "artifactCount": 1,
+    "evidenceArtifactCount": 1,
+    "packageSetPresent": false,
+    "trustedPublishingPresent": false,
+    "transactionPresent": true,
+    "anchorManifestPresent": false,
+    "buildSummaryPresent": true,
+    "platformArtifactManifestCount": 3,
+    "distTagPromotionEvidencePresent": true,
+    "impactPresent": true,
+    "agentIndexPresent": true,
+    "productMechanismPresent": true,
+    "surfaceImpactsRequired": false,
+    "surfaceImpactCount": 0,
+    "versionImpact": "unknown"
+  },
+  "issues": [
+    {
+      "level": "warning",
+      "code": "kfd-2.claims[6].downgraded",
+      "message": "public release claim is downgraded and needs human review",
+      "details": {
+        "id": "first-party-clean-room-structural-independence",
+        "proseOnly": false
+      }
+    },
+    {
+      "level": "warning",
+      "code": "kfd-2.status",
+      "message": "kfd-2 release trust passport audit is downgraded by prose-only or residual-risk claims",
+      "details": {}
+    }
+  ]
+}

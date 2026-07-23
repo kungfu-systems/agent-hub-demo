@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-hub-demo-product-artifact-linux-x64",
+  "standard": "kfd-1",
+  "source": {
+    "repo": "kungfu-systems/agent-hub-demo",
+    "ref": "b888659739b70119dfb7ac5b4bde636f4431e9e0",
+    "package": "@kungfu-tech/agent-hub-demo"
+  },
+  "contractWorld": {
+    "id": "agent-hub-demo-product-artifact-linux-x64",
+    "schemaId": "agent-hub-demo.product-artifact/v1",
+    "digest": "sha256:293f0f56e5da50179bcec9fc4c4afa63510227b810c2b3a04d18e5c406eadeec",
+    "owner": "kungfu-systems/agent-hub-demo maintainers",
+    "selfHosted": false
+  },
+  "surfaces": [
+    {
+      "name": "agent-hub-demo.json",
+      "sourcePath": "",
+      "sourceSha256": "",
+      "artifactPath": ".buildchain/release-passport/agent-hub-demo.json",
+      "expectedSha256": "293f0f56e5da50179bcec9fc4c4afa63510227b810c2b3a04d18e5c406eadeec",
+      "byteForByte": true
+    },
+    {
+      "name": "agent-hub-demo-linux-x64",
+      "sourcePath": "",
+      "sourceSha256": "",
+      "artifactPath": ".buildchain/release-passport/agent-hub-demo-linux-x64",
+      "expectedSha256": "abf4d3610fe9cf19e185d3495be31e4c3681c7e4a8b8d2fe62c10a2da03bafd4",
+      "byteForByte": true
+    }
+  ],
+  "responsibility": {
+    "sourceContractOwner": "kungfu-systems/agent-hub-demo maintainers",
+    "artifactVerificationOwner": "Buildchain KFD-1 release gate",
+    "releasePassportProofOwner": "Buildchain"
+  }
+}

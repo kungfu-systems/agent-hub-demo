@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.binary-artifact/v1",
+  "platform": "macos-arm64",
+  "file": "dist/agent-hub-demo-macos-arm64",
+  "sha256": "41bb1458a64d35a2588304b5d29d861dc1f05ba570f1c3c03a0f4f3eb24a4cfa",
+  "size": 120078544,
+  "node": "v24.18.0",
+  "runtimeDependencies": [],
+  "smoke": {
+    "version": {
+      "product": "agent-hub-demo",
+      "version": "0.2.0-alpha.7"
+    },
+    "selfVerify": {
+      "schemaVersion": 1,
+      "contract": "agent-hub-demo.self-verification/v1",
+      "ok": true,
+      "checks": [
+        {
+          "id": "kfd-manifest-digest",
+          "passed": true
+        },
+        {
+          "id": "adapter-artifact-root",
+          "passed": true
+        },
+        {
+          "id": "kfd-123-declaration",
+          "passed": true
+        }
+      ],
+      "adapterRoot": "sha256:2343cc7fcd1ccc6eb168a5d7f2f9874a445091d3253478bc9a9c9be023a050b4",
+      "kfdManifestDigest": "sha256:dab4e93d2a662092eb51e29171dfc8bd0c400daa99899f074e69608b45cc7a59"
+    },
+    "hubCount": 2
+  }
+}
