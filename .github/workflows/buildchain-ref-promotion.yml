@@ -68,6 +68,7 @@ jobs:
       required-artifact-count: 3
       publish-artifact-kind: custom
       publish-target: github-release
+      publish-rematerialize-on-resume: true
       publish-required-artifacts-json: >-
         [{"group":"release","kind":"github-release","name":"agent-hub-demo","ref_template":"v{version}"}]
       trusted-publishing: false
