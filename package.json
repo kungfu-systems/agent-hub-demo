@@ -1,6 +1,6 @@
 {
   "name": "@kungfu-tech/agent-hub-demo",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.4",
   "description": "A clean-room KFD Agent Hub demonstration using a file-backed content-addressed store.",
   "license": "Apache-2.0",
   "type": "module",
