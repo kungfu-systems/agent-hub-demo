@@ -6,7 +6,7 @@ import { pathToFileURL } from "node:url";
 
 import { adapterArtifact } from "./artifact.js";
 import { digest } from "./canonical.js";
-import { PRODUCT_VERSION } from "./generated-facts.js";
+import { PRODUCT_VERSION } from "./product.js";
 import { createEnvironment, runCoreDemo, runRuntime100 } from "./scenarios.js";
 
 const ADAPTER = {
