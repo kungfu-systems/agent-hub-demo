@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 
 const argv = process.argv.slice(2);
 const valueFor = (flag, fallback = "") => {
@@ -9,7 +9,14 @@ const valueFor = (flag, fallback = "") => {
 };
 
 const cwd = process.cwd();
-const artifactPath = resolve(cwd, valueFor("--artifact", "dist/agent-hub-demo.json"));
+const productPath = resolve(cwd, valueFor("--artifact", "dist/agent-hub-demo.json"));
+const binaryNames = readdirSync(resolve(cwd, "dist")).filter((name) =>
+  /^agent-hub-demo-(linux-x64|macos-arm64|windows-x64)(?:\.exe)?$/.test(name),
+);
+if (binaryNames.length !== 1) {
+  throw new Error(`expected one platform binary under dist, found ${binaryNames.length}`);
+}
+const binaryPath = resolve(cwd, "dist", binaryNames[0]);
 const prebuildPath = resolve(cwd, valueFor(
   "--kfd-3-prebuild",
   ".buildchain/release-qualification/kfd-3-prebuild.json",
@@ -24,9 +31,10 @@ const kfd3ArtifactPath = resolve(cwd, valueFor(
 ));
 const sourceSha = valueFor("--source-sha", process.env.GITHUB_SHA || "unknown");
 
-const bytes = readFileSync(artifactPath);
-const sha256 = createHash("sha256").update(bytes).digest("hex");
-const relativeArtifact = "dist/agent-hub-demo.json";
+const productSha256 = createHash("sha256").update(readFileSync(productPath)).digest("hex");
+const binarySha256 = createHash("sha256").update(readFileSync(binaryPath)).digest("hex");
+const relativeProduct = "dist/agent-hub-demo.json";
+const relativeBinary = `dist/${basename(binaryPath)}`;
 const writeJson = (path, value) => {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
@@ -44,18 +52,28 @@ const kfd1Witness = {
   contractWorld: {
     id: "agent-hub-demo-product-artifact",
     schemaId: "agent-hub-demo.product-artifact/v1",
-    digest: `sha256:${sha256}`,
+    digest: `sha256:${productSha256}`,
     owner: "kungfu-systems/agent-hub-demo maintainers",
     selfHosted: false,
   },
-  surfaces: [{
-    name: "agent-hub-demo.json",
-    sourcePath: relativeArtifact,
-    sourceSha256: sha256,
-    artifactPath: "agent-hub-demo.json",
-    expectedSha256: sha256,
-    byteForByte: true,
-  }],
+  surfaces: [
+    {
+      name: "agent-hub-demo.json",
+      sourcePath: relativeProduct,
+      sourceSha256: productSha256,
+      artifactPath: "agent-hub-demo.json",
+      expectedSha256: productSha256,
+      byteForByte: true,
+    },
+    {
+      name: basename(binaryPath),
+      sourcePath: relativeBinary,
+      sourceSha256: binarySha256,
+      artifactPath: basename(binaryPath),
+      expectedSha256: binarySha256,
+      byteForByte: true,
+    },
+  ],
   responsibility: {
     sourceContractOwner: "kungfu-systems/agent-hub-demo maintainers",
     artifactVerificationOwner: "Buildchain KFD-1 release gate",
@@ -69,17 +87,18 @@ const kfd3Artifact = {
   ...prebuild,
   witnessKind: "artifact",
   artifact: {
-    name: "agent-hub-demo.json",
-    path: relativeArtifact,
-    sha256,
+    name: basename(binaryPath),
+    path: relativeBinary,
+    sha256: binarySha256,
   },
 };
 writeJson(kfd3ArtifactPath, kfd3Artifact);
 
 process.stdout.write(`${JSON.stringify({
   status: "prepared",
-  artifact: relativeArtifact,
-  sha256,
+  product: relativeProduct,
+  binary: relativeBinary,
+  sha256: binarySha256,
   kfd1Witness: kfd1Path,
   kfd3ArtifactWitness: kfd3ArtifactPath,
 })}\n`);
