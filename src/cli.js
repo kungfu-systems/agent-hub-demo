@@ -6,8 +6,8 @@ import { pathToFileURL } from "node:url";
 import { handshake, runAdapterCli } from "./adapter.js";
 import { adapterArtifact } from "./artifact.js";
 import { canonicalJson, digest } from "./canonical.js";
-import { PRODUCT_VERSION } from "./generated-facts.js";
 import { loadPublicKfdProfile } from "./public-kfd.js";
+import { PRODUCT_VERSION } from "./product.js";
 import { runCoreDemo } from "./scenarios.js";
 
 function valueFor(argv, name, fallback) {
