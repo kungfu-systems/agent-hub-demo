@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 1,
+  "id": "kfd-3-surface-registry-windows-x64",
+  "standard": "kfd-3",
+  "witnessKind": "artifact",
+  "supportLevel": "release",
+  "source": {
+    "cwd": "D:\\a\\agent-hub-demo\\agent-hub-demo",
+    "sourceSha": "e352eea4a9d050ab9ec47029b7ed505f2fcd9a15",
+    "registryPath": "",
+    "registryDigest": "sha256:1975dc443f67587fbe9d3d68f1426e635f61f056f0dce3c6d33832e633f78fdf"
+  },
+  "sourceRegistry": {
+    "id": "product-kfd-3-surface-registry",
+    "path": "",
+    "sha256": ""
+  },
+  "collaborationInterfaceDigest": "sha256:92937b43a7f9ad068574b9454231d35f408bf95aed9d0b0bb115ad087f6f456b",
+  "collaborationInterface": {
+    "schemaVersion": 1,
+    "contract": "kungfu-buildchain-kfd-3-surface-registry",
+    "product": {
+      "name": ""
+    },
+    "surfaces": [
+      {
+        "id": "cli:agent-hub-demo",
+        "kind": "cli",
+        "name": "agent-hub-demo",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "src/cli.js",
+        "artifactPath": "src/cli.js",
+        "evidencePath": "src/cli.js",
+        "detectionMethod": "package.json#bin",
+        "policy": {},
+        "facts": {
+          "packageName": "@kungfu-tech/agent-hub-demo",
+          "binName": "agent-hub-demo",
+          "target": "src/cli.js"
+        },
+        "distribution": {
+          "registrar": "Buildchain release-candidate promotion",
+          "tasks": [
+            "build",
+            "self-verify",
+            "publish-github-release",
+            "verify-release-passport"
+          ],
+          "artifacts": [
+            {
+              "kind": "standalone-binary",
+              "platform": "linux-x64",
+              "pathGlob": "dist/agent-hub-demo-linux-x64"
+            },
+            {
+              "kind": "standalone-binary",
+              "platform": "macos-arm64",
+              "pathGlob": "dist/agent-hub-demo-macos-arm64"
+            },
+            {
+              "kind": "standalone-binary",
+              "platform": "windows-x64",
+              "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
+            }
+          ]
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      },
+      {
+        "id": "doc:agents.md",
+        "kind": "documentation",
+        "name": "AGENTS.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "AGENTS.md",
+        "artifactPath": "AGENTS.md",
+        "evidencePath": "AGENTS.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "AGENTS.md",
+          "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      },
+      {
+        "id": "doc:docs/map.md",
+        "kind": "documentation",
+        "name": "docs/MAP.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "docs/MAP.md",
+        "artifactPath": "docs/MAP.md",
+        "evidencePath": "docs/MAP.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/MAP.md",
+          "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      },
+      {
+        "id": "doc:docs/release_qualification.md",
+        "kind": "documentation",
+        "name": "docs/RELEASE_QUALIFICATION.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+        "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+        "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/RELEASE_QUALIFICATION.md",
+          "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      },
+      {
+        "id": "doc:docs/versioning.md",
+        "kind": "documentation",
+        "name": "docs/versioning.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "docs/versioning.md",
+        "artifactPath": "docs/versioning.md",
+        "evidencePath": "docs/versioning.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/versioning.md",
+          "sha256": "79939c36046fad8d4ce13dcf6a571b2abc6b535e04b1f4b146ec40ef0bcd81b1"
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      },
+      {
+        "id": "doc:readme.md",
+        "kind": "documentation",
+        "name": "README.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "declared",
+        "sourcePath": "README.md",
+        "artifactPath": "README.md",
+        "evidencePath": "README.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "README.md",
+          "sha256": "93a272e4121e4f3b3c168c4211831ec756f589d56190115c683116fba11ee92f"
+        },
+        "declaration": {
+          "owner": "product",
+          "source": "buildchain kfd 3 register"
+        }
+      }
+    ],
+    "detectedSurfaces": [
+      {
+        "id": "binary:dist/agent-hub-demo-windows-x64.exe",
+        "kind": "binary",
+        "name": "agent-hub-demo-windows-x64.exe",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "dist/agent-hub-demo-windows-x64.exe",
+        "artifactPath": "dist/agent-hub-demo-windows-x64.exe",
+        "evidencePath": "dist/agent-hub-demo-windows-x64.exe",
+        "detectionMethod": "artifact-path-scan",
+        "policy": {},
+        "facts": {
+          "path": "dist/agent-hub-demo-windows-x64.exe",
+          "sha256": "e7da0508aafc1eff9d18945f919593d2f48cb85ef8519d51fc50c8fe15896a14"
+        }
+      },
+      {
+        "id": "cli:agent-hub-demo",
+        "kind": "cli",
+        "name": "agent-hub-demo",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "src/cli.js",
+        "artifactPath": "src/cli.js",
+        "evidencePath": "src/cli.js",
+        "detectionMethod": "package.json#bin",
+        "policy": {},
+        "facts": {
+          "packageName": "@kungfu-tech/agent-hub-demo",
+          "binName": "agent-hub-demo",
+          "target": "src/cli.js"
+        }
+      },
+      {
+        "id": "doc:agents.md",
+        "kind": "documentation",
+        "name": "AGENTS.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "AGENTS.md",
+        "artifactPath": "AGENTS.md",
+        "evidencePath": "AGENTS.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "AGENTS.md",
+          "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+        }
+      },
+      {
+        "id": "doc:docs/map.md",
+        "kind": "documentation",
+        "name": "docs/MAP.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "docs/MAP.md",
+        "artifactPath": "docs/MAP.md",
+        "evidencePath": "docs/MAP.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/MAP.md",
+          "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+        }
+      },
+      {
+        "id": "doc:docs/release_qualification.md",
+        "kind": "documentation",
+        "name": "docs/RELEASE_QUALIFICATION.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+        "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+        "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/RELEASE_QUALIFICATION.md",
+          "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+        }
+      },
+      {
+        "id": "doc:docs/versioning.md",
+        "kind": "documentation",
+        "name": "docs/versioning.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "docs/versioning.md",
+        "artifactPath": "docs/versioning.md",
+        "evidencePath": "docs/versioning.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "docs/versioning.md",
+          "sha256": "f5ae942c95e61b6eb0592812623a409e7b91704ba1dfe0387ab0286bcdfeb047"
+        }
+      },
+      {
+        "id": "doc:readme.md",
+        "kind": "documentation",
+        "name": "README.md",
+        "visibility": "public",
+        "participantFacing": true,
+        "state": "detected",
+        "sourcePath": "README.md",
+        "artifactPath": "README.md",
+        "evidencePath": "README.md",
+        "detectionMethod": "documentation-scan",
+        "policy": {},
+        "facts": {
+          "path": "README.md",
+          "sha256": "c1ccb29efd4e985a219560f836cd138d7dfdaa94a3151b337075a6ab28cef5fa"
+        }
+      }
+    ],
+    "audit": {
+      "schemaVersion": 1,
+      "contract": "kungfu-buildchain-kfd-3-surface-audit",
+      "ok": true,
+      "status": "passed",
+      "registryPath": "",
+      "detection": {
+        "schemaVersion": 1,
+        "contract": "kungfu-buildchain-kfd-3-surface-detection",
+        "cwd": "D:\\a\\agent-hub-demo\\agent-hub-demo",
+        "artifactPath": "",
+        "detectedAt": "2026-07-23T11:54:09.112Z",
+        "kinds": [
+          "binary",
+          "cli",
+          "documentation",
+          "node-api",
+          "python-api",
+          "site-bundle"
+        ],
+        "summary": {
+          "surfaceCount": 7,
+          "byKind": {
+            "binary": 1,
+            "cli": 1,
+            "documentation": 5,
+            "node-api": 0,
+            "python-api": 0,
+            "site-bundle": 0
+          }
+        },
+        "surfaces": [
+          {
+            "id": "binary:dist/agent-hub-demo-windows-x64.exe",
+            "kind": "binary",
+            "name": "agent-hub-demo-windows-x64.exe",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "dist/agent-hub-demo-windows-x64.exe",
+            "artifactPath": "dist/agent-hub-demo-windows-x64.exe",
+            "evidencePath": "dist/agent-hub-demo-windows-x64.exe",
+            "detectionMethod": "artifact-path-scan",
+            "policy": {},
+            "facts": {
+              "path": "dist/agent-hub-demo-windows-x64.exe",
+              "sha256": "e7da0508aafc1eff9d18945f919593d2f48cb85ef8519d51fc50c8fe15896a14"
+            }
+          },
+          {
+            "id": "cli:agent-hub-demo",
+            "kind": "cli",
+            "name": "agent-hub-demo",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "src/cli.js",
+            "artifactPath": "src/cli.js",
+            "evidencePath": "src/cli.js",
+            "detectionMethod": "package.json#bin",
+            "policy": {},
+            "facts": {
+              "packageName": "@kungfu-tech/agent-hub-demo",
+              "binName": "agent-hub-demo",
+              "target": "src/cli.js"
+            }
+          },
+          {
+            "id": "doc:agents.md",
+            "kind": "documentation",
+            "name": "AGENTS.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "AGENTS.md",
+            "artifactPath": "AGENTS.md",
+            "evidencePath": "AGENTS.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "AGENTS.md",
+              "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+            }
+          },
+          {
+            "id": "doc:docs/map.md",
+            "kind": "documentation",
+            "name": "docs/MAP.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/MAP.md",
+            "artifactPath": "docs/MAP.md",
+            "evidencePath": "docs/MAP.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/MAP.md",
+              "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+            }
+          },
+          {
+            "id": "doc:docs/release_qualification.md",
+            "kind": "documentation",
+            "name": "docs/RELEASE_QUALIFICATION.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+            "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+            "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/RELEASE_QUALIFICATION.md",
+              "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+            }
+          },
+          {
+            "id": "doc:docs/versioning.md",
+            "kind": "documentation",
+            "name": "docs/versioning.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/versioning.md",
+            "artifactPath": "docs/versioning.md",
+            "evidencePath": "docs/versioning.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/versioning.md",
+              "sha256": "f5ae942c95e61b6eb0592812623a409e7b91704ba1dfe0387ab0286bcdfeb047"
+            }
+          },
+          {
+            "id": "doc:readme.md",
+            "kind": "documentation",
+            "name": "README.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "README.md",
+            "artifactPath": "README.md",
+            "evidencePath": "README.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "README.md",
+              "sha256": "c1ccb29efd4e985a219560f836cd138d7dfdaa94a3151b337075a6ab28cef5fa"
+            }
+          }
+        ]
+      },
+      "registry": {
+        "schemaVersion": 1,
+        "contract": "kungfu-buildchain-kfd-3-surface-registry",
+        "product": {
+          "name": ""
+        },
+        "registryPath": ".buildchain/kfd/kfd-3/surfaces.json",
+        "surfaces": [
+          {
+            "id": "cli:agent-hub-demo",
+            "kind": "cli",
+            "name": "agent-hub-demo",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "src/cli.js",
+            "artifactPath": "src/cli.js",
+            "evidencePath": "src/cli.js",
+            "detectionMethod": "package.json#bin",
+            "policy": {},
+            "facts": {
+              "packageName": "@kungfu-tech/agent-hub-demo",
+              "binName": "agent-hub-demo",
+              "target": "src/cli.js"
+            },
+            "distribution": {
+              "registrar": "Buildchain release-candidate promotion",
+              "tasks": [
+                "build",
+                "self-verify",
+                "publish-github-release",
+                "verify-release-passport"
+              ],
+              "artifacts": [
+                {
+                  "kind": "standalone-binary",
+                  "platform": "linux-x64",
+                  "pathGlob": "dist/agent-hub-demo-linux-x64"
+                },
+                {
+                  "kind": "standalone-binary",
+                  "platform": "macos-arm64",
+                  "pathGlob": "dist/agent-hub-demo-macos-arm64"
+                },
+                {
+                  "kind": "standalone-binary",
+                  "platform": "windows-x64",
+                  "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
+                }
+              ]
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:agents.md",
+            "kind": "documentation",
+            "name": "AGENTS.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "AGENTS.md",
+            "artifactPath": "AGENTS.md",
+            "evidencePath": "AGENTS.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "AGENTS.md",
+              "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/map.md",
+            "kind": "documentation",
+            "name": "docs/MAP.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/MAP.md",
+            "artifactPath": "docs/MAP.md",
+            "evidencePath": "docs/MAP.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/MAP.md",
+              "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/release_qualification.md",
+            "kind": "documentation",
+            "name": "docs/RELEASE_QUALIFICATION.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+            "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+            "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/RELEASE_QUALIFICATION.md",
+              "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/versioning.md",
+            "kind": "documentation",
+            "name": "docs/versioning.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/versioning.md",
+            "artifactPath": "docs/versioning.md",
+            "evidencePath": "docs/versioning.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/versioning.md",
+              "sha256": "79939c36046fad8d4ce13dcf6a571b2abc6b535e04b1f4b146ec40ef0bcd81b1"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:readme.md",
+            "kind": "documentation",
+            "name": "README.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "README.md",
+            "artifactPath": "README.md",
+            "evidencePath": "README.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "README.md",
+              "sha256": "93a272e4121e4f3b3c168c4211831ec756f589d56190115c683116fba11ee92f"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          }
+        ],
+        "policy": {
+          "detectedButUnregistered": "warn",
+          "declaredButMissing": "fail"
+        }
+      },
+      "summary": {
+        "detected": 7,
+        "declared": 6,
+        "enforced": 0,
+        "detectedButUnregistered": 0,
+        "declaredButMissing": 0
+      },
+      "states": {
+        "detected": [
+          {
+            "id": "binary:dist/agent-hub-demo-windows-x64.exe",
+            "kind": "binary",
+            "name": "agent-hub-demo-windows-x64.exe",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "dist/agent-hub-demo-windows-x64.exe",
+            "artifactPath": "dist/agent-hub-demo-windows-x64.exe",
+            "evidencePath": "dist/agent-hub-demo-windows-x64.exe",
+            "detectionMethod": "artifact-path-scan",
+            "policy": {},
+            "facts": {
+              "path": "dist/agent-hub-demo-windows-x64.exe",
+              "sha256": "e7da0508aafc1eff9d18945f919593d2f48cb85ef8519d51fc50c8fe15896a14"
+            }
+          },
+          {
+            "id": "cli:agent-hub-demo",
+            "kind": "cli",
+            "name": "agent-hub-demo",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "src/cli.js",
+            "artifactPath": "src/cli.js",
+            "evidencePath": "src/cli.js",
+            "detectionMethod": "package.json#bin",
+            "policy": {},
+            "facts": {
+              "packageName": "@kungfu-tech/agent-hub-demo",
+              "binName": "agent-hub-demo",
+              "target": "src/cli.js"
+            }
+          },
+          {
+            "id": "doc:agents.md",
+            "kind": "documentation",
+            "name": "AGENTS.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "AGENTS.md",
+            "artifactPath": "AGENTS.md",
+            "evidencePath": "AGENTS.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "AGENTS.md",
+              "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+            }
+          },
+          {
+            "id": "doc:docs/map.md",
+            "kind": "documentation",
+            "name": "docs/MAP.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/MAP.md",
+            "artifactPath": "docs/MAP.md",
+            "evidencePath": "docs/MAP.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/MAP.md",
+              "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+            }
+          },
+          {
+            "id": "doc:docs/release_qualification.md",
+            "kind": "documentation",
+            "name": "docs/RELEASE_QUALIFICATION.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+            "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+            "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/RELEASE_QUALIFICATION.md",
+              "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+            }
+          },
+          {
+            "id": "doc:docs/versioning.md",
+            "kind": "documentation",
+            "name": "docs/versioning.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "docs/versioning.md",
+            "artifactPath": "docs/versioning.md",
+            "evidencePath": "docs/versioning.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/versioning.md",
+              "sha256": "f5ae942c95e61b6eb0592812623a409e7b91704ba1dfe0387ab0286bcdfeb047"
+            }
+          },
+          {
+            "id": "doc:readme.md",
+            "kind": "documentation",
+            "name": "README.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "detected",
+            "sourcePath": "README.md",
+            "artifactPath": "README.md",
+            "evidencePath": "README.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "README.md",
+              "sha256": "c1ccb29efd4e985a219560f836cd138d7dfdaa94a3151b337075a6ab28cef5fa"
+            }
+          }
+        ],
+        "declared": [
+          {
+            "id": "cli:agent-hub-demo",
+            "kind": "cli",
+            "name": "agent-hub-demo",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "src/cli.js",
+            "artifactPath": "src/cli.js",
+            "evidencePath": "src/cli.js",
+            "detectionMethod": "package.json#bin",
+            "policy": {},
+            "facts": {
+              "packageName": "@kungfu-tech/agent-hub-demo",
+              "binName": "agent-hub-demo",
+              "target": "src/cli.js"
+            },
+            "distribution": {
+              "registrar": "Buildchain release-candidate promotion",
+              "tasks": [
+                "build",
+                "self-verify",
+                "publish-github-release",
+                "verify-release-passport"
+              ],
+              "artifacts": [
+                {
+                  "kind": "standalone-binary",
+                  "platform": "linux-x64",
+                  "pathGlob": "dist/agent-hub-demo-linux-x64"
+                },
+                {
+                  "kind": "standalone-binary",
+                  "platform": "macos-arm64",
+                  "pathGlob": "dist/agent-hub-demo-macos-arm64"
+                },
+                {
+                  "kind": "standalone-binary",
+                  "platform": "windows-x64",
+                  "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
+                }
+              ]
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:agents.md",
+            "kind": "documentation",
+            "name": "AGENTS.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "AGENTS.md",
+            "artifactPath": "AGENTS.md",
+            "evidencePath": "AGENTS.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "AGENTS.md",
+              "sha256": "e9de313c11998f2a0acbc42a3302fb9e35a2c933dd0087240332be9ddbfcc56b"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/map.md",
+            "kind": "documentation",
+            "name": "docs/MAP.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/MAP.md",
+            "artifactPath": "docs/MAP.md",
+            "evidencePath": "docs/MAP.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/MAP.md",
+              "sha256": "b5bbeea655eea8203f8a64aafc4944ff9a79f2ca5c66a2f38bdc9e6085fa91c8"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/release_qualification.md",
+            "kind": "documentation",
+            "name": "docs/RELEASE_QUALIFICATION.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/RELEASE_QUALIFICATION.md",
+            "artifactPath": "docs/RELEASE_QUALIFICATION.md",
+            "evidencePath": "docs/RELEASE_QUALIFICATION.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/RELEASE_QUALIFICATION.md",
+              "sha256": "518b78b96079afdefdfc9d38286d4244976141d5d67e94b3eb2f3635ad14f697"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:docs/versioning.md",
+            "kind": "documentation",
+            "name": "docs/versioning.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "docs/versioning.md",
+            "artifactPath": "docs/versioning.md",
+            "evidencePath": "docs/versioning.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "docs/versioning.md",
+              "sha256": "79939c36046fad8d4ce13dcf6a571b2abc6b535e04b1f4b146ec40ef0bcd81b1"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          },
+          {
+            "id": "doc:readme.md",
+            "kind": "documentation",
+            "name": "README.md",
+            "visibility": "public",
+            "participantFacing": true,
+            "state": "declared",
+            "sourcePath": "README.md",
+            "artifactPath": "README.md",
+            "evidencePath": "README.md",
+            "detectionMethod": "documentation-scan",
+            "policy": {},
+            "facts": {
+              "path": "README.md",
+              "sha256": "93a272e4121e4f3b3c168c4211831ec756f589d56190115c683116fba11ee92f"
+            },
+            "declaration": {
+              "owner": "product",
+              "source": "buildchain kfd 3 register"
+            }
+          }
+        ],
+        "enforced": [],
+        "distributionBindings": [
+          {
+            "detectedSurfaceId": "binary:dist/agent-hub-demo-windows-x64.exe",
+            "declaredSurfaceId": "cli:agent-hub-demo",
+            "artifact": {
+              "kind": "standalone-binary",
+              "platform": "windows-x64",
+              "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "detectedButUnregistered": [],
+        "declaredButMissing": [],
+        "distributionBindings": [
+          {
+            "detectedSurfaceId": "binary:dist/agent-hub-demo-windows-x64.exe",
+            "declaredSurfaceId": "cli:agent-hub-demo",
+            "artifact": {
+              "kind": "standalone-binary",
+              "platform": "windows-x64",
+              "pathGlob": "dist/agent-hub-demo-windows-x64.exe"
+            }
+          }
+        ]
+      },
+      "issues": []
+    }
+  },
+  "auditBoundary": {
+    "mode": "closed-world",
+    "scope": "KFD-3 registered product public surfaces detected by Buildchain",
+    "detectedButUnregisteredPolicy": "warn",
+    "declaredButMissingPolicy": "fail"
+  },
+  "residualRisk": [],
+  "responsibility": {
+    "registryFactsOwner": "product",
+    "artifactVerificationOwner": "Buildchain KFD-3 surface audit",
+    "releasePassportProofOwner": "Buildchain"
+  },
+  "artifact": {
+    "name": "agent-hub-demo-windows-x64.exe",
+    "path": ".buildchain/release-passport/agent-hub-demo-windows-x64.exe",
+    "sha256": "e7da0508aafc1eff9d18945f919593d2f48cb85ef8519d51fc50c8fe15896a14"
+  }
+}
