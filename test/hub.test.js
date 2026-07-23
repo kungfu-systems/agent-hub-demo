@@ -134,6 +134,14 @@ test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
   );
 });
 
+test("release checks regenerate embedded facts after Buildchain versions the package", () => {
+  const packageJson = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url)),
+  );
+  assert.equal(packageJson.scripts.precheck, "npm run generate:embedded");
+  assert.equal(packageJson.scripts.pretest, "npm run check:embedded");
+});
+
 test("release publication separates Buildchain artifact IDs from product targets", () => {
   assert.deepEqual(releasePlatforms, [
     { artifact: "linux-x64", target: "linux-x64" },

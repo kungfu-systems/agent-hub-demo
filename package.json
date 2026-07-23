@@ -18,6 +18,7 @@
     "demo": "node src/cli.js demo",
     "generate:embedded": "node scripts/generate-embedded-facts.mjs",
     "inspect": "node src/adapter.js inspect",
+    "precheck": "npm run generate:embedded",
     "pretest": "npm run check:embedded",
     "prepare:release-evidence": "node scripts/prepare-release-evidence.mjs",
     "qualify:buildchain-release": "node scripts/qualify-buildchain-release.mjs",
