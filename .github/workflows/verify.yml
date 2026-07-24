@@ -1,0 +1,20 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dev/v*/v*
+      - alpha/v*/v*
+      - release/v*/v*
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    uses: kungfu-systems/buildchain/.github/workflows/check.yml@v2
+    with:
+      require-version-state: true
+      upload-artifacts: true
