@@ -31,7 +31,7 @@ Create work on a Buildchain-classified branch (`feature/*`, `fix/*`, `chore/*`,
 `dev/vX/vX.Y` line. The protected `dev`, `alpha`, `release`, and
 `publish-gate/*` channels are not ad-hoc work branches. Version changes,
 promotion tags, and GitHub Releases are produced only by Buildchain after a
-reviewed channel pull request. Buildchain v2 does not yet auto-seal
+reviewed channel pull request. Buildchain v3 does not yet auto-seal
 release-candidate admission for this repository's GitHub-Release-only target,
 so the promotion entrypoint remains dry-run-only and must not be replaced by a
 repository-owned tag or release script.

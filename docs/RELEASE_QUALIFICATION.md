@@ -21,7 +21,7 @@ Requirements: Node.js 24 or newer, npm, and Git.
 ```bash
 npm ci --registry=https://registry.npmjs.org/
 npm run check
-npx --yes --package @kungfu-tech/buildchain@2.14.15 buildchain kfd hub test --for agent
+npx --yes --package @kungfu-tech/buildchain@3.0.1-alpha.2 buildchain kfd hub test --for agent
 npm run qualify:release
 ```
 
