@@ -23,7 +23,7 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
       node-version: "24"

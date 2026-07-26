@@ -26,7 +26,7 @@ Buildchain-managed merge targets, not development branches. Exact tags such as
 `v0.1.0-alpha.0` are immutable evidence; floating tags are moved only by
 Buildchain promotion.
 
-The Buildchain v2 alpha release-candidate authority seals both exact npm targets
+The Buildchain v3 alpha release-candidate authority seals both exact npm targets
 and exact caller-bound GitHub Release targets. Agent Hub Demo uses only
 `github-release:kungfu-systems/agent-hub-demo`, an empty npm package identity,
 and a credentialless product predicate. Manual promotion remains dry-run-only;

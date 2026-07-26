@@ -15,7 +15,7 @@ const declarationPath = resolve(cwd, valueFor("--declaration", ".buildchain/kfd/
 const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
-const buildchainVersion = "2.14.15";
+const buildchainVersion = "3.0.1-alpha.2";
 const npmExecPath = process.env.npm_execpath || "";
 const npxCli = npmExecPath.replace(/npm-cli\.js$/, "npx-cli.js");
 const npxCommand = npxCli !== npmExecPath ? process.execPath : "npx";
