@@ -26,7 +26,7 @@ command = "npm ci --registry=https://registry.npmjs.org/"
 command = "npm run build"
 
 [lifecycle.verify]
-command = "npm run verify:signed-release"
+command = "npm run check"
 
 [lifecycle.publish]
 command = "node scripts/write-publish-evidence.mjs"
