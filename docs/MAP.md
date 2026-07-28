@@ -24,6 +24,8 @@
 - `.buildchain/buildchain.toml` — semver/auto version state, lifecycle
   commands, and the only three-platform artifact-signing declarations.
 - `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
+- `.github/workflows/artifact-signing-dogfood.yml` — protected, channel-neutral
+  Buildchain artifact-signing authority dogfood.
 - `.github/workflows/verify.yml` — stable protected-branch check surface.
 - `.github/workflows/buildchain-ref-promotion.yml` — thin Buildchain-owned
   promotion planner; dry-run-only until Buildchain supports sealed

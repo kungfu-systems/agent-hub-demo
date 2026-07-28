@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       buildchain-ref:
-        description: Exact Buildchain signing authority train or SHA
+        description: Protected Buildchain artifact-signing authority ref or exact SHA
         required: false
-        default: train/v3/v3.0/artifact-signing-authority
+        default: authority/v3/v3.0/artifact-signing
 
 permissions:
   contents: read
@@ -18,7 +18,7 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@train/v3/v3.0/artifact-signing-authority
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@authority/v3/v3.0/artifact-signing
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
