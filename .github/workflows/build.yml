@@ -23,7 +23,7 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@train/v3/v3.0/artifact-signing-authority
     secrets: inherit
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
