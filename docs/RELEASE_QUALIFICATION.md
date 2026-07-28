@@ -11,6 +11,12 @@ notarization evidence, and Windows carries timestamped Authenticode. Each
 payload contains a platform manifest and
 KFD-1/KFD-2/KFD-3 evidence.
 
+Both prerelease and stable release qualification use the protected,
+channel-neutral Buildchain authority ref
+`authority/v3/v3.0/artifact-signing`. Certificate rotation stays inside the
+central `buildchain-artifact-signing` environment; the consumer does not select
+an alpha- or release-specific credential environment.
+
 After a reviewed channel pull request is merged, Buildchain owns version-state
 mutation, publish-gate locking, exact and floating refs, sealed GitHub Release
 admission, Release Passport generation, and immutable asset upload. The
