@@ -15,7 +15,7 @@ test("consumer declares three honest signing intents without credentials", () =>
 });
 
 test("release verification consumes final signed bytes before KFD evidence", () => {
-  const workflow = fs.readFileSync(path.join(root, ".github/workflows/build.yml"), "utf8");
+  const workflow = fs.readFileSync(path.join(root, ".github/workflows/artifact-signing-dogfood.yml"), "utf8");
   const verifier = fs.readFileSync(path.join(root, "scripts/verify-signed-binary.mjs"), "utf8");
   const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
   assert.match(workflow, /actions: read/);

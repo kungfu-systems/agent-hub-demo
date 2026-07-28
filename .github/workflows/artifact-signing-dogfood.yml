@@ -1,34 +1,32 @@
-name: Build
+name: Artifact Signing Dogfood
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - dev/v*/v*.*
-      - alpha/v*/v*.*
-      - release/v*/v*.*
   workflow_dispatch:
     inputs:
       buildchain-ref:
-        description: Temporary Buildchain runtime ref for trusted manual validation
+        description: Exact Buildchain signing authority train or SHA
         required: false
-        default: ""
+        default: train/v3/v3.0/artifact-signing-authority
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  signing-dogfood:
     permissions:
+      actions: read
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@train/v3/v3.0/artifact-signing-authority
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
+      buildchain-ref: ${{ inputs.buildchain-ref }}
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
-      verify-command: npm run check && npm run qualify:buildchain-release
+      verify-command: npm run verify:signed-release
       kfd-agent-hub: off
       require-install: true
       require-build: true
@@ -41,4 +39,4 @@ jobs:
         .buildchain/kfd/kfd-2
         .buildchain/release-qualification
       release-candidate: true
-      publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
+      publish-channel: none
