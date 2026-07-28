@@ -3,8 +3,12 @@
 The Buildchain release-candidate workflow starts from a fresh GitHub checkout
 on Linux x64, macOS arm64, and Windows x64. Every runner installs the exact
 public npm dependency graph, runs the product tests and 100-delivery soak,
-builds a Node SEA executable, smoke-tests that executable without npm, and runs
-the public Agent Hub gate. Each payload contains a platform manifest and
+builds a Node SEA executable, submits only its sealed bytes to the central
+Buildchain signing authority, imports and smoke-tests the final signed
+executable without npm, and runs the public Agent Hub gate. Linux carries a
+detached cryptographic signature, macOS carries Developer ID plus accepted
+notarization evidence, and Windows carries timestamped Authenticode. Each
+payload contains a platform manifest and
 KFD-1/KFD-2/KFD-3 evidence.
 
 After a reviewed channel pull request is merged, Buildchain owns version-state
@@ -60,6 +64,10 @@ Release Passport. Exact prerelease and release tags are immutable evidence;
 floating tags remain Buildchain-owned channel refs. The bundle includes every
 sibling evidence document referenced by the Passport so a downloaded directory
 can be verified without the source checkout.
+
+The per-platform binary manifest records the signature profile, provider,
+immutable result digest, and evidence path. All checksums and KFD witnesses are
+regenerated after the signed bytes are imported.
 
 ## Claim and nonclaims
 

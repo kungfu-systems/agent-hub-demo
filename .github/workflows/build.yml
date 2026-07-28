@@ -24,12 +24,13 @@ jobs:
       issues: write
       id-token: write
     uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    secrets: inherit
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
-      verify-command: npm run check && npm run qualify:buildchain-release
+      verify-command: npm run verify:signed-release
       kfd-agent-hub: off
       require-install: true
       require-build: true

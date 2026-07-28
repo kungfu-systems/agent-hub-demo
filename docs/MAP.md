@@ -21,8 +21,8 @@
   audit boundary, responsibility, and residual risk.
 - `.buildchain/kfd/kfd-3/surfaces.json` — registered public collaboration
   surfaces used by the release witness.
-- `.buildchain/buildchain.toml` — semver/auto version state and lifecycle
-  commands.
+- `.buildchain/buildchain.toml` — semver/auto version state, lifecycle
+  commands, and the only three-platform artifact-signing declarations.
 - `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
 - `.github/workflows/verify.yml` — stable protected-branch check surface.
 - `.github/workflows/buildchain-ref-promotion.yml` — thin Buildchain-owned
@@ -31,6 +31,8 @@
 - `scripts/qualify-release.mjs` — offline fail-closed mutation oracle.
 - `scripts/qualify-buildchain-release.mjs` — product-specific KFD evidence run
   inside the Buildchain release-candidate lifecycle.
+- `scripts/verify-signed-binary.mjs` — final-byte platform signature and product
+  smoke verification before KFD and Passport evidence is sealed.
 - `docs/RELEASE_QUALIFICATION.md` — exact release evidence and claim limits.
 - `docs/versioning.md` — active Buildchain line and KFD-1 version-impact log.
 - `CONTRIBUTING.md` — contribution, DCO, and upstream-boundary guidance.
