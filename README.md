@@ -2,8 +2,11 @@
 
 Agent Hub Demo is a small reference project for shipping a KFD-compatible
 Agent Hub as Buildchain-managed standalone binaries. The release matrix
-publishes Linux x64, macOS arm64, and Windows x64 executables, KFD-1/2/3
-evidence, checksums, and one independently verifiable Release Passport.
+publishes a detached-signature Linux x64 executable, a Developer ID signed and
+notarized macOS arm64 executable, and a timestamped Authenticode Windows x64
+executable, plus KFD-1/2/3 evidence, checksums, and one independently
+verifiable Release Passport. This repository declares desired signature state
+only; Buildchain owns credentials, provider jobs, and immutable result delivery.
 
 The implementation uses two independent Hubs backed by separate file-based
 content-addressed stores. KFD enters through the public npm package at build
