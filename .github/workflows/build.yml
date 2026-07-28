@@ -24,7 +24,8 @@ jobs:
       issues: write
       id-token: write
     uses: kungfu-systems/buildchain/.github/workflows/build.yml@train/v3/v3.0/artifact-signing-authority
-    secrets: inherit
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
       node-version: "24"
