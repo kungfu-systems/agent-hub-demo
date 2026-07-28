@@ -19,6 +19,33 @@ permissions:
 
 jobs:
   build:
+    if: ${{ github.event_name == 'pull_request' }}
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    with:
+      node-version: "24"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm run check && npm run qualify:buildchain-release
+      kfd-agent-hub: off
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
+      artifact-paths: |
+        dist
+        .buildchain/artifacts
+        .buildchain/kfd/kfd-2
+        .buildchain/release-qualification
+      release-candidate: true
+      publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
+
+  signing-dogfood:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     permissions:
       actions: read
       contents: read
