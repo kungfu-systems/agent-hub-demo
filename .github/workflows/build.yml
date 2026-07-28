@@ -28,7 +28,7 @@ jobs:
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
+      buildchain-ref: ${{ inputs.buildchain-ref || 'train/v3/v3.0/artifact-signing-authority' }}
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
