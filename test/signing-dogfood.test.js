@@ -18,7 +18,9 @@ test("release verification consumes final signed bytes before KFD evidence", () 
   const workflow = fs.readFileSync(path.join(root, ".github/workflows/build.yml"), "utf8");
   const verifier = fs.readFileSync(path.join(root, "scripts/verify-signed-binary.mjs"), "utf8");
   const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
-  assert.match(workflow, /secrets: inherit/);
+  assert.match(workflow, /actions: read/);
+  assert.match(workflow, /BUILDCHAIN_PROMOTION_TOKEN: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/);
+  assert.doesNotMatch(workflow, /CERTIFICATE|PASSWORD|PRIVATE_KEY|TEAM_ID|NOTARY|TIMESTAMP_URL/);
   assert.match(workflow, /verify-command: npm run verify:signed-release/);
   assert.match(packageJson.scripts["verify:signed-release"], /verify:signed-binary.*qualify:buildchain-release/);
   assert.match(verifier, /detached-signature-v1/);
