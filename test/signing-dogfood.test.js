@@ -29,5 +29,8 @@ test("release verification consumes final signed bytes before KFD evidence", () 
   assert.match(verifier, /apple-developer-id/);
   assert.match(verifier, /windows-authenticode/);
   assert.match(verifier, /codesign/);
+  assert.match(verifier, /notarytool-accepted/);
+  assert.match(verifier, /standalone-notary-ticket-online/);
+  assert.doesNotMatch(verifier, /spctl/);
   assert.match(verifier, /Get-AuthenticodeSignature/);
 });

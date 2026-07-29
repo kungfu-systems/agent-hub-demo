@@ -11,6 +11,12 @@ notarization evidence, and Windows carries timestamped Authenticode. Each
 payload contains a platform manifest and
 KFD-1/KFD-2/KFD-3 evidence.
 
+The macOS artifact is a standalone Mach-O executable rather than an app
+bundle. Final-byte verification therefore uses strict `codesign` validation
+and requires the Buildchain result to prove `notarytool` acceptance plus the
+standalone online ticket; app-bundle Gatekeeper assessment and ticket stapling
+do not apply to this artifact shape.
+
 Both prerelease and stable release qualification use the protected,
 channel-neutral Buildchain authority ref
 `authority/v3/v3.0/artifact-signing`. Certificate rotation stays inside the

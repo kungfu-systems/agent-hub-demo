@@ -61,7 +61,17 @@ if (result.signature?.profile !== expected[0] || result.signature?.semantics !==
 }
 if (process.platform === "darwin") {
   run("codesign", ["--verify", "--strict", "--verbose=4", binaryPath]);
-  run("spctl", ["--assess", "--type", "execute", "--verbose=4", binaryPath]);
+  const requiredChecks = [
+    "codesign-strict",
+    "developer-id-team",
+    "hardened-runtime",
+    "notarytool-accepted",
+    "standalone-notary-ticket-online",
+  ];
+  const observedChecks = new Set(result.verification?.checks || []);
+  if (requiredChecks.some((check) => !observedChecks.has(check))) {
+    throw new Error("Buildchain result does not prove standalone Mach-O signing and accepted notarization");
+  }
 }
 if (process.platform === "win32") {
   const check = run("powershell.exe", [
