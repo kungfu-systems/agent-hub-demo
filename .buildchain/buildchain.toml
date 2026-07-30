@@ -30,3 +30,27 @@ command = "npm run check"
 
 [lifecycle.publish]
 command = "node scripts/write-publish-evidence.mjs"
+
+[[signing.artifacts]]
+id = "agent-hub-demo-linux-x64"
+path = "dist/agent-hub-demo-linux-x64"
+profile = "auto"
+kind = "binary"
+platforms = ["linux-x64"]
+required = true
+
+[[signing.artifacts]]
+id = "agent-hub-demo-macos-arm64"
+path = "dist/agent-hub-demo-macos-arm64"
+profile = "auto"
+kind = "mach-o"
+platforms = ["macos"]
+required = true
+
+[[signing.artifacts]]
+id = "agent-hub-demo-windows-x64"
+path = "dist/agent-hub-demo-windows-x64.exe"
+profile = "auto"
+kind = "pe"
+platforms = ["windows-x64"]
+required = true

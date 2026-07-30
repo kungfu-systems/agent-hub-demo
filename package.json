@@ -25,7 +25,9 @@
     "qualify:passport": "node scripts/qualify-passport.mjs",
     "qualify:release": "node scripts/qualify-release.mjs",
     "runtime100": "node src/adapter.js run --scenario runtime-100",
-    "test": "node --test"
+    "test": "node --test",
+    "verify:signed-binary": "node scripts/verify-signed-binary.mjs",
+    "verify:signed-release": "npm run test && npm run runtime100 && npm run verify:signed-binary && npm run qualify:buildchain-release"
   },
   "dependencies": {
     "@kungfu-tech/kfd": "1.0.0-alpha.42"
