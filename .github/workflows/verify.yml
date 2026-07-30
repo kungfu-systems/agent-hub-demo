@@ -16,5 +16,6 @@ jobs:
   check:
     uses: kungfu-systems/buildchain/.github/workflows/check.yml@v3
     with:
+      buildchain-ref: 9d74fb4557e71992db3516b5ba750d57cb9f3521
       require-version-state: true
       upload-artifacts: true
