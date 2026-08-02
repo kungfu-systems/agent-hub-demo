@@ -233,6 +233,7 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   const workflow = fs.readFileSync(new URL("../.github/workflows/build.yml", import.meta.url), "utf8");
   assert.match(workflow, /auditable-demo-mode:[\s\S]*- gate[\s\S]*- full/u);
   assert.match(workflow, /build:\n    permissions:\n      actions: read\n      contents: read/u);
+  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
   assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);

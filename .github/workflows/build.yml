@@ -33,7 +33,7 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@9006e8e3714d9a318c971d39392b62958bb0b045 # PR #2194 merged exact artifact coordinates
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || '' }}
       node-version: "22"
