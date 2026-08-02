@@ -30,11 +30,11 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@authority/v3/v3.0/artifact-signing
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3-alpha
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: authority/v3/v3.0/artifact-signing
+      buildchain-ref: v3-alpha
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
@@ -61,11 +61,11 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@authority/v3/v3.0/artifact-signing
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3-alpha
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: authority/v3/v3.0/artifact-signing
+      buildchain-ref: v3-alpha
       runner-preset: custom
       platforms-json: '[{"id":"linux-x64","name":"Linux x64","runner":"[\"ubuntu-24.04\"]"}]'
       node-version: "24"

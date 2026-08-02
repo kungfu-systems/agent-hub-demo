@@ -231,8 +231,8 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   const workflow = fs.readFileSync(new URL("../.github/workflows/build.yml", import.meta.url), "utf8");
   assert.match(workflow, /auditable-demo-mode:[\s\S]*- gate[\s\S]*- full/u);
   assert.match(workflow, /build:\n    if: \$\{\{ github\.event_name != 'workflow_dispatch' \|\| inputs\.auditable-demo-mode == 'off' \}\}\n    permissions:\n      actions: read\n      contents: read/u);
-  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@authority\/v3\/v3\.0\/artifact-signing/u);
-  assert.match(workflow, /buildchain-ref: authority\/v3\/v3\.0\/artifact-signing/u);
+  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@v3-alpha/u);
+  assert.match(workflow, /buildchain-ref: v3-alpha/u);
   assert.match(workflow, /auditable-demo-binary:[\s\S]*runner-preset: custom[\s\S]*platforms-json: '\[\{"id":"linux-x64"/u);
   assert.match(workflow, /artifact-name: agent-hub-demo-auditable-binary[\s\S]*release-candidate: false/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
