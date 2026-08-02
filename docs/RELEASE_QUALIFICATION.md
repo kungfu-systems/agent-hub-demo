@@ -6,12 +6,12 @@ installs the exact public npm dependency graph, runs the product tests and
 gate. It produces KFD-1, KFD-2, KFD-3, Agent Hub, and mutation evidence. After
 a reviewed channel pull request is merged, Buildchain owns version-state
 mutation, publish-gate locking, exact and floating refs, Release Passport
-generation, and GitHub Release publication. The current Buildchain v2 automatic
-admission path is npm-specific, while this repository is GitHub-Release-only.
-The checked-in promotion workflow therefore invokes the canonical Buildchain
-planner in dry-run mode and performs no publication mutation. A real publish
-must remain fail-closed until Buildchain exposes a sealed matching provider
-lane; repository-owned tag or release fallbacks are forbidden.
+generation, and GitHub Release publication. Buildchain v3 is the repository's
+only admitted Buildchain major line. The checked-in promotion workflow invokes
+the canonical planner in dry-run mode and performs no publication mutation
+until the GitHub-Release-only target has an exact sealed provider admission. A
+real publish remains fail-closed until then; repository-owned tag or release
+fallbacks are forbidden.
 
 ## Reproduce locally
 
@@ -20,7 +20,7 @@ Requirements: Node.js 22 or newer, npm, and Git.
 ```bash
 npm ci --registry=https://registry.npmjs.org/
 npm run check
-npx --yes --package @kungfu-tech/buildchain@2.14.15 buildchain kfd hub test --for agent
+npx --yes --package @kungfu-tech/buildchain@3.0.4 buildchain kfd hub test --for agent
 npm run qualify:release
 ```
 

@@ -233,11 +233,40 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   const workflow = fs.readFileSync(new URL("../.github/workflows/build.yml", import.meta.url), "utf8");
   assert.match(workflow, /auditable-demo-mode:[\s\S]*- gate[\s\S]*- full/u);
   assert.match(workflow, /build:\n    permissions:\n      actions: read\n      contents: read/u);
-  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
+  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@v3/u);
+  assert.doesNotMatch(workflow, /buildchain-ref:/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
   assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);
   assert.match(workflow, /value\?\.entries\?\.kungfu/u);
   assert.doesNotMatch(workflow, /kungfu-episodes-cli-linux-x64\/bin\/kungfu/u);
   assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[build, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
+});
+
+test("repository invokes Buildchain v3 only", () => {
+  const repositoryFiles = [
+    ".github/workflows/build.yml",
+    ".buildchain/alpha-contract-lock.json",
+    ".buildchain/contract-lock.json",
+    "CONTRIBUTING.md",
+    "README.md",
+    "docs/RELEASE_QUALIFICATION.md",
+    "docs/versioning.md",
+    "scripts/qualify-passport.mjs",
+    "scripts/qualify-release.mjs",
+  ];
+  const root = path.resolve(import.meta.dirname, "..");
+  const retiredMajor = String(1 + 1);
+  const retiredInvocation = new RegExp([
+    `@kungfu-tech/buildchain@${retiredMajor}(?:\\.|\\b)`,
+    `@v${retiredMajor}\\b`,
+    `Buildchain v${retiredMajor}`,
+    `"ref": "v${retiredMajor}(?:-alpha)?"`,
+  ].join("|"), "u");
+  for (const relative of repositoryFiles) {
+    const content = fs.readFileSync(path.join(root, relative), "utf8");
+    assert.doesNotMatch(content, retiredInvocation, relative);
+  }
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, ".buildchain/contract-lock.json"), "utf8")).buildchain.majorLine, "v3");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, ".buildchain/alpha-contract-lock.json"), "utf8")).buildchain.majorLine, "v3");
 });

@@ -18,7 +18,7 @@ const outputPath = resolve(cwd, valueFor(
   "--output",
   ".buildchain/release-qualification/passport-qualification.json",
 ));
-const buildchainVersion = "2.14.15";
+const buildchainVersion = "3.0.4";
 
 function verify(path) {
   const result = spawnSync("npx", [

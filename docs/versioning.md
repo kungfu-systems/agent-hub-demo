@@ -26,12 +26,11 @@ Buildchain-managed merge targets, not development branches. Exact tags such as
 `v0.1.0-alpha.0` are immutable evidence; floating tags are moved only by
 Buildchain promotion.
 
-The current Buildchain v2 release-candidate authority auto-seals npm
-publication targets, but Agent Hub Demo publishes only through GitHub Releases.
-The canonical promotion workflow therefore runs in dry-run mode and creates no
-tag, release, or `publish-gate/*` ref until Buildchain provides a matching
-sealed provider lane. This fail-closed boundary must not be bypassed with a
-consumer-owned publisher or a false npm identity.
+Buildchain v3 is the only admitted Buildchain major line. Agent Hub Demo
+publishes only through GitHub Releases, so the canonical promotion workflow
+runs in dry-run mode and creates no tag, release, or `publish-gate/*` ref until
+an exact matching provider admission is sealed. This fail-closed boundary must
+not be bypassed with a consumer-owned publisher or a false npm identity.
 
 ## Decision log
 

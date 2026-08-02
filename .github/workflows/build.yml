@@ -9,10 +9,6 @@ on:
       - release/v*/v*.*
   workflow_dispatch:
     inputs:
-      buildchain-ref:
-        description: Temporary Buildchain runtime ref for trusted manual validation
-        required: false
-        default: ""
       auditable-demo-mode:
         description: Run the shared auditable demo logic without waiting for a release
         required: true
@@ -33,9 +29,8 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@9006e8e3714d9a318c971d39392b62958bb0b045 # PR #2194 merged exact artifact coordinates
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
       node-version: "22"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build

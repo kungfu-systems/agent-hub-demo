@@ -31,10 +31,11 @@ Create work on a Buildchain-classified branch (`feature/*`, `fix/*`, `chore/*`,
 `dev/vX/vX.Y` line. The protected `dev`, `alpha`, `release`, and
 `publish-gate/*` channels are not ad-hoc work branches. Version changes,
 promotion tags, and GitHub Releases are produced only by Buildchain after a
-reviewed channel pull request. Buildchain v2 does not yet auto-seal
-release-candidate admission for this repository's GitHub-Release-only target,
-so the promotion entrypoint remains dry-run-only and must not be replaced by a
-repository-owned tag or release script.
+reviewed channel pull request. Buildchain v3 is the only admitted Buildchain
+major line for this repository. Because the publication target is GitHub
+Release-only, the promotion entrypoint remains dry-run-only until an exact
+provider admission is sealed; it must not be replaced by a repository-owned
+tag or release script.
 
 Pull requests should explain behavior, tests, contract impact, and residual
 risk. Complete the repository governance checklist in the pull request
