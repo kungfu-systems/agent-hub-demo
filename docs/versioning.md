@@ -8,7 +8,7 @@ confidence: high
 sensitivity: public
 evidence_grade: B
 review_state: self-reviewed
-last_reviewed: 2026-07-23
+last_reviewed: 2026-08-02
 ---
 
 # Versioning
@@ -65,3 +65,4 @@ not commit transaction output or bypass the promotion gate.
 | 2026-07-23 | Separate transaction version from embedded protocol facts | `v0.2` | patch | Package version state now enters source commands and SEA binaries directly, while generated KFD and adapter facts remain stable during Buildchain version verification. |
 | 2026-07-23 | Version the Agent Hub declaration atomically | `v0.2` | patch | The KFD conformance declaration now advances with `package.json`, so promotion-time verification binds the exact public adapter version instead of a stale prerelease. |
 | 2026-07-23 | Bind candidate binaries to the governed release version | `v0.2` | patch | Reviewed candidates predeclare the exact next version, while Buildchain independently verifies that version and owns the tag and publication transaction; the product predicate denies mismatches. |
+| 2026-08-02 | Add declarative binary animation publication | `v0.2` | minor | Buildchain v3 consumes the exact same-run standalone Linux binary, verifies its product metadata and embedded facts, captures independent native 1080p and 720p terminal sessions, and binds rendered media to a Release Passport. Source launchers and other products are outside this demo contract. |

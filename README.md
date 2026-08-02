@@ -20,6 +20,33 @@ admission state, revocation set, and export bundle. The file binding records
 transport receipts while the Hub keeps delivery, admission, and completion as
 independent facts.
 
+<!-- agent-hub-demo:auditable-demo:start -->
+## Auditable standalone demo
+
+[![Agent Hub Demo standalone binary completing its deterministic demonstration](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.gif)](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/public-evidence.json)
+
+Animation subject: `agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation`
+
+Native renditions: [1080p MP4](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.webm) · [720p MP4](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.webm)
+
+[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/poster.png)
+
+<details>
+<summary>Evidence and claim boundary</summary>
+
+This animation records the exact same-run Agent Hub Demo standalone binary
+completing its deterministic local demonstration. The 1080p and 720p videos
+come from independent native PTY captures, not a scaled recording. It validates
+the binary recording pipeline; it does not certify production security or grant
+authorization or permission from first-party/System
+identity, KFD compliance, Product System metadata, package metadata, registry
+history, scan output, or standalone generation.
+
+[Source `0dc4570c4096`](https://github.com/kungfu-systems/agent-hub-demo/commit/0dc4570c4096928aad8152a2caacdef1205a5058) · [workflow run](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139) · [Gate artifact](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828544298) · [media artifact](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828557652) · [Release Passport](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/release-passport.json) · [public evidence](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/public-evidence.json)
+
+</details>
+<!-- agent-hub-demo:auditable-demo:end -->
+
 ## Quick start
 
 Download the executable for your platform from the latest GitHub Release and
@@ -152,6 +179,8 @@ hosted operation are outside the current claim.
   declares the limited public release claim and residual risk.
 - [`.buildchain/kfd/kfd-3/surfaces.json`](.buildchain/kfd/kfd-3/surfaces.json)
   declares the CLI and cross-platform distribution surface.
+- [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
+  the deterministic standalone-binary animation subject and native renditions.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
 - [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)

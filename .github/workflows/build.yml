@@ -9,24 +9,32 @@ on:
       - release/v*/v*.*
   workflow_dispatch:
     inputs:
-      buildchain-ref:
-        description: Temporary Buildchain runtime ref for trusted manual validation
-        required: false
-        default: ""
+      auditable-demo-mode:
+        description: Run the shared binary auditable demo logic without waiting for a release
+        required: true
+        default: "off"
+        type: choice
+        options:
+          - "off"
+          - gate
+          - full
 
 permissions:
   contents: read
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.auditable-demo-mode == 'off' }}
     permissions:
       actions: read
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3-alpha
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
+      buildchain-ref: v3-alpha
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
@@ -44,3 +52,311 @@ jobs:
         .buildchain/release-qualification
       release-candidate: true
       publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
+
+  auditable-demo-binary:
+    name: Build exact Agent Hub Demo demo binary
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3-alpha
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+    with:
+      buildchain-ref: v3-alpha
+      runner-preset: custom
+      platforms-json: '[{"id":"linux-x64","name":"Linux x64","runner":"[\"ubuntu-24.04\"]"}]'
+      node-version: "24"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm run check && npm run qualify:buildchain-release
+      kfd-agent-hub: off
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo-auditable-binary
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
+      artifact-paths: |
+        dist/agent-hub-demo-linux-x64
+        dist/agent-hub-demo-linux-x64.sha256
+        .buildchain/artifacts/binary-linux-x64.json
+      release-candidate: false
+      publish-channel: none
+
+  resolve-auditable-demo-source:
+    name: Resolve exact Agent Hub Demo binary artifact
+    needs: auditable-demo-binary
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      artifact-id: ${{ steps.resolve.outputs.artifact-id }}
+      artifact-name: ${{ steps.resolve.outputs.artifact-name }}
+      artifact-digest: ${{ steps.resolve.outputs.artifact-digest }}
+      artifact-url: ${{ steps.resolve.outputs.artifact-url }}
+      artifact-expires-at: ${{ steps.resolve.outputs.artifact-expires-at }}
+    steps:
+      - name: Resolve producer-owned Linux coordinate
+        id: resolve
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+          ARTIFACT_COORDINATES_JSON: ${{ needs.auditable-demo-binary.outputs.artifact-coordinates-json }}
+        with:
+          script: |
+            const sourceSha = process.env.SOURCE_SHA || "";
+            if (!/^[0-9a-f]{40}$/.test(sourceSha)) throw new Error("build did not expose one exact source SHA");
+            let coordinates;
+            try { coordinates = JSON.parse(process.env.ARTIFACT_COORDINATES_JSON || "{}"); }
+            catch { throw new Error("artifact coordinate set is not valid JSON"); }
+            if (
+              coordinates.schema !== "buildchain.github-artifact-coordinate-set/v1" ||
+              coordinates.repository !== `${context.repo.owner}/${context.repo.repo}` ||
+              coordinates.runId !== String(context.runId) ||
+              coordinates.sourceSha !== sourceSha ||
+              !Array.isArray(coordinates.artifacts)
+            ) throw new Error("artifact coordinate set is not bound to this source run");
+            const declared = coordinates.artifacts.filter((artifact) => artifact?.platformId === "linux-x64");
+            if (declared.length !== 1) throw new Error(`expected one Linux coordinate, found ${declared.length}`);
+            const coordinate = declared[0];
+            if (
+              !/^[1-9][0-9]*$/.test(coordinate.id || "") ||
+              !/^sha256:[0-9a-f]{64}$/.test(coordinate.digest || "") ||
+              coordinate.url !== `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/artifacts/${coordinate.id}` ||
+              !Number.isFinite(Date.parse(coordinate.expiresAt || ""))
+            ) throw new Error("Linux coordinate is incomplete");
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              owner: context.repo.owner, repo: context.repo.repo, run_id: context.runId, per_page: 100,
+            });
+            const matches = artifacts.filter((artifact) => String(artifact.id) === coordinate.id && !artifact.expired);
+            if (matches.length !== 1) throw new Error(`expected one live artifact id ${coordinate.id}, found ${matches.length}`);
+            const observed = matches[0];
+            if (
+              observed.name !== coordinate.name || observed.digest !== coordinate.digest ||
+              new Date(observed.expires_at).toISOString() !== new Date(coordinate.expiresAt).toISOString()
+            ) throw new Error("live Linux artifact drifted from its producer coordinate");
+            core.setOutput("artifact-id", coordinate.id);
+            core.setOutput("artifact-name", coordinate.name);
+            core.setOutput("artifact-digest", coordinate.digest);
+            core.setOutput("artifact-url", coordinate.url);
+            core.setOutput("artifact-expires-at", coordinate.expiresAt);
+
+  capture-auditable-demo:
+    name: Capture exact Agent Hub Demo standalone binary
+    needs: [auditable-demo-binary, resolve-auditable-demo-source]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      artifact-name: ${{ steps.identity.outputs.artifact-name }}
+      artifact-digest: ${{ steps.coordinate.outputs.artifact-digest }}
+      artifact-url: ${{ steps.upload.outputs.artifact-url }}
+      capture-root: ${{ steps.identity.outputs.capture-root }}
+    steps:
+      - name: Check out exact Agent Hub Demo source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+          path: source
+          persist-credentials: false
+
+      - name: Download exact same-run Agent Hub Demo binary artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: ${{ needs.resolve-auditable-demo-source.outputs.artifact-name }}
+          path: source-artifact
+
+      - name: Capture and independently verify both native renditions
+        env:
+          ARTIFACT_COORDINATES_JSON: ${{ needs.auditable-demo-binary.outputs.artifact-coordinates-json }}
+        run: |
+          set -euo pipefail
+          chmod 755 source-artifact/dist/agent-hub-demo-linux-x64
+          printf '%s\n' "${ARTIFACT_COORDINATES_JSON}" > source-coordinate.json
+          python3 source/scripts/capture-agent-hub-demo.py \
+            --binary source-artifact/dist/agent-hub-demo-linux-x64 \
+            --binary-metadata source-artifact/.buildchain/artifacts/binary-linux-x64.json \
+            --demo-config source/.buildchain/auditable-demo.json \
+            --source-artifact source-artifact \
+            --source-coordinate source-coordinate.json \
+            --output auditable-demo-source
+
+      - name: Bind capture source identity
+        id: identity
+        env:
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+        run: |
+          set -euo pipefail
+          capture_root=$(node -e '
+            const fs = require("fs");
+            const value = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            if (!/^sha256:[0-9a-f]{64}$/.test(value.root || "")) process.exit(2);
+            process.stdout.write(value.root);
+          ' auditable-demo-source/manifest.json)
+          echo "artifact-name=agent-hub-demo-auditable-source-${SOURCE_SHA:0:12}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_OUTPUT}"
+          echo "capture-root=${capture_root}" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload exact capture source
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.identity.outputs.artifact-name }}
+          path: auditable-demo-source
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+          overwrite: false
+
+      - name: Normalize exact capture artifact digest
+        id: coordinate
+        env:
+          RAW_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          set -euo pipefail
+          digest="${RAW_DIGEST}"
+          if [[ "${digest}" =~ ^[0-9a-f]{64}$ ]]; then
+            digest="sha256:${digest}"
+          fi
+          if [[ ! "${digest}" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "capture artifact digest is not an exact sha256 coordinate" >&2
+            exit 2
+          fi
+          echo "artifact-digest=${digest}" >> "${GITHUB_OUTPUT}"
+
+  auditable-demo:
+    name: Required auditable demo Gate
+    needs: [auditable-demo-binary, capture-auditable-demo]
+    permissions:
+      actions: read
+      contents: read
+    uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@aa5f421f56dce2a3c8c6e2d66593b63107350a74 # v3 dev/v3/v3.0, PR #2217
+    with:
+      source-ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+      source-artifact-name: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
+      source-artifact-digest: ${{ needs.capture-auditable-demo.outputs.artifact-digest }}
+      adapter-path: scripts/auditable-demo-adapter.mjs
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de
+      render-media: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode == 'full') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+      media-profile: responsive-web-delivery-v1
+      artifact-retention-days: 14
+      require-trusted-event: true
+
+  auditable-demo-passport:
+    name: Bind auditable demo Release Passport
+    needs: [auditable-demo-binary, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo]
+    if: ${{ needs.auditable-demo.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Check out exact qualified source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify retained artifact coordinates and expiry
+        id: artifacts
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          SOURCE_ID: ${{ needs.resolve-auditable-demo-source.outputs.artifact-id }}
+          SOURCE_NAME: ${{ needs.resolve-auditable-demo-source.outputs.artifact-name }}
+          SOURCE_DIGEST: ${{ needs.resolve-auditable-demo-source.outputs.artifact-digest }}
+          CAPTURE_ID: ${{ needs.capture-auditable-demo.outputs.artifact-id }}
+          CAPTURE_NAME: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
+          CAPTURE_DIGEST: ${{ needs.capture-auditable-demo.outputs.artifact-digest }}
+          GATE_ID: ${{ needs.auditable-demo.outputs.gate-artifact-id }}
+          GATE_NAME: ${{ needs.auditable-demo.outputs.gate-artifact-name }}
+          GATE_DIGEST: ${{ needs.auditable-demo.outputs.gate-artifact-digest }}
+          MEDIA_ID: ${{ needs.auditable-demo.outputs.media-artifact-id }}
+          MEDIA_NAME: ${{ needs.auditable-demo.outputs.media-artifact-name }}
+          MEDIA_DIGEST: ${{ needs.auditable-demo.outputs.media-artifact-digest }}
+        with:
+          script: |
+            const declared = [
+              { kind: "source", required: true }, { kind: "capture", required: true },
+              { kind: "gate", required: true }, { kind: "media", required: false },
+            ].map(({ kind, required }) => ({ kind, required,
+              id: process.env[`${kind.toUpperCase()}_ID`] || "",
+              name: process.env[`${kind.toUpperCase()}_NAME`] || "",
+              digest: process.env[`${kind.toUpperCase()}_DIGEST`] || "",
+            }));
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              owner: context.repo.owner, repo: context.repo.repo, run_id: context.runId, per_page: 100,
+            });
+            const byId = new Map(artifacts.map((artifact) => [String(artifact.id), artifact]));
+            for (const coordinate of declared) {
+              if (/^[0-9a-f]{64}$/.test(coordinate.digest)) coordinate.digest = `sha256:${coordinate.digest}`;
+              const present = [coordinate.id, coordinate.name, coordinate.digest].filter(Boolean).length;
+              if (!coordinate.required && present === 0) {
+                core.setOutput(`${coordinate.kind}-digest`, "");
+                core.setOutput(`${coordinate.kind}-expires-at`, "");
+                continue;
+              }
+              if (present !== 3 || !/^[1-9][0-9]*$/.test(coordinate.id) || !/^sha256:[0-9a-f]{64}$/.test(coordinate.digest)) {
+                throw new Error(`${coordinate.kind} artifact coordinate is partial or invalid`);
+              }
+              const artifact = byId.get(coordinate.id);
+              if (!artifact || artifact.expired || artifact.name !== coordinate.name || artifact.digest !== coordinate.digest) {
+                throw new Error(`${coordinate.kind} artifact differs from the retained run artifact`);
+              }
+              const expiry = Date.parse(artifact.expires_at || "");
+              if (!Number.isFinite(expiry) || expiry <= Date.now()) throw new Error(`${coordinate.kind} artifact is expired`);
+              core.setOutput(`${coordinate.kind}-digest`, artifact.digest);
+              core.setOutput(`${coordinate.kind}-expires-at`, new Date(expiry).toISOString());
+            }
+
+      - name: Write and verify exact Release Passport
+        env:
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+          BUILDCHAIN_SHA: aa5f421f56dce2a3c8c6e2d66593b63107350a74
+          RENDERER_IMAGE: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de
+          CAPTURE_ROOT: ${{ needs.capture-auditable-demo.outputs.capture-root }}
+          SOURCE_ARTIFACT_ID: ${{ needs.resolve-auditable-demo-source.outputs.artifact-id }}
+          SOURCE_ARTIFACT_NAME: ${{ needs.resolve-auditable-demo-source.outputs.artifact-name }}
+          SOURCE_ARTIFACT_DIGEST: ${{ steps.artifacts.outputs.source-digest }}
+          SOURCE_ARTIFACT_URL: ${{ needs.resolve-auditable-demo-source.outputs.artifact-url }}
+          SOURCE_ARTIFACT_EXPIRES_AT: ${{ steps.artifacts.outputs.source-expires-at }}
+          CAPTURE_ARTIFACT_ID: ${{ needs.capture-auditable-demo.outputs.artifact-id }}
+          CAPTURE_ARTIFACT_NAME: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
+          CAPTURE_ARTIFACT_DIGEST: ${{ steps.artifacts.outputs.capture-digest }}
+          CAPTURE_ARTIFACT_URL: ${{ needs.capture-auditable-demo.outputs.artifact-url }}
+          CAPTURE_ARTIFACT_EXPIRES_AT: ${{ steps.artifacts.outputs.capture-expires-at }}
+          GATE_ROOT: ${{ needs.auditable-demo.outputs.gate-root }}
+          GATE_ARTIFACT_ID: ${{ needs.auditable-demo.outputs.gate-artifact-id }}
+          GATE_ARTIFACT_NAME: ${{ needs.auditable-demo.outputs.gate-artifact-name }}
+          GATE_ARTIFACT_DIGEST: ${{ steps.artifacts.outputs.gate-digest }}
+          GATE_ARTIFACT_URL: ${{ needs.auditable-demo.outputs.gate-artifact-url }}
+          GATE_ARTIFACT_EXPIRES_AT: ${{ steps.artifacts.outputs.gate-expires-at }}
+          MEDIA_ROOT: ${{ needs.auditable-demo.outputs.media-root }}
+          MEDIA_PROFILE: ${{ needs.auditable-demo.outputs.media-profile }}
+          MEDIA_QUALIFICATION_ROOT: ${{ needs.auditable-demo.outputs.media-qualification-root }}
+          MEDIA_ARTIFACT_ID: ${{ needs.auditable-demo.outputs.media-artifact-id }}
+          MEDIA_ARTIFACT_NAME: ${{ needs.auditable-demo.outputs.media-artifact-name }}
+          MEDIA_ARTIFACT_DIGEST: ${{ steps.artifacts.outputs.media-digest }}
+          MEDIA_ARTIFACT_URL: ${{ needs.auditable-demo.outputs.media-artifact-url }}
+          MEDIA_ARTIFACT_EXPIRES_AT: ${{ steps.artifacts.outputs.media-expires-at }}
+        run: |
+          node scripts/auditable-demo-passport.mjs write --output auditable-demo-release-passport.json
+          node scripts/auditable-demo-passport.mjs check --input auditable-demo-release-passport.json
+
+      - name: Upload exact Release Passport
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: agent-hub-demo-auditable-passport-${{ needs.auditable-demo-binary.outputs.publish-source-sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: auditable-demo-release-passport.json
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+          overwrite: false

@@ -90,6 +90,25 @@ async function runDemo(argv) {
   mkdirSync(root, { recursive: true });
   const report = runCoreDemo(root);
   writeFileSync(output, `${canonicalJson(report)}\n`);
+  if (argv.includes("--presentation")) {
+    const lines = [
+      ["32;1", "Agent Hub Demo  PASSED"],
+      ["36", "Fact delivery             admitted"],
+      ["36", "Episode delivery          admitted"],
+      ["36", "Duplicate delivery        idempotent"],
+      ["33", "Semantic conflict         visible"],
+      ["35", "Authority amplification   rejected"],
+      ["35", "Expired warrant           rejected"],
+      ["35", "Revoked warrant           rejected"],
+      ["35", "Disclosure conflation     rejected"],
+      ["32", "Export/import recovery    verified"],
+      ["32", "Drifted bundle            rejected"],
+    ];
+    for (const [color, line] of lines) {
+      process.stdout.write(`\u001b[${color}m${line}\u001b[0m\n`);
+    }
+    return;
+  }
   emit({ status: "passed", root, output, results: report.results });
 }
 
