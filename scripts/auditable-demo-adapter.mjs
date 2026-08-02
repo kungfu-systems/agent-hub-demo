@@ -71,6 +71,16 @@ function requireValue(condition, message) {
   if (!condition) fail(message);
 }
 
+function prepareOutput(output) {
+  if (!fs.existsSync(output)) {
+    fs.mkdirSync(output);
+    return;
+  }
+  const metadata = fs.lstatSync(output);
+  requireValue(metadata.isDirectory() && !metadata.isSymbolicLink(), "adapter output must be a directory");
+  requireValue(fs.readdirSync(output).length === 0, "adapter output must be empty");
+}
+
 function parseArgs(argv) {
   const values = {};
   for (let index = 0; index < argv.length; index += 2) {
@@ -186,8 +196,7 @@ export function adapt({ artifactRoot, output, sourceCoordinate }) {
   requireValue(manifest.product?.name === "agent-hub-demo" && manifest.product?.distribution === "standalone-binary" && JSON.stringify(manifest.product?.runtimeDependencies) === "[]", "standalone product boundary mismatch");
   requireValue(JSON.stringify(manifest.authority?.grants) === "[]", "capture source grants authority");
   requireValue(Array.isArray(manifest.renditions) && manifest.renditions.length === 2, "capture source must have two renditions");
-  requireValue(!fs.existsSync(output), "adapter output must be new");
-  fs.mkdirSync(output);
+  prepareOutput(output);
   const primary = writeRendition(output, artifactRoot, manifest, manifest.renditions[0], "primary");
   const responsive = writeRendition(output, artifactRoot, manifest, manifest.renditions[1], "responsive");
   requireValue(primary.id === "1080p" && responsive.id === "720p" && primary.captureRoot !== responsive.captureRoot, "native rendition roots are invalid");

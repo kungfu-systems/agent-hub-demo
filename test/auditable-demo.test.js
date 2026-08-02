@@ -123,6 +123,7 @@ test("adapter projects the two exact binary captures and fails closed on drift",
   const gate = path.join(root, "gate-coordinate.json");
   const output = path.join(root, "adapter-output");
   writeJson(gate, gateCoordinate());
+  fs.mkdirSync(output);
   adapt({ artifactRoot: captureSource, output, sourceCoordinate: gate });
   const set = JSON.parse(fs.readFileSync(path.join(output, "rendition-set.json"), "utf8"));
   assert.deepEqual(set.renditions.map(({ id, role }) => [id, role]), [["1080p", "primary"], ["720p", "responsive"]]);
@@ -134,4 +135,14 @@ test("adapter projects the two exact binary captures and fails closed on drift",
   summary.results.fact = "rejected";
   writeJson(summaryPath, summary);
   assert.throws(() => adapt({ artifactRoot: captureSource, output: path.join(root, "tampered"), sourceCoordinate: gate }), /admitted deliveries/u);
+});
+
+test("adapter rejects a pre-populated output directory", PTY, (t) => {
+  const { root, output: captureSource } = captureFixture(t);
+  const gate = path.join(root, "gate-coordinate.json");
+  const output = path.join(root, "adapter-output");
+  writeJson(gate, gateCoordinate());
+  fs.mkdirSync(output);
+  fs.writeFileSync(path.join(output, "foreign.txt"), "not adapter output\n");
+  assert.throws(() => adapt({ artifactRoot: captureSource, output, sourceCoordinate: gate }), /output must be empty/u);
 });
