@@ -236,7 +236,7 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   assert.match(workflow, /auditable-demo-binary:[\s\S]*runner-preset: custom[\s\S]*platforms-json: '\[\{"id":"linux-x64"/u);
   assert.match(workflow, /artifact-name: agent-hub-demo-auditable-binary[\s\S]*release-candidate: false/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
-  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@6f2252722018cb5d471895818bb58db9346cec65/u);
+  assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@31483f9652651d5b7b324fae6864bc4e7ff16fb6/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);
   assert.match(workflow, /source-artifact\/dist\/agent-hub-demo-linux-x64/u);
   assert.match(workflow, /binary-linux-x64\.json/u);
