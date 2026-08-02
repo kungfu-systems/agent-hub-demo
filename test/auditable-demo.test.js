@@ -129,6 +129,11 @@ test("adapter projects the two exact binary captures and fails closed on drift",
   assert.deepEqual(set.renditions.map(({ id, role }) => [id, role]), [["1080p", "primary"], ["720p", "responsive"]]);
   assert.equal(JSON.parse(fs.readFileSync(path.join(output, "scene.json"), "utf8")).width, 1920);
   assert.equal(JSON.parse(fs.readFileSync(path.join(output, "scene-720p.json"), "utf8")).width, 1280);
+  const primaryCapture = JSON.parse(fs.readFileSync(path.join(output, "terminal-capture.json"), "utf8"));
+  assert.equal(primaryCapture.schema, "kungfu.terminal-capture/v1");
+  assert.equal(primaryCapture.completion.status, "qualified");
+  assert.match(primaryCapture.completion.reportRoot, /^sha256:[0-9a-f]{64}$/u);
+  assert.equal("summaryRoot" in primaryCapture.completion, false);
   assert.deepEqual(set.authority.grants, []);
   const summaryPath = path.join(captureSource, "renditions/720p/run-summary.json");
   const summary = JSON.parse(fs.readFileSync(summaryPath, "utf8"));

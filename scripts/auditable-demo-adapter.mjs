@@ -128,6 +128,25 @@ function validateCapture(value, descriptor, label) {
   requireValue(bytes > 0 && bytes <= 4 * 1024 * 1024, `${label} byte bound mismatch`);
 }
 
+function projectTerminalCapture(capture) {
+  return {
+    schema: "kungfu.terminal-capture/v1",
+    command: capture.command,
+    dimensions: capture.dimensions,
+    durationMs: capture.durationMs,
+    encoding: capture.encoding,
+    events: capture.events,
+    completion: {
+      schema: capture.completion.schema,
+      status: "qualified",
+      reportRoot: capture.completion.summaryRoot,
+      eventCount: capture.completion.eventCount,
+    },
+    exitCode: capture.exitCode,
+    authority: capture.authority,
+  };
+}
+
 function writeRendition(output, artifactRoot, manifest, descriptor, role) {
   const label = `rendition ${descriptor.id}`;
   const summary = readJson(inside(artifactRoot, descriptor.runSummary, `${label} summary path`), `${label} summary`);
@@ -142,6 +161,7 @@ function writeRendition(output, artifactRoot, manifest, descriptor, role) {
   const projectionName = `public-projection${suffix}.json`;
   const sceneName = `scene${suffix}.json`;
   const captureName = `terminal-capture${suffix}.json`;
+  const terminalCapture = projectTerminalCapture(capture);
   const transcript = [
     "$ agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation",
     "Agent Hub Demo PASSED",
@@ -172,7 +192,7 @@ function writeRendition(output, artifactRoot, manifest, descriptor, role) {
   fs.writeFileSync(path.join(output, transcriptName), transcript);
   fs.writeFileSync(path.join(output, projectionName), stableJson(projection));
   fs.writeFileSync(path.join(output, sceneName), stableJson(scene));
-  fs.writeFileSync(path.join(output, captureName), stableJson(capture));
+  fs.writeFileSync(path.join(output, captureName), stableJson(terminalCapture));
   return {
     id: descriptor.id,
     role,
