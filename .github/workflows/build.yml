@@ -29,9 +29,11 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
-    secrets: inherit
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@authority/v3/v3.0/artifact-signing
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
+      buildchain-ref: authority/v3/v3.0/artifact-signing
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
