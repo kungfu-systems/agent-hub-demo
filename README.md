@@ -179,7 +179,8 @@ hosted operation are outside the current claim.
   declares the CLI and cross-platform distribution surface.
 - [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
   the standalone-binary scenario consumed directly by Buildchain's declarative
-  demo platform; this repository carries no product-specific capture glue.
+  demo platform; the exact binary and animation are bound to the same workflow
+  run, and this repository carries no product-specific capture glue.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
 - [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)
