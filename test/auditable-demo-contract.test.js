@@ -248,8 +248,11 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
 test("repository invokes Buildchain v3 only", () => {
   const repositoryFiles = [
     ".github/workflows/build.yml",
+    ".github/workflows/buildchain-ref-promotion.yml",
+    ".github/workflows/verify.yml",
     ".buildchain/alpha-contract-lock.json",
     ".buildchain/contract-lock.json",
+    ".buildchain/kfd/kfd-2/registry.json",
     "CONTRIBUTING.md",
     "README.md",
     "docs/RELEASE_QUALIFICATION.md",

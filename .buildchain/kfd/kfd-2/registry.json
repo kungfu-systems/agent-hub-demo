@@ -14,7 +14,7 @@
     "tagPrefix": "v"
   },
   "buildchain": {
-    "checkCommand": "npx --yes --package @kungfu-tech/buildchain@2.14.15 buildchain kfd 2 product-claims check --json"
+    "checkCommand": "npx --yes --package @kungfu-tech/buildchain@3.0.4 buildchain kfd 2 product-claims check --json"
   },
   "claims": [
     {
