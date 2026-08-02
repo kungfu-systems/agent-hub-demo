@@ -236,7 +236,7 @@ jobs:
     permissions:
       actions: read
       contents: read
-    uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@86cfa4d4df65d2114cd71b41eee28a74a3b14573 # PR #2194 generic terminal completion train
+    uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@9006e8e3714d9a318c971d39392b62958bb0b045 # PR #2194 merged generic terminal completion
     with:
       source-ref: ${{ needs.build.outputs.publish-source-sha }}
       source-artifact-name: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
@@ -329,7 +329,7 @@ jobs:
         env:
           SOURCE_SHA: ${{ needs.build.outputs.publish-source-sha }}
           KUNGFU_SOURCE_SHA: 0c584fc0e6446a07a5bdb1462738ffab47dddadb
-          BUILDCHAIN_SHA: 86cfa4d4df65d2114cd71b41eee28a74a3b14573
+          BUILDCHAIN_SHA: 9006e8e3714d9a318c971d39392b62958bb0b045
           RENDERER_IMAGE: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591
           CAPTURE_ROOT: ${{ needs.capture-auditable-demo.outputs.capture-root }}
           SOURCE_ARTIFACT_ID: ${{ needs.resolve-auditable-demo-source.outputs.artifact-id }}
