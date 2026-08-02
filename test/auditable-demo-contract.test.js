@@ -242,6 +242,7 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   assert.match(workflow, /binary-linux-x64\.json/u);
   assert.match(workflow, /\.buildchain\/auditable-demo\.json/u);
   assert.match(workflow, /capture-auditable-demo:[\s\S]*runs-on: ubuntu-24\.04[\s\S]*timeout-minutes: 10/u);
+  assert.match(workflow, /Normalize exact capture artifact digest[\s\S]*\^sha256:\[0-9a-f\]\{64\}\$/u);
   assert.doesNotMatch(workflow, /Check out exact external|--kungfu|external-qualification-and-recording-tool/u);
   assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[auditable-demo-binary, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
 });

@@ -157,7 +157,7 @@ jobs:
     outputs:
       artifact-id: ${{ steps.upload.outputs.artifact-id }}
       artifact-name: ${{ steps.identity.outputs.artifact-name }}
-      artifact-digest: ${{ steps.upload.outputs.artifact-digest }}
+      artifact-digest: ${{ steps.coordinate.outputs.artifact-digest }}
       artifact-url: ${{ steps.upload.outputs.artifact-url }}
       capture-root: ${{ steps.identity.outputs.capture-root }}
     steps:
@@ -214,6 +214,22 @@ jobs:
           retention-days: 14
           compression-level: 0
           overwrite: false
+
+      - name: Normalize exact capture artifact digest
+        id: coordinate
+        env:
+          RAW_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          set -euo pipefail
+          digest="${RAW_DIGEST}"
+          if [[ "${digest}" =~ ^[0-9a-f]{64}$ ]]; then
+            digest="sha256:${digest}"
+          fi
+          if [[ ! "${digest}" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "capture artifact digest is not an exact sha256 coordinate" >&2
+            exit 2
+          fi
+          echo "artifact-digest=${digest}" >> "${GITHUB_OUTPUT}"
 
   auditable-demo:
     name: Required auditable demo Gate
