@@ -167,6 +167,10 @@ jobs:
 
       - name: Build exact installed Kungfu CLI capture tool
         working-directory: kungfu-source
+        env:
+          CC: gcc-14
+          CXX: g++-14
+          KUNGFU_BUILDCHAIN_SOURCE_BUILD: "1"
         run: ./shifu product cli dist
 
       - name: Extract exact installed Kungfu CLI
