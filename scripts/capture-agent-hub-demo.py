@@ -153,7 +153,7 @@ def validate_binary(binary: Path, metadata: dict[str, Any]) -> dict[str, Any]:
 
 def validate_report(report: dict[str, Any]) -> dict[str, Any]:
     results = report.get("results") or {}
-    require(report.get("contract") == "agent-hub-demo.run-report/v1", "demo report contract mismatch")
+    require(report.get("contract") == "agent-hub-demo.report/v1", "demo report contract mismatch")
     expected = {"fact": "admitted", "episode": "admitted", "conflict": "conflicted",
                 "amplification": "rejected", "expired": "rejected", "revoked": "rejected",
                 "unknownFeature": "rejected", "disclosureConflation": "rejected"}

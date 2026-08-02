@@ -34,7 +34,7 @@ if args and args[0] == "demo":
     output = args[args.index("--output") + 1]
     os.makedirs(os.path.dirname(output))
     verdict = lambda status: {"status": status}
-    report = {"contract":"agent-hub-demo.run-report/v1","results":{
+    report = {"contract":"agent-hub-demo.report/v1","results":{
       "fact":verdict("admitted"),"episode":verdict("admitted"),"duplicate":{"duplicate":True},
       "conflict":verdict("conflicted"),"amplification":verdict("rejected"),
       "expired":verdict("rejected"),"revoked":verdict("rejected"),
