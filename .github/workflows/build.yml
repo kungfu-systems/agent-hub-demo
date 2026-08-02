@@ -30,6 +30,7 @@ jobs:
       issues: write
       id-token: write
     uses: kungfu-systems/buildchain/.github/workflows/build.yml@v3
+    secrets: inherit
     with:
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
