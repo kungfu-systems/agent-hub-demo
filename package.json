@@ -12,8 +12,6 @@
     "node": ">=24"
   },
   "scripts": {
-    "auditable-demo:check": "node scripts/materialize-auditable-demo.mjs check --repo-root .",
-    "auditable-demo:materialize": "node scripts/materialize-auditable-demo.mjs update",
     "build": "npm run generate:embedded && node scripts/build.mjs",
     "check": "npm run test && npm run runtime100 && npm run build",
     "check:embedded": "node scripts/generate-embedded-facts.mjs --check",
