@@ -21,28 +21,26 @@ transport receipts while the Hub keeps delivery, admission, and completion as
 independent facts.
 
 <!-- agent-hub-demo:auditable-demo:start -->
-## Auditable standalone demo
+## Agent Hub Demo standalone binary
 
-[![Agent Hub Demo standalone binary completing its deterministic demonstration](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.gif)](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/public-evidence.json)
+[![Agent Hub Demo standalone binary](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/demo.gif)](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/public-evidence.json)
 
-Animation subject: `agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation`
+Animation scenario:
 
-Native renditions: [1080p MP4](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.webm) · [720p MP4](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.webm)
+```text
+$ agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation
+```
 
-[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/poster.png)
+Native renditions: [1080p MP4](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/demo.webm) · [720p MP4](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/demo-720p.webm)
+
+[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/poster.png)
 
 <details>
 <summary>Evidence and claim boundary</summary>
 
-This animation records the exact same-run Agent Hub Demo standalone binary
-completing its deterministic local demonstration. The 1080p and 720p videos
-come from independent native PTY captures, not a scaled recording. It validates
-the binary recording pipeline; it does not certify production security or grant
-authorization or permission from first-party/System
-identity, KFD compliance, Product System metadata, package metadata, registry
-history, scan output, or standalone generation.
+This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.
 
-[Source `0dc4570c4096`](https://github.com/kungfu-systems/agent-hub-demo/commit/0dc4570c4096928aad8152a2caacdef1205a5058) · [workflow run](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139) · [Gate artifact](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828544298) · [media artifact](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828557652) · [Release Passport](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/release-passport.json) · [public evidence](docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/public-evidence.json)
+[Release Passport](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/release-passport.json) · [auditable evidence](docs/evidence/auditable-demo/8b19e6e64d84c5579a7741b79ee3fe802c932f16bc8dd3041e31468310f9cef6/agent-hub-demo/public-evidence.json)
 
 </details>
 <!-- agent-hub-demo:auditable-demo:end -->
@@ -181,7 +179,8 @@ hosted operation are outside the current claim.
   declares the CLI and cross-platform distribution surface.
 - [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
   the standalone-binary scenario consumed directly by Buildchain's declarative
-  demo platform; this repository carries no product-specific capture glue.
+  demo platform; the exact binary and animation are bound to the same workflow
+  run, and this repository carries no product-specific capture glue.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
 - [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)
