@@ -9,6 +9,8 @@
     "node": ">=22"
   },
   "scripts": {
+    "auditable-demo:check": "node scripts/materialize-auditable-demo.mjs check --repo-root .",
+    "auditable-demo:materialize": "node scripts/materialize-auditable-demo.mjs update",
     "build": "node scripts/build.mjs",
     "check": "npm run test && npm run runtime100 && npm run build",
     "demo": "node src/cli.js demo",

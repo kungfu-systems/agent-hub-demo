@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .demo/
+.kungfu/
+__pycache__/
 .buildchain/artifacts/
 .buildchain/kfd/kfd-2/buildchain-claim-args.txt
 .buildchain/kfd/kfd-2/claims/
