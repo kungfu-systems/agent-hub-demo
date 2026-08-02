@@ -240,6 +240,7 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);
   assert.match(workflow, /value\?\.entries\?\.kungfu/u);
   assert.doesNotMatch(workflow, /kungfu-episodes-cli-linux-x64\/bin\/kungfu/u);
+  assert.match(workflow, /capture-auditable-demo:[\s\S]*runs-on: ubuntu-24\.04/u);
   assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[build, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
 });
 

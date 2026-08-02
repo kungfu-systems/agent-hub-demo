@@ -132,7 +132,7 @@ jobs:
   capture-auditable-demo:
     name: Capture exact Kungfu Agent Hub qualifier
     needs: [build, resolve-auditable-demo-source]
-    runs-on: [self-hosted, Linux, X64, kungfu-build-v4-linux-x64]
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     permissions:
       actions: read
