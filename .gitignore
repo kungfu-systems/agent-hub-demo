@@ -2,8 +2,8 @@ node_modules/
 dist/
 .demo/
 .kungfu/
-__pycache__/
 .buildchain/artifacts/
+.buildchain/sea/
 .buildchain/kfd/kfd-2/buildchain-claim-args.txt
 .buildchain/kfd/kfd-2/claims/
 .buildchain/kfd/kfd-2/release-claims.json

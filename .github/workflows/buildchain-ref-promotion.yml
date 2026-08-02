@@ -16,7 +16,7 @@ on:
       target-ref:
         description: Buildchain channel branch to promote
         required: true
-        default: alpha/v0/v0.1
+        default: alpha/v0/v0.2
       dry-run:
         description: Only print planned ref and release updates
         required: true
@@ -49,7 +49,7 @@ jobs:
           github.event.workflow_run.event == 'push'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v3
+    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v3-alpha
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
@@ -68,18 +68,33 @@ jobs:
       required-artifact-count: 3
       publish-artifact-kind: custom
       publish-target: github-release
+      publish-rematerialize-on-resume: true
       publish-required-artifacts-json: >-
         [{"group":"release","kind":"github-release","name":"agent-hub-demo","ref_template":"v{version}"}]
-      publish-package-main: "@kungfu-tech/agent-hub-demo"
       trusted-publishing: false
       release-passport: true
       release-passport-product-name: Agent Hub Demo
-      release-passport-kfd-1-witness-jsons: .buildchain/release-inputs/kfd-1-witness.json
+      release-passport-kfd-1-witness-jsons: |
+        .buildchain/release-inputs/kfd-1-witness-linux-x64.json
+        .buildchain/release-inputs/kfd-1-witness-macos-arm64.json
+        .buildchain/release-inputs/kfd-1-witness-windows-x64.json
       release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
-      release-passport-kfd-3-prebuild-witness-jsons: .buildchain/release-inputs/kfd-3-prebuild.json
-      release-passport-kfd-3-artifact-witness-jsons: .buildchain/release-inputs/kfd-3-artifact.json
+      release-passport-kfd-3-prebuild-witness-jsons: |
+        .buildchain/release-inputs/kfd-3-prebuild-linux-x64.json
+        .buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json
+        .buildchain/release-inputs/kfd-3-prebuild-windows-x64.json
+      release-passport-kfd-3-artifact-witness-jsons: |
+        .buildchain/release-inputs/kfd-3-artifact-linux-x64.json
+        .buildchain/release-inputs/kfd-3-artifact-macos-arm64.json
+        .buildchain/release-inputs/kfd-3-artifact-windows-x64.json
       github-release: true
-      github-release-notes: Buildchain-managed Agent Hub Demo release evidence and Release Passport.
-      # Agent Hub Demo is GitHub-Release-only, so keep the canonical planner
-      # fail-closed until Buildchain owns that provider lane.
-      dry-run: true
+      github-release-notes: Buildchain-managed standalone binaries, KFD-1/2/3 evidence, and Release Passport.
+      publication-auto-admission: true
+      publication-auto-no-gate: true
+      publication-publisher-workflow-path: .github/workflows/buildchain-ref-promotion.yml
+      publication-product: Agent Hub Demo
+      publication-target: github-release:kungfu-systems/agent-hub-demo
+      publication-package-name: ""
+      publication-consumer-predicate-id: agent-hub-demo.binary-kfd123-release/v1
+      publication-consumer-qualification-command: node scripts/qualify-publication.mjs
+      dry-run: ${{ github.event_name == 'workflow_dispatch' }}

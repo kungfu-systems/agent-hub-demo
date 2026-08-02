@@ -1,9 +1,18 @@
 # Agent Hub Demo
 
-Agent Hub Demo is a clean-room demonstration of building a KFD-compatible
-Agent Hub with Buildchain. It implements two independent Node.js Hubs backed by
-separate file-based content-addressed stores and consumes KFD only through its
-public npm package and adapter contract.
+Agent Hub Demo is a small reference project for shipping a KFD-compatible
+Agent Hub as Buildchain-managed standalone binaries. The release matrix
+publishes a detached-signature Linux x64 executable, a Developer ID signed and
+notarized macOS arm64 executable, and a timestamped Authenticode Windows x64
+executable, plus KFD-1/2/3 evidence, checksums, and one independently
+verifiable Release Passport. This repository declares desired signature state
+only; Buildchain owns credentials, provider jobs, and immutable result delivery.
+
+The implementation uses two independent Hubs backed by separate file-based
+content-addressed stores. KFD enters through the public npm package at build
+time; its exact public profile facts are embedded into the executables, so
+released binaries do not require Node.js, npm, a source checkout, or private
+packages.
 
 The repository is deliberately small, but the implementation is real. Each Hub
 owns a distinct Ed25519 identity, capability document, content-addressed store,
@@ -13,13 +22,25 @@ independent facts.
 
 ## Quick start
 
-Requirements: Node.js 22 or newer and npm.
+Download the executable for your platform from the latest GitHub Release and
+run:
+
+```bash
+./agent-hub-demo-linux-x64 self-describe --json
+./agent-hub-demo-linux-x64 self-verify --json
+./agent-hub-demo-linux-x64 demo --root .demo/release
+```
+
+On Windows, use `agent-hub-demo-windows-x64.exe`; on macOS, use
+`agent-hub-demo-macos-arm64`.
+
+Building from source requires Node.js 24 or newer and npm:
 
 ```bash
 git clone https://github.com/kungfu-systems/agent-hub-demo.git
 cd agent-hub-demo
 npm ci --registry=https://registry.npmjs.org/
-npm test
+npm run check
 npm run demo
 ```
 
@@ -44,12 +65,15 @@ This soak does not replace or qualify the separate KFD Runtime 100 profile.
 Run the public Buildchain first-class Agent Hub gate separately:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@3.0.4 buildchain kfd hub test --for agent
+npx --yes --package @kungfu-tech/buildchain@3.0.1-alpha.2 buildchain kfd hub test --for agent
 ```
 
 The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
 runs the fixed public KFD Hub suite against the real adapter, and writes its
-lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`.
+lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`. The
+prerelease version is pinned deliberately: it is the same public Buildchain
+contract used by this release line, including the KFD-3 distribution-artifact
+binding required by the three standalone binaries.
 
 Run the release qualification after that positive gate:
 
@@ -65,11 +89,14 @@ and an explicit owner, evidence pointer, and next action. See
 
 ## Agent adapter
 
-The adapter uses the public KFD Agent Hub JSONL stdio envelopes:
+The source CLI and released binary expose the same public KFD Agent Hub JSONL
+stdio envelopes:
 
 ```bash
 node src/adapter.js inspect
 node src/adapter.js jsonl --root .demo/adapter
+./agent-hub-demo-linux-x64 adapter inspect
+./agent-hub-demo-linux-x64 adapter jsonl --root .demo/adapter-binary
 ```
 
 Example handshake request:
@@ -90,6 +117,24 @@ public KFD package, a public black-box adapter boundary, and Buildchain without
 depending on Kungfu Core, private packages, local paths, Git submodules, a
 copied KFD evaluator, or private Buildchain scripts.
 
+The reference release demonstrates three bounded adoption layers:
+
+- KFD-1 binds every platform executable and product contract artifact
+  byte-for-byte to its release-candidate evidence;
+- KFD-2 publishes the explicit structural-independence claim, responsibility,
+  exclusions, and residual risk;
+- KFD-3 declares the participant-facing CLI plus its three-platform
+  distribution tasks and artifacts.
+
+Buildchain collects those witnesses with the exact release-candidate manifests,
+publishes the executables and `SHA256SUMS`, and emits
+`buildchain.release.json`. Verify a downloaded release directory independently:
+
+```bash
+npx --yes --package @kungfu-tech/buildchain@3.0.1-alpha.2 buildchain verify release-passport buildchain.release.json --json
+shasum -a 256 -c SHA256SUMS
+```
+
 It is not KFD certification, a production security assessment, independent
 vendor adoption, plural-vendor interoperability, or proof of production
 fitness. The file binding is the tested transport in this release; HTTP and
@@ -105,6 +150,12 @@ hosted operation are outside the current claim.
   builder-owned adoption declaration.
 - [`.buildchain/kfd/kfd-2/registry.json`](.buildchain/kfd/kfd-2/registry.json)
   declares the limited public release claim and residual risk.
+- [`.buildchain/kfd/kfd-3/surfaces.json`](.buildchain/kfd/kfd-3/surfaces.json)
+  declares the CLI and cross-platform distribution surface.
+- [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
+  Node SEA build and binary smoke checks.
+- [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)
+  assembles the exact three-platform GitHub Release and Passport inputs.
 - [`src/hub.js`](src/hub.js) is the product implementation.
 - [`src/adapter.js`](src/adapter.js) is the black-box KFD adapter.
 
