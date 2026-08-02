@@ -237,13 +237,13 @@ jobs:
     permissions:
       actions: read
       contents: read
-    uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@31483f9652651d5b7b324fae6864bc4e7ff16fb6 # v3 PR #2217 train validation
+    uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@aa5f421f56dce2a3c8c6e2d66593b63107350a74 # v3 dev/v3/v3.0, PR #2217
     with:
       source-ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
       source-artifact-name: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
       source-artifact-digest: ${{ needs.capture-auditable-demo.outputs.artifact-digest }}
       adapter-path: scripts/auditable-demo-adapter.mjs
-      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de
       render-media: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode == 'full') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
       media-profile: responsive-web-delivery-v1
       artifact-retention-days: 14
@@ -320,8 +320,8 @@ jobs:
       - name: Write and verify exact Release Passport
         env:
           SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
-          BUILDCHAIN_SHA: 31483f9652651d5b7b324fae6864bc4e7ff16fb6
-          RENDERER_IMAGE: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591
+          BUILDCHAIN_SHA: aa5f421f56dce2a3c8c6e2d66593b63107350a74
+          RENDERER_IMAGE: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de
           CAPTURE_ROOT: ${{ needs.capture-auditable-demo.outputs.capture-root }}
           SOURCE_ARTIFACT_ID: ${{ needs.resolve-auditable-demo-source.outputs.artifact-id }}
           SOURCE_ARTIFACT_NAME: ${{ needs.resolve-auditable-demo-source.outputs.artifact-name }}
