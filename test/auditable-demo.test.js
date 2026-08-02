@@ -8,6 +8,9 @@ import test from "node:test";
 import { adapt } from "../scripts/auditable-demo-adapter.mjs";
 
 const SOURCE_SHA = "a".repeat(40);
+const PTY_CAPTURE_TEST = process.platform === "win32"
+  ? { skip: "the auditable-demo capture producer uses a Linux/macOS PTY" }
+  : {};
 
 function temporary(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "agent-hub-demo-animation-"));
@@ -114,7 +117,7 @@ function gateCoordinate() {
   };
 }
 
-test("capture producer runs exact argv, verifies evidence, and emits native captures", (t) => {
+test("capture producer runs exact argv, verifies evidence, and emits native captures", PTY_CAPTURE_TEST, (t) => {
   const root = temporary(t);
   const sourceArtifact = path.join(root, "source-artifact");
   const output = path.join(root, "capture-source");
@@ -153,7 +156,7 @@ test("capture producer runs exact argv, verifies evidence, and emits native capt
   assert.equal(fs.existsSync(path.join(output, "renditions/1080p/kungfu-agent-hub-check")), false);
 });
 
-test("adapter projects two exact Buildchain renditions and fails closed on drift", (t) => {
+test("adapter projects two exact Buildchain renditions and fails closed on drift", PTY_CAPTURE_TEST, (t) => {
   const root = temporary(t);
   const sourceArtifact = path.join(root, "source-artifact");
   const captureSource = path.join(root, "capture-source");
