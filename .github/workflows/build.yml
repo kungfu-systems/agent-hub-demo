@@ -24,6 +24,7 @@ permissions:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.auditable-demo-mode == 'off' }}
     permissions:
       actions: read
       contents: read
@@ -52,9 +53,41 @@ jobs:
       release-candidate: true
       publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
 
+  auditable-demo-binary:
+    name: Build exact Agent Hub Demo demo binary
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@authority/v3/v3.0/artifact-signing
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+    with:
+      buildchain-ref: authority/v3/v3.0/artifact-signing
+      runner-preset: custom
+      platforms-json: '[{"id":"linux-x64","name":"Linux x64","runner":"[\"ubuntu-24.04\"]"}]'
+      node-version: "24"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm run check && npm run qualify:buildchain-release
+      kfd-agent-hub: off
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo-auditable-binary
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
+      artifact-paths: |
+        dist/agent-hub-demo-linux-x64
+        dist/agent-hub-demo-linux-x64.sha256
+        .buildchain/artifacts/binary-linux-x64.json
+      release-candidate: false
+      publish-channel: none
+
   resolve-auditable-demo-source:
     name: Resolve exact Agent Hub Demo binary artifact
-    needs: build
+    needs: auditable-demo-binary
     if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -72,8 +105,8 @@ jobs:
         id: resolve
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
-          SOURCE_SHA: ${{ needs.build.outputs.publish-source-sha }}
-          ARTIFACT_COORDINATES_JSON: ${{ needs.build.outputs.artifact-coordinates-json }}
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+          ARTIFACT_COORDINATES_JSON: ${{ needs.auditable-demo-binary.outputs.artifact-coordinates-json }}
         with:
           script: |
             const sourceSha = process.env.SOURCE_SHA || "";
@@ -115,7 +148,7 @@ jobs:
 
   capture-auditable-demo:
     name: Capture exact Agent Hub Demo standalone binary
-    needs: [build, resolve-auditable-demo-source]
+    needs: [auditable-demo-binary, resolve-auditable-demo-source]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -131,7 +164,7 @@ jobs:
       - name: Check out exact Agent Hub Demo source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ needs.build.outputs.publish-source-sha }}
+          ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
           path: source
           persist-credentials: false
 
@@ -143,7 +176,7 @@ jobs:
 
       - name: Capture and independently verify both native renditions
         env:
-          ARTIFACT_COORDINATES_JSON: ${{ needs.build.outputs.artifact-coordinates-json }}
+          ARTIFACT_COORDINATES_JSON: ${{ needs.auditable-demo-binary.outputs.artifact-coordinates-json }}
         run: |
           set -euo pipefail
           chmod 755 source-artifact/dist/agent-hub-demo-linux-x64
@@ -159,7 +192,7 @@ jobs:
       - name: Bind capture source identity
         id: identity
         env:
-          SOURCE_SHA: ${{ needs.build.outputs.publish-source-sha }}
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
         run: |
           set -euo pipefail
           capture_root=$(node -e '
@@ -184,13 +217,13 @@ jobs:
 
   auditable-demo:
     name: Required auditable demo Gate
-    needs: [build, capture-auditable-demo]
+    needs: [auditable-demo-binary, capture-auditable-demo]
     permissions:
       actions: read
       contents: read
     uses: kungfu-systems/buildchain/.github/workflows/.auditable-demo.yml@9006e8e3714d9a318c971d39392b62958bb0b045 # v3 PR #2194
     with:
-      source-ref: ${{ needs.build.outputs.publish-source-sha }}
+      source-ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
       source-artifact-name: ${{ needs.capture-auditable-demo.outputs.artifact-name }}
       source-artifact-digest: ${{ needs.capture-auditable-demo.outputs.artifact-digest }}
       adapter-path: scripts/auditable-demo-adapter.mjs
@@ -202,7 +235,7 @@ jobs:
 
   auditable-demo-passport:
     name: Bind auditable demo Release Passport
-    needs: [build, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo]
+    needs: [auditable-demo-binary, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo]
     if: ${{ needs.auditable-demo.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -213,7 +246,7 @@ jobs:
       - name: Check out exact qualified source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ needs.build.outputs.publish-source-sha }}
+          ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
           fetch-depth: 1
           persist-credentials: false
 
@@ -270,7 +303,7 @@ jobs:
 
       - name: Write and verify exact Release Passport
         env:
-          SOURCE_SHA: ${{ needs.build.outputs.publish-source-sha }}
+          SOURCE_SHA: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
           BUILDCHAIN_SHA: 9006e8e3714d9a318c971d39392b62958bb0b045
           RENDERER_IMAGE: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591
           CAPTURE_ROOT: ${{ needs.capture-auditable-demo.outputs.capture-root }}
@@ -305,7 +338,7 @@ jobs:
       - name: Upload exact Release Passport
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: agent-hub-demo-auditable-passport-${{ needs.build.outputs.publish-source-sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: agent-hub-demo-auditable-passport-${{ needs.auditable-demo-binary.outputs.publish-source-sha }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: auditable-demo-release-passport.json
           if-no-files-found: error
           retention-days: 14

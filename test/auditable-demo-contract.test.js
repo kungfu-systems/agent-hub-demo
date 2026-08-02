@@ -230,9 +230,11 @@ test("materializer publishes content-addressed media and a receipt-driven README
 test("workflow uses one shared manual and promotion path with immutable toolchain coordinates", () => {
   const workflow = fs.readFileSync(new URL("../.github/workflows/build.yml", import.meta.url), "utf8");
   assert.match(workflow, /auditable-demo-mode:[\s\S]*- gate[\s\S]*- full/u);
-  assert.match(workflow, /build:\n    permissions:\n      actions: read\n      contents: read/u);
+  assert.match(workflow, /build:\n    if: \$\{\{ github\.event_name != 'workflow_dispatch' \|\| inputs\.auditable-demo-mode == 'off' \}\}\n    permissions:\n      actions: read\n      contents: read/u);
   assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/build\.yml@authority\/v3\/v3\.0\/artifact-signing/u);
   assert.match(workflow, /buildchain-ref: authority\/v3\/v3\.0\/artifact-signing/u);
+  assert.match(workflow, /auditable-demo-binary:[\s\S]*runner-preset: custom[\s\S]*platforms-json: '\[\{"id":"linux-x64"/u);
+  assert.match(workflow, /artifact-name: agent-hub-demo-auditable-binary[\s\S]*release-candidate: false/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
   assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);
@@ -241,7 +243,7 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   assert.match(workflow, /\.buildchain\/auditable-demo\.json/u);
   assert.match(workflow, /capture-auditable-demo:[\s\S]*runs-on: ubuntu-24\.04[\s\S]*timeout-minutes: 10/u);
   assert.doesNotMatch(workflow, /Check out exact external|--kungfu|external-qualification-and-recording-tool/u);
-  assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[build, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
+  assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[auditable-demo-binary, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
 });
 
 test("repository invokes Buildchain v3 only", () => {
