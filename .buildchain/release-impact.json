@@ -24,11 +24,18 @@
       "class": "evidence-contract",
       "rationale": "Per-platform KFD-1 and KFD-3 witnesses, the bounded KFD-2 claim, checksums, manifests, and exact release-candidate roots are collected into a Buildchain Release Passport.",
       "source": "scripts/write-publish-evidence.mjs"
+    },
+    {
+      "id": "buildchain-binary-auditable-demo",
+      "impact": "minor",
+      "class": "binary-distribution",
+      "rationale": "A declarative Buildchain v3 demo contract records the exact same-run standalone binary into independent native 1080p and 720p terminal captures and publishes receipt-bound responsive media.",
+      "source": ".buildchain/auditable-demo.json"
     }
   ],
   "classification": "minor",
   "breaking": false,
   "security": false,
   "migrationRequired": false,
-  "summary": "Publish the Agent Hub Demo as a Buildchain-managed cross-platform binary KFD-1/2/3 Release Passport reference."
+  "summary": "Publish Agent Hub Demo as a Buildchain-managed cross-platform binary and auditable animation reference."
 }

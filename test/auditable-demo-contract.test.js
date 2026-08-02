@@ -9,7 +9,6 @@ import { buildPassport, stableJson, verifyPassport } from "../scripts/auditable-
 import { checkMaterialized, materialize } from "../scripts/materialize-auditable-demo.mjs";
 
 const SOURCE_SHA = "a".repeat(40);
-const KUNGFU_SHA = "b".repeat(40);
 const BUILDCHAIN_SHA = "c".repeat(40);
 const RENDERER = `ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:${"d".repeat(64)}`;
 const REPOSITORY = "kungfu-systems/agent-hub-demo";
@@ -78,7 +77,7 @@ function createBundles(root) {
       transcript: `sha256:${"a".repeat(64)}`,
       projection: `sha256:${"b".repeat(64)}`,
       scene: `sha256:${"c".repeat(64)}`,
-      evidenceClass: "exact-installed-kungfu-agent-hub-qualification/v1",
+      evidenceClass: "exact-agent-hub-demo-standalone-binary/v1",
       claimBoundary: "bounded fixture",
       renditionSet: {
         schema: "kungfu.auditable-demo.rendition-set/v1",
@@ -140,7 +139,7 @@ function createBundles(root) {
   writeJson(path.join(media, "manifest.json"), {
     schema: "build-images.auditable-demo-render/v1",
     renderer: { image: RENDERER },
-    policy: { evidenceClass: "exact-installed-kungfu-agent-hub-qualification/v1", runtimeTextAuthority: "rendition-set.json" },
+    policy: { evidenceClass: "exact-agent-hub-demo-standalone-binary/v1", runtimeTextAuthority: "rendition-set.json" },
     inputs: {
       renditions: [
         { role: "primary", terminalCapture: { root: primaryCapture, dimensions: { columns: 150, rows: 36 } } },
@@ -157,7 +156,7 @@ function createBundles(root) {
   });
   writeJson(path.join(media, "media-inspection.json"), { status: "passed" });
   writeJson(path.join(media, "media-probe.json"), { passed: true });
-  writeJson(path.join(media, "public-projection.json"), { evidenceClass: "exact-installed-kungfu-agent-hub-qualification/v1" });
+  writeJson(path.join(media, "public-projection.json"), { evidenceClass: "exact-agent-hub-demo-standalone-binary/v1" });
   writeJson(path.join(media, "scene.json"), { width: 1920, height: 1080 });
   fs.writeFileSync(path.join(media, "complete-transcript.txt"), "qualified\n");
   fs.writeFileSync(path.join(media, "renderer-checksums.sha256"), "fixture\n");
@@ -171,7 +170,6 @@ function envFor(bundle) {
     GITHUB_RUN_ID: RUN_ID,
     GITHUB_RUN_ATTEMPT: "1",
     SOURCE_SHA,
-    KUNGFU_SOURCE_SHA: KUNGFU_SHA,
     BUILDCHAIN_SHA,
     RENDERER_IMAGE: RENDERER,
     CAPTURE_ROOT: `sha256:${"f".repeat(64)}`,
@@ -198,7 +196,7 @@ test("Release Passport binds exact artifacts and rejects authority drift", (t) =
   const bundle = createBundles(root);
   const passport = buildPassport(envFor(bundle));
   assert.equal(passport.media.status, "rendered");
-  assert.equal(passport.capture.command, "kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check");
+  assert.equal(passport.capture.command, "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation");
   assert.deepEqual(passport.authority.grants, []);
   assert.equal(verifyPassport(passport), passport);
   const tampered = structuredClone(passport);
@@ -218,11 +216,11 @@ test("materializer publishes content-addressed media and a receipt-driven README
   const evidence = materialize({ repoRoot: repo, passportPath, gateBundle: bundle.gate, mediaBundle: bundle.media });
   assert.equal(checkMaterialized(repo).evidenceRoot, evidence.evidenceRoot);
   const readme = fs.readFileSync(path.join(repo, "README.md"), "utf8");
-  assert.match(readme, /kungfu agent hub qualify --output-dir \.\/kungfu-agent-hub-check/u);
+  assert.match(readme, /agent-hub-demo demo --root \.\/agent-hub-demo-run/u);
   assert.match(readme, /1080p MP4/u);
   assert.match(readme, /720p WebM/u);
   assert.match(readme, /reduced-motion fallback/u);
-  assert.match(readme, /does not certify or authorize Agent Hub/u);
+  assert.match(readme, /does not certify production security/u);
   const evidenceDirectory = path.dirname(path.join(repo, evidence.passport.path));
   for (const name of ["demo.gif", "demo.mp4", "demo.webm", "demo-720p.mp4", "demo-720p.webm", "poster.png", "release-passport.json", "public-evidence.json"]) {
     assert.equal(fs.statSync(path.join(evidenceDirectory, name)).isFile(), true);
@@ -238,10 +236,11 @@ test("workflow uses one shared manual and promotion path with immutable toolchai
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
   assert.match(workflow, /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.auditable-demo\.yml@9006e8e3714d9a318c971d39392b62958bb0b045/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:e5ae5002dc0fc267e265dba1068d7476e541dddc9035ccd72cee94dfad872591/u);
-  assert.match(workflow, /value\?\.entries\?\.kungfu/u);
-  assert.doesNotMatch(workflow, /kungfu-episodes-cli-linux-x64\/bin\/kungfu/u);
-  assert.match(workflow, /capture-auditable-demo:[\s\S]*runs-on: ubuntu-24\.04/u);
-  assert.match(workflow, /KUNGFU_BUILDCHAIN_SOURCE_BUILD: "1"/u);
+  assert.match(workflow, /source-artifact\/dist\/agent-hub-demo-linux-x64/u);
+  assert.match(workflow, /binary-linux-x64\.json/u);
+  assert.match(workflow, /\.buildchain\/auditable-demo\.json/u);
+  assert.match(workflow, /capture-auditable-demo:[\s\S]*runs-on: ubuntu-24\.04[\s\S]*timeout-minutes: 10/u);
+  assert.doesNotMatch(workflow, /Check out exact external|--kungfu|external-qualification-and-recording-tool/u);
   assert.match(workflow, /auditable-demo-passport:[\s\S]*needs: \[build, resolve-auditable-demo-source, capture-auditable-demo, auditable-demo\]/u);
 });
 

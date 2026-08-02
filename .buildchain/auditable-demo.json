@@ -1,0 +1,22 @@
+{
+  "schema": "buildchain.binary-auditable-demo/v1",
+  "product": "agent-hub-demo",
+  "artifact": {
+    "platformId": "linux-x64",
+    "binaryPath": "dist/agent-hub-demo-linux-x64",
+    "metadataPath": ".buildchain/artifacts/binary-linux-x64.json",
+    "metadataContract": "agent-hub-demo.binary-artifact/v1",
+    "runtimeDependencies": []
+  },
+  "demo": {
+    "command": "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation",
+    "timeoutSeconds": 60,
+    "deterministic": true,
+    "network": "not-required",
+    "secrets": "none"
+  },
+  "renditions": [
+    { "id": "1080p", "columns": 150, "rows": 36, "width": 1920, "height": 1080 },
+    { "id": "720p", "columns": 100, "rows": 28, "width": 1280, "height": 720 }
+  ]
+}

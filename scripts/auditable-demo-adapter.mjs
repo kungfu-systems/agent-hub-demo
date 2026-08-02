@@ -93,25 +93,23 @@ function inside(root, relative, label) {
   return resolved;
 }
 
-function validateQualification(value, sourceSha, label) {
-  const product = value.product || {};
-  const coverage = value.coverage || {};
-  const verification = value.independentVerification || {};
-  requireValue(value.schema === "kungfu.kfd-agent-hub-qualification/v1", `${label} schema mismatch`);
-  requireValue(value.valid === true && value.result === "pass", `${label} did not pass`);
-  requireValue(coverage.passed === 20 && coverage.total === 20, `${label} is not 20/20`);
-  requireValue(value.kfd?.offline === true, `${label} is not offline`);
-  requireValue(value.isolation?.realHomeUnchanged === true, `${label} isolation failed`);
-  requireValue(product.sourceCommit === sourceSha && DIGEST.test(product.artifactDigest || ""), `${label} product identity mismatch`);
-  requireValue(verification.schema === "kungfu.kfd-agent-hub-qualification-verification/v1" && verification.valid === true && verification.result === "pass", `${label} independent verification failed`);
-  requireValue(Array.isArray(verification.checks) && verification.checks.length > 0 && verification.checks.every((item) => item.passed === true), `${label} verification checks failed`);
+function validateRunSummary(value, label) {
+  requireValue(value.schema === "agent-hub-demo.capture-summary/v1", `${label} schema mismatch`);
+  requireValue(value.status === "passed" && DIGEST.test(value.reportRoot || ""), `${label} did not pass`);
+  requireValue(value.results?.fact === "admitted" && value.results?.episode === "admitted", `${label} admitted deliveries are missing`);
+  requireValue(value.results?.conflict === "conflicted", `${label} visible conflict is missing`);
+  for (const name of ["amplification", "expired", "revoked", "unknownFeature", "disclosureConflation"]) {
+    requireValue(value.results?.[name] === "rejected", `${label} ${name} rejection is missing`);
+  }
+  requireValue(value.duplicateIdempotent === true && value.driftRejected === true && value.recoveredObjects > 0, `${label} recovery boundary failed`);
 }
 
 function validateCapture(value, descriptor, label) {
-  requireValue(value.schema === "kungfu.terminal-capture/v1", `${label} schema mismatch`);
-  requireValue(value.command === "kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check", `${label} command mismatch`);
+  requireValue(value.schema === "agent-hub-demo.terminal-capture/v1", `${label} schema mismatch`);
+  requireValue(value.command === "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation", `${label} command mismatch`);
   requireValue(value.dimensions?.columns === descriptor.columns && value.dimensions?.rows === descriptor.rows, `${label} dimensions mismatch`);
-  requireValue(value.completion?.schema === "kungfu.kfd-agent-hub-qualification/v1" && value.completion?.status === "qualified" && DIGEST.test(value.completion?.reportRoot || ""), `${label} completion mismatch`);
+  requireValue(value.completion?.schema === "agent-hub-demo.capture-summary/v1" && value.completion?.status === "passed" && DIGEST.test(value.completion?.summaryRoot || ""), `${label} completion mismatch`);
+  requireValue(value.completion.summaryRoot === descriptor.runSummaryRoot, `${label} completion root mismatch`);
   requireValue(value.exitCode === 0, `${label} exit code mismatch`);
   requireValue(value.authority?.classification === "volatile-terminal-observation" && Array.isArray(value.authority?.grants) && value.authority.grants.length === 0, `${label} grants authority`);
   requireValue(JSON.stringify(value.authority?.nonAuthorities) === JSON.stringify(NON_AUTHORITIES), `${label} non-authority boundary mismatch`);
@@ -122,11 +120,11 @@ function validateCapture(value, descriptor, label) {
 
 function writeRendition(output, artifactRoot, manifest, descriptor, role) {
   const label = `rendition ${descriptor.id}`;
-  const qualification = readJson(inside(artifactRoot, descriptor.qualificationSummary, `${label} qualification path`), `${label} qualification`);
+  const summary = readJson(inside(artifactRoot, descriptor.runSummary, `${label} summary path`), `${label} summary`);
   const capture = readJson(inside(artifactRoot, descriptor.terminalCapture, `${label} capture path`), `${label} capture`);
-  validateQualification(qualification, manifest.kungfu.sourceSha, label);
+  validateRunSummary(summary, label);
   validateCapture(capture, descriptor, label);
-  requireValue(rootJson(qualification) === descriptor.qualificationRoot, `${label} qualification root mismatch`);
+  requireValue(rootJson(summary) === descriptor.runSummaryRoot, `${label} summary root mismatch`);
   requireValue(rootJson(capture) === descriptor.terminalCaptureRoot, `${label} capture root mismatch`);
 
   const suffix = descriptor.id === "1080p" ? "" : "-720p";
@@ -135,12 +133,12 @@ function writeRendition(output, artifactRoot, manifest, descriptor, role) {
   const sceneName = `scene${suffix}.json`;
   const captureName = `terminal-capture${suffix}.json`;
   const transcript = [
-    "$ kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check",
-    "KFD Agent Hub Qualification PASSED",
-    "20 of 20 scenarios passed",
-    "Independent offline verification passed",
-    "The isolated qualification home remained unchanged",
-    "Scope: one exact installed Kungfu artifact; not Agent Hub Demo certification or authorization",
+    "$ agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation",
+    "Agent Hub Demo PASSED",
+    "Fact and Episode delivery admitted; duplicate idempotent",
+    "Semantic conflict visible; invalid authority rejected",
+    "Export/import recovery verified; drifted bundle rejected",
+    "Scope: one exact standalone Agent Hub Demo binary; no authorization or production certification",
   ].join("\n") + "\n";
   const durationMs = Math.min(60_000, capture.durationMs + 750);
   const scene = {
@@ -150,15 +148,15 @@ function writeRendition(output, artifactRoot, manifest, descriptor, role) {
     height: descriptor.id === "1080p" ? 1080 : 720,
     fps: 15,
     durationMs,
-    title: "Kungfu Agent Hub — exact installed qualifier",
+    title: "Agent Hub Demo — standalone binary",
     commandLabel: manifest.command,
     background: "#0B1020",
     accent: "#67E8A5",
   };
   const projection = {
     schema: "build-images.demo-projection/v1",
-    evidenceClass: "exact-installed-kungfu-agent-hub-qualification/v1",
-    claimBoundary: "This presentation proves one exact installed Kungfu artifact passed its bundled offline 20-scenario Agent Hub qualification in isolated local homes. It does not qualify Agent Hub Demo, grant authorization, certify security, prove production fitness, remote interoperability, external adoption, or unobserved platforms.",
+    evidenceClass: "exact-agent-hub-demo-standalone-binary/v1",
+    claimBoundary: "This presentation proves one exact same-run Agent Hub Demo standalone binary completed its deterministic local demonstration. It does not grant authorization, certify security, prove production fitness, remote interoperability, external adoption, or unobserved platforms.",
     cues: [{ startMs: 0, endMs: durationMs, transcriptLines: [1, 2, 3, 4, 5, 6], annotation: descriptor.id === "1080p" ? "native 150x36 capture" : "native 100x28 capture" }],
   };
   fs.writeFileSync(path.join(output, transcriptName), transcript);
@@ -180,12 +178,12 @@ export function adapt({ artifactRoot, output, sourceCoordinate }) {
   const manifest = readJson(path.join(artifactRoot, "manifest.json"), "capture source manifest");
   const coordinate = readJson(sourceCoordinate, "Gate source coordinate");
   const originalCoordinate = readJson(path.join(artifactRoot, "source-coordinate.json"), "original source coordinate");
-  requireValue(manifest.schema === "agent-hub-demo.auditable-demo-source/v1" && manifest.status === "qualified", "capture source manifest mismatch");
+  requireValue(manifest.schema === "agent-hub-demo.auditable-demo-source/v1" && manifest.status === "passed", "capture source manifest mismatch");
   const { root, ...manifestBody } = manifest;
   requireValue(root === rootJson(manifestBody), "capture source manifest root mismatch");
   requireValue(manifest.sourceCoordinateRoot === rootJson(originalCoordinate), "original source coordinate root mismatch");
   requireValue(coordinate.sourceSha === originalCoordinate.sourceSha, "Gate and original source SHA differ");
-  requireValue(manifest.kungfu?.role === "external-qualification-and-recording-tool" && manifest.kungfu?.runtimeDependency === false, "Kungfu dependency boundary mismatch");
+  requireValue(manifest.product?.name === "agent-hub-demo" && manifest.product?.distribution === "standalone-binary" && JSON.stringify(manifest.product?.runtimeDependencies) === "[]", "standalone product boundary mismatch");
   requireValue(JSON.stringify(manifest.authority?.grants) === "[]", "capture source grants authority");
   requireValue(Array.isArray(manifest.renditions) && manifest.renditions.length === 2, "capture source must have two renditions");
   requireValue(!fs.existsSync(output), "adapter output must be new");

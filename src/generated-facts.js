@@ -135,7 +135,7 @@ export const EMBEDDED_ADAPTER_ARTIFACT = Object.freeze({
     },
     {
       "path": "src/cli.js",
-      "sha256": "1eb3cc119a67767998ce8ce2b8baab43a9ef8acd52e195f9097f956210e57af0"
+      "sha256": "cb2782ca7736fb8286c986269771e419f367e2580bace8774ed3b34b308c9778"
     },
     {
       "path": "src/hub.js",
@@ -154,5 +154,5 @@ export const EMBEDDED_ADAPTER_ARTIFACT = Object.freeze({
       "sha256": "5df9ca254303a007171e39910379ca11a45f96d448204d165d061e840ea30788"
     }
   ],
-  "root": "sha256:2343cc7fcd1ccc6eb168a5d7f2f9874a445091d3253478bc9a9c9be023a050b4"
+  "root": "sha256:743c297965cff14bad4f430a5cac58b1c9bc76dc33ed165b7e9c52a7be67344b"
 });

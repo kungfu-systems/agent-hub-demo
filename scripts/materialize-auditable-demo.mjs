@@ -253,7 +253,7 @@ function verifyEvidence(value, repoRoot) {
     evidenceRoot !== sha256(stableJson(body)) ||
     value.schema !== "agent-hub-demo.auditable-demo.public-evidence/v1" ||
     value.status !== "qualified" ||
-    value.command !== "kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check" ||
+    value.command !== "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation" ||
     !DIGEST.test(value.passport?.root || "") ||
     value.media?.status !== "rendered" ||
     value.renditionPolicy !== "independent-native-pty-captures/v1"
@@ -290,9 +290,9 @@ export function renderReadmeBlock(evidence) {
   const source = evidence.sourceSha.slice(0, 12);
   return [
     START,
-    "## Auditable Agent Hub qualification",
+    "## Auditable standalone demo",
     "",
-    `[![Kungfu Agent Hub qualifier passing all 20 offline scenarios](${root}/demo.gif)](${root}/public-evidence.json)`,
+    `[![Agent Hub Demo standalone binary completing its deterministic demonstration](${root}/demo.gif)](${root}/public-evidence.json)`,
     "",
     `Animation subject: \`${evidence.command}\``,
     "",
@@ -303,11 +303,11 @@ export function renderReadmeBlock(evidence) {
     "<details>",
     "<summary>Evidence and claim boundary</summary>",
     "",
-    "This animation records one exact installed Kungfu artifact running its bundled,",
-    "offline 20-scenario Agent Hub qualification in isolated homes. The 1080p and",
-    "720p videos come from independent native PTY captures, not a scaled recording.",
-    "It validates the recording pipeline; it does not certify or authorize Agent Hub",
-    "Demo, prove production security, or grant permission from first-party/System",
+    "This animation records the exact same-run Agent Hub Demo standalone binary",
+    "completing its deterministic local demonstration. The 1080p and 720p videos",
+    "come from independent native PTY captures, not a scaled recording. It validates",
+    "the binary recording pipeline; it does not certify production security or grant",
+    "authorization or permission from first-party/System",
     "identity, KFD compliance, Product System metadata, package metadata, registry",
     "history, scan output, or standalone generation.",
     "",

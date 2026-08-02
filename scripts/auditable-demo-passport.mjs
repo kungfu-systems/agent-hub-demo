@@ -12,7 +12,7 @@ const ID = /^[1-9][0-9]*$/u;
 const REPOSITORY = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/u;
 const ARTIFACT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,255}$/u;
 const RENDERER = /^ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:[0-9a-f]{64}$/u;
-const COMMAND = "kungfu agent hub qualify --output-dir ./kungfu-agent-hub-check";
+const COMMAND = "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation";
 const BUILDCHAIN_WORKFLOW = "scripts/auditable-demo-adapter.mjs";
 const REQUIRED_AUTHORIZATION_SOURCES = [
   "exact-release-passport",
@@ -32,11 +32,11 @@ const NON_AUTHORITIES = [
   "standalone-generation",
 ];
 const CLAIMS = [
-  "one exact installed Kungfu artifact passed its bundled offline 20-scenario Agent Hub qualification",
+  "one exact same-run Agent Hub Demo standalone binary completed its deterministic local demonstration",
   "two independent native PTY captures passed the required Buildchain Gate",
 ];
 const NON_CLAIMS = [
-  "Agent Hub Demo KFD certification or authorization",
+  "KFD certification or authorization",
   "production security or fitness",
   "remote interoperability or external adoption",
   "authorization from identity, compliance, metadata, or generated evidence",
@@ -115,7 +115,6 @@ export function buildPassport(env = process.env) {
   const runId = required(env, "GITHUB_RUN_ID", ID);
   const runAttempt = required(env, "GITHUB_RUN_ATTEMPT", ID);
   const sourceSha = required(env, "SOURCE_SHA", SHA);
-  const kungfuSourceSha = required(env, "KUNGFU_SOURCE_SHA", SHA);
   const buildchainSha = required(env, "BUILDCHAIN_SHA", SHA);
   const rendererImage = required(env, "RENDERER_IMAGE", RENDERER);
   const captureRoot = required(env, "CAPTURE_ROOT", DIGEST);
@@ -157,7 +156,9 @@ export function buildPassport(env = process.env) {
       command: COMMAND,
       root: captureRoot,
       artifact: captureArtifact,
-      kungfuSourceSha,
+      product: "agent-hub-demo",
+      distribution: "standalone-binary",
+      runtimeDependencies: [],
       renditionPolicy: "independent-native-pty-captures/v1",
     },
     gate: { status: "passed", root: gateRoot, artifact: gateArtifact },
@@ -169,7 +170,7 @@ export function buildPassport(env = process.env) {
     },
     authority: {
       grants: [],
-      evidenceClass: "exact-installed-kungfu-agent-hub-qualification/v1",
+      evidenceClass: "exact-agent-hub-demo-standalone-binary/v1",
       claims: CLAIMS,
       nonClaims: NON_CLAIMS,
       authorization: {
@@ -196,8 +197,10 @@ export function verifyPassport(value) {
     !ID.test(value.workflow?.runAttempt || "") ||
     value.workflow?.url !== `https://github.com/${value.repository}/actions/runs/${value.workflow.runId}` ||
     !SHA.test(value.source?.sha || "") ||
-    !SHA.test(value.capture?.kungfuSourceSha || "") ||
     value.capture?.command !== COMMAND ||
+    value.capture?.product !== "agent-hub-demo" ||
+    value.capture?.distribution !== "standalone-binary" ||
+    JSON.stringify(value.capture?.runtimeDependencies) !== "[]" ||
     value.capture?.renditionPolicy !== "independent-native-pty-captures/v1" ||
     !DIGEST.test(value.capture?.root || "") ||
     value.gate?.status !== "passed" ||
@@ -235,7 +238,7 @@ export function verifyPassport(value) {
   }
   if (
     JSON.stringify(value.authority?.grants) !== "[]" ||
-    value.authority?.evidenceClass !== "exact-installed-kungfu-agent-hub-qualification/v1" ||
+    value.authority?.evidenceClass !== "exact-agent-hub-demo-standalone-binary/v1" ||
     JSON.stringify(value.authority?.claims) !== JSON.stringify(CLAIMS) ||
     JSON.stringify(value.authority?.nonClaims) !== JSON.stringify(NON_CLAIMS) ||
     value.authority?.authorization?.status !== "not-granted-by-demo" ||

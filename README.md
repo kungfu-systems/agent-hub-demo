@@ -152,6 +152,8 @@ hosted operation are outside the current claim.
   declares the limited public release claim and residual risk.
 - [`.buildchain/kfd/kfd-3/surfaces.json`](.buildchain/kfd/kfd-3/surfaces.json)
   declares the CLI and cross-platform distribution surface.
+- [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
+  the deterministic standalone-binary animation subject and native renditions.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
 - [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)
