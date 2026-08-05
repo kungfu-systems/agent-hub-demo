@@ -77,6 +77,12 @@ test("consumer carries no product-specific capture or publication implementation
   assert.equal(packageJson.scripts["auditable-demo:materialize"], undefined);
 });
 
+test("binary metadata binds the exact executable closure", () => {
+  for (const relative of ["scripts/build-binary.mjs", "scripts/verify-signed-binary.mjs"]) {
+    assert.match(read(relative), /executableFiles:\s*\[\{ path: [^,]+, sha256: [^}]+ \}\]/u, relative);
+  }
+});
+
 test("repository invokes Buildchain v3 only", () => {
   const repositoryFiles = [
     ".github/workflows/build.yml",

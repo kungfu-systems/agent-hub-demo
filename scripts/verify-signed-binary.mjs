@@ -99,6 +99,7 @@ const metadata = {
   size: statSync(binaryPath).size,
   node: process.version,
   runtimeDependencies: [],
+  executableFiles: [{ path: `dist/${basename(binaryPath)}`, sha256: observedDigest.slice("sha256:".length) }],
   signing: {
     profile: result.signature.profile,
     semantics: result.signature.semantics,
