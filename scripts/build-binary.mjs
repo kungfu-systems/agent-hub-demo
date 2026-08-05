@@ -127,15 +127,18 @@ export async function buildBinary() {
     throw new Error("standalone binary smoke verification failed");
   }
 
+  const outputSha256 = sha256(output);
+  const outputPath = `dist/${basename(output)}`;
   const metadata = {
     schemaVersion: 1,
     contract: "agent-hub-demo.binary-artifact/v1",
     platform,
-    file: `dist/${basename(output)}`,
-    sha256: sha256(output),
+    file: outputPath,
+    sha256: outputSha256,
     size: readFileSync(output).byteLength,
     node: process.version,
     runtimeDependencies: [],
+    executableFiles: [{ path: outputPath, sha256: outputSha256 }],
     smoke: {
       version: checks[0],
       selfVerify: checks[1],
