@@ -12,6 +12,7 @@ function read(relative) {
 test("declaration binds the exact standalone binary without implicit authority", () => {
   const declaration = JSON.parse(read(".buildchain/auditable-demo.json"));
   assert.equal(declaration.schema, "buildchain.declarative-binary-demo/v1");
+  assert.equal(declaration.compositionMode, "terminal-fill");
   assert.deepEqual(declaration.product, {
     id: "agent-hub-demo",
     displayName: "Agent Hub Demo",
@@ -53,11 +54,13 @@ test("one reusable Buildchain job serves manual validation and promotion materia
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@0b5df3a2f51eb92a67d04883af1d28ca6d9bedd1/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@81ffb1b99273945696d9e17456730830fda4eb84/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
   assert.match(workflow, /scenario-path: \.buildchain\/auditable-demo\.json/u);
+  assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1/u);
+  assert.doesNotMatch(workflow, /build\.yml@v3-alpha|buildchain-ref: v3-alpha/u);
   assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
   assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
 });
