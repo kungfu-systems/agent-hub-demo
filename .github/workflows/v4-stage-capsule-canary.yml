@@ -1,0 +1,17 @@
+name: V4 Stage Capsule Canary
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    uses: kungfu-systems/buildchain/.github/workflows/v4-stage-capsule-canary.yml@6153db4cbff209d7f5cbb1bce3d3b76c4d2e47d6
+    with:
+      consumer: agent-hub-demo
+      node-version: "24"
+      install-artifact-path: node_modules/.package-lock.json
+      build-artifact-path: dist/agent-hub-demo.json
+      verify-artifact-path: dist/agent-hub-demo.json
