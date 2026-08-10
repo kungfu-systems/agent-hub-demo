@@ -1,6 +1,7 @@
 name: V4 Stage Capsule Canary
 
 on:
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -8,7 +9,7 @@ permissions:
 
 jobs:
   canary:
-    uses: kungfu-systems/buildchain/.github/workflows/v4-stage-capsule-canary.yml@5f55f4d3027642e48ccee2f10f22b3e19c6fde88
+    uses: kungfu-systems/buildchain/.github/workflows/v4-stage-capsule-canary.yml@4178776bf635d0738cb1917e449076d64883218c
     with:
       consumer: agent-hub-demo
       node-version: "24"
