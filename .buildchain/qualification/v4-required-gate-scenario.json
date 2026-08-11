@@ -1,0 +1,13 @@
+{
+  "schema": "agent-hub-demo.v4-required-gate-qualification-scenario/v1",
+  "scenario": "cold-execution",
+  "mode": "shadow-only",
+  "productionAuthority": "v3",
+  "eventBinding": "pull_request.head.sha",
+  "expectedEvidence": [
+    "real-lifecycle-linux-x64",
+    "real-lifecycle-macos-arm64",
+    "real-lifecycle-windows-x64",
+    "exact-three-platform-reconciliation"
+  ]
+}
