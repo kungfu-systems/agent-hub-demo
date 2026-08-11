@@ -1,13 +1,13 @@
 {
   "schema": "agent-hub-demo.v4-required-gate-qualification-scenario/v1",
-  "scenario": "corrupt-mismatched-capsule-rejection",
+  "scenario": "deterministic-interruption-retry",
   "mode": "shadow-only",
   "productionAuthority": "v3",
   "eventBinding": "pull_request.head.sha",
   "expectedEvidence": [
-    "corrupt-content-rejection",
-    "root-mismatch-rejection",
-    "cross-platform-rejection",
-    "cross-stage-rejection"
+    "partial-content-rejection",
+    "missing-content-rejection",
+    "stale-writer-rejection",
+    "deterministic-successful-recovery"
   ]
 }
