@@ -1,13 +1,13 @@
 {
   "schema": "agent-hub-demo.v4-required-gate-qualification-scenario/v1",
-  "scenario": "stale-capsule-invalidation",
+  "scenario": "corrupt-mismatched-capsule-rejection",
   "mode": "shadow-only",
   "productionAuthority": "v3",
   "eventBinding": "pull_request.head.sha",
   "expectedEvidence": [
-    "source-drift-rejection",
-    "toolchain-drift-rejection",
-    "policy-drift-rejection",
-    "expired-retention-rejection"
+    "corrupt-content-rejection",
+    "root-mismatch-rejection",
+    "cross-platform-rejection",
+    "cross-stage-rejection"
   ]
 }
