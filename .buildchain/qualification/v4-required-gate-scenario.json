@@ -1,13 +1,13 @@
 {
   "schema": "agent-hub-demo.v4-required-gate-qualification-scenario/v1",
-  "scenario": "cold-execution",
+  "scenario": "retained-failure-clean-resume",
   "mode": "shadow-only",
   "productionAuthority": "v3",
   "eventBinding": "pull_request.head.sha",
   "expectedEvidence": [
-    "real-lifecycle-linux-x64",
-    "real-lifecycle-macos-arm64",
-    "real-lifecycle-windows-x64",
-    "exact-three-platform-reconciliation"
+    "late-verify-failure-without-capsule-emission",
+    "retained-install-and-build-capsules",
+    "clean-process-minimal-resume",
+    "fresh-and-resumed-root-equality"
   ]
 }
