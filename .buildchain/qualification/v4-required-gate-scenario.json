@@ -1,13 +1,13 @@
 {
   "schema": "agent-hub-demo.v4-required-gate-qualification-scenario/v1",
-  "scenario": "retained-failure-clean-resume",
+  "scenario": "stale-capsule-invalidation",
   "mode": "shadow-only",
   "productionAuthority": "v3",
   "eventBinding": "pull_request.head.sha",
   "expectedEvidence": [
-    "late-verify-failure-without-capsule-emission",
-    "retained-install-and-build-capsules",
-    "clean-process-minimal-resume",
-    "fresh-and-resumed-root-equality"
+    "source-drift-rejection",
+    "toolchain-drift-rejection",
+    "policy-drift-rejection",
+    "expired-retention-rejection"
   ]
 }
