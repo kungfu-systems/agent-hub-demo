@@ -1,0 +1,10 @@
+{
+  "schema": "agent-hub-demo.v4-required-gate-cutover-qualification/v1",
+  "mode": "qualification-only",
+  "eventBinding": "pull_request.head.sha",
+  "requiredContext": "canary / Reconcile exact three-platform evidence",
+  "protectedRuntime": "4178776bf635d0738cb1917e449076d64883218c",
+  "productionAuthority": "v3",
+  "productionWrites": false,
+  "providerEffects": false
+}
