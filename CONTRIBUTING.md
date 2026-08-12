@@ -30,11 +30,9 @@ Create work on a Buildchain-classified branch (`feature/*`, `fix/*`, `chore/*`,
 `docs/*`, `ci/*`, or `refactor/*`) and open the pull request against the active
 `dev/vX/vX.Y` line. The protected `dev`, `alpha`, `release`, and
 `publish-gate/*` channels are not ad-hoc work branches. Version changes,
-promotion tags, and GitHub Releases are produced only by Buildchain after a
-reviewed channel pull request. Buildchain v2 does not yet auto-seal
-release-candidate admission for this repository's GitHub-Release-only target,
-so the promotion entrypoint remains dry-run-only and must not be replaced by a
-repository-owned tag or release script.
+promotion tags, and GitHub Releases are produced only by the exact reviewed
+Buildchain v4 authority after a reviewed channel pull request. The consumer
+must not add repository-owned tag, release, signing, or publication fallbacks.
 
 Pull requests should explain behavior, tests, contract impact, and residual
 risk. Complete the repository governance checklist in the pull request

@@ -8,7 +8,7 @@ confidence: high
 sensitivity: public
 evidence_grade: B
 review_state: self-reviewed
-last_reviewed: 2026-07-23
+last_reviewed: 2026-08-12
 ---
 
 # Versioning
@@ -26,7 +26,7 @@ Buildchain-managed merge targets, not development branches. Exact tags such as
 `v0.1.0-alpha.0` are immutable evidence; floating tags are moved only by
 Buildchain promotion.
 
-The Buildchain v2 alpha release-candidate authority seals both exact npm targets
+The exact reviewed Buildchain v4 release-candidate authority seals both exact npm targets
 and exact caller-bound GitHub Release targets. Agent Hub Demo uses only
 `github-release:kungfu-systems/agent-hub-demo`, an empty npm package identity,
 and a credentialless product predicate. Manual promotion remains dry-run-only;
@@ -65,3 +65,5 @@ not commit transaction output or bypass the promotion gate.
 | 2026-07-23 | Separate transaction version from embedded protocol facts | `v0.2` | patch | Package version state now enters source commands and SEA binaries directly, while generated KFD and adapter facts remain stable during Buildchain version verification. |
 | 2026-07-23 | Version the Agent Hub declaration atomically | `v0.2` | patch | The KFD conformance declaration now advances with `package.json`, so promotion-time verification binds the exact public adapter version instead of a stale prerelease. |
 | 2026-07-23 | Bind candidate binaries to the governed release version | `v0.2` | patch | Reviewed candidates predeclare the exact next version, while Buildchain independently verifies that version and owns the tag and publication transaction; the product predicate denies mismatches. |
+| 2026-08-02 | Add declarative binary animation publication | `v0.2` | minor | The then-current Buildchain authority consumes the exact same-run standalone Linux binary, verifies its product metadata and embedded facts, captures independent native 1080p and 720p terminal sessions, and binds rendered media to a Release Passport. Source launchers and other products are outside this demo contract. |
+| 2026-08-12 | Adopt Buildchain v4 as sole production authority | `v0.2` | patch | Every production workflow pins one independently reviewed v4 commit. Linux and macOS remain signed; Windows is published only under a machine-readable zero-request unsigned exception and cannot be represented as Authenticode-signed. |
