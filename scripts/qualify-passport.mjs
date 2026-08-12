@@ -18,12 +18,12 @@ const outputPath = resolve(cwd, valueFor(
   "--output",
   ".buildchain/release-qualification/passport-qualification.json",
 ));
-const buildchainVersion = "3.0.1-alpha.2";
+const buildchainAuthority = "d4622ccd6255445d3f9d0fff9082e7977d7549ca";
+const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 
 function verify(path) {
-  const result = spawnSync("npx", [
-    "--yes", "--package", `@kungfu-tech/buildchain@${buildchainVersion}`,
-    "buildchain", "verify", "release-passport", path, "--json",
+  const result = spawnSync(process.execPath, [
+    buildchainCli, "verify", "release-passport", path, "--json",
   ], {
     cwd,
     encoding: "utf8",
@@ -59,7 +59,7 @@ const output = {
   verdict: rejected ? "passed" : "failed",
   positive: {
     status: "verified",
-    verifier: `@kungfu-tech/buildchain@${buildchainVersion} verify release-passport`,
+    verifier: `kungfu-systems/buildchain@${buildchainAuthority} verify release-passport`,
   },
   mutation: {
     id: "release-passport-agent-hub-report-root-drift",

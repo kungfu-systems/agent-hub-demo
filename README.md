@@ -3,10 +3,14 @@
 Agent Hub Demo is a small reference project for shipping a KFD-compatible
 Agent Hub as Buildchain-managed standalone binaries. The release matrix
 publishes a detached-signature Linux x64 executable, a Developer ID signed and
-notarized macOS arm64 executable, and a timestamped Authenticode Windows x64
+notarized macOS arm64 executable, and an explicitly unsigned Windows x64
 executable, plus KFD-1/2/3 evidence, checksums, and one independently
 verifiable Release Passport. This repository declares desired signature state
 only; Buildchain owns credentials, provider jobs, and immutable result delivery.
+The exact reviewed Buildchain v4 commit pinned in every production workflow is
+the sole build, channel-promotion, publication, and release authority. The
+machine-readable Windows exception lives in
+`.buildchain/platform-signing-policy.json`; no Authenticode claim is made.
 
 The implementation uses two independent Hubs backed by separate file-based
 content-addressed stores. KFD enters through the public npm package at build
@@ -90,15 +94,15 @@ This soak does not replace or qualify the separate KFD Runtime 100 profile.
 Run the public Buildchain first-class Agent Hub gate separately:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@3.0.1-alpha.2 buildchain kfd hub test --for agent
+node .buildchain/runtime/bin/buildchain.mjs kfd hub test --for agent
 ```
 
 The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
 runs the fixed public KFD Hub suite against the real adapter, and writes its
 lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`. The
-prerelease version is pinned deliberately: it is the same public Buildchain
-contract used by this release line, including the KFD-3 distribution-artifact
-binding required by the three standalone binaries.
+runtime checkout is pinned to the same exact reviewed Buildchain v4 commit used
+by the workflows, including the KFD-3 distribution-artifact binding required by
+the three standalone binaries.
 
 Run the release qualification after that positive gate:
 
@@ -156,7 +160,7 @@ publishes the executables and `SHA256SUMS`, and emits
 `buildchain.release.json`. Verify a downloaded release directory independently:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@3.0.1-alpha.2 buildchain verify release-passport buildchain.release.json --json
+node .buildchain/runtime/bin/buildchain.mjs verify release-passport buildchain.release.json --json
 shasum -a 256 -c SHA256SUMS
 ```
 

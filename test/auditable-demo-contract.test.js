@@ -54,7 +54,7 @@ test("one reusable Buildchain job serves manual validation and promotion materia
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@81ffb1b99273945696d9e17456730830fda4eb84/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@d4622ccd6255445d3f9d0fff9082e7977d7549ca/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
@@ -83,7 +83,7 @@ test("binary metadata binds the exact executable closure", () => {
   }
 });
 
-test("repository invokes Buildchain v3 only", () => {
+test("repository invokes only the exact reviewed Buildchain v4 authority", () => {
   const repositoryFiles = [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
@@ -98,16 +98,23 @@ test("repository invokes Buildchain v3 only", () => {
     "scripts/qualify-passport.mjs",
     "scripts/qualify-release.mjs",
   ];
-  const retiredMajor = String(1 + 1);
-  const retiredInvocation = new RegExp([
-    `@kungfu-tech/buildchain@${retiredMajor}(?:\\.|\\b)`,
-    `@v${retiredMajor}\\b`,
-    `Buildchain v${retiredMajor}`,
-    `"ref": "v${retiredMajor}(?:-alpha)?"`,
-  ].join("|"), "u");
+  const retiredInvocation = /@kungfu-tech\/buildchain@3(?:\.|\b)|@v3(?:-alpha)?\b|Buildchain v3|"ref": "v3(?:-alpha)?"/u;
   for (const relative of repositoryFiles) {
     assert.doesNotMatch(read(relative), retiredInvocation, relative);
   }
-  assert.equal(JSON.parse(read(".buildchain/contract-lock.json")).buildchain.majorLine, "v3");
-  assert.equal(JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain.majorLine, "v3");
+  const authority = "d4622ccd6255445d3f9d0fff9082e7977d7549ca";
+  for (const relative of [
+    ".github/workflows/build.yml",
+    ".github/workflows/buildchain-ref-promotion.yml",
+    ".github/workflows/verify.yml",
+    ".github/workflows/artifact-signing-dogfood.yml",
+    ".github/workflows/v4-stage-capsule-canary.yml",
+  ]) {
+    const refs = [...read(relative).matchAll(/kungfu-systems\/buildchain\/\.github\/workflows\/[^\s]+@([0-9a-f]{40})/gu)];
+    assert.ok(refs.length > 0, relative);
+    assert.ok(refs.every((match) => match[1] === authority), relative);
+  }
+  assert.equal(JSON.parse(read(".buildchain/contract-lock.json")).buildchain.majorLine, "v4");
+  assert.equal(JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain.majorLine, "v4");
+  assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, authority);
 });

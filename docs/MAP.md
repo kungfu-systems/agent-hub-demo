@@ -22,7 +22,8 @@
 - `.buildchain/kfd/kfd-3/surfaces.json` — registered public collaboration
   surfaces used by the release witness.
 - `.buildchain/buildchain.toml` — semver/auto version state, lifecycle
-  commands, and the only three-platform artifact-signing declarations.
+  commands, the two signed-platform declarations, and the machine-readable
+  Windows unsigned exception.
 - `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
 - `.github/workflows/artifact-signing-dogfood.yml` — protected, channel-neutral
   Buildchain artifact-signing authority dogfood.
