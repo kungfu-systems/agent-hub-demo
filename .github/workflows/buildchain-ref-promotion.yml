@@ -25,9 +25,12 @@ on:
 permissions:
   contents: write
   actions: write
+  artifact-metadata: write
+  attestations: write
   checks: write
   issues: write
   id-token: write
+  pull-requests: write
 
 jobs:
   reject-manual-apply:
