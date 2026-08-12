@@ -15,7 +15,7 @@ const declarationPath = resolve(cwd, valueFor("--declaration", ".buildchain/kfd/
 const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
-const buildchainAuthority = "a4c247055e9ea17eee5fe5907341f6945a135a24";
+const buildchainAuthority = "3079091f770ce9fdca950e106259e34e5171f763";
 const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 const work = mkdtempSync(join(tmpdir(), "agent-hub-release-qualification-"));
 
