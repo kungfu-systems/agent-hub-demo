@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.binary-artifact/v1",
+  "platform": "windows-x64",
+  "file": "dist/agent-hub-demo-windows-x64.exe",
+  "sha256": "aa1b733a5e561c6573cc2f051683de2bb8269867bbc208d913f7b04c636f4519",
+  "size": 92715520,
+  "node": "v22.23.2",
+  "runtimeDependencies": [],
+  "executableFiles": [
+    {
+      "path": "dist/agent-hub-demo-windows-x64.exe",
+      "sha256": "aa1b733a5e561c6573cc2f051683de2bb8269867bbc208d913f7b04c636f4519"
+    }
+  ],
+  "signing": {
+    "state": "unsigned-exception",
+    "profile": "none",
+    "semantics": "explicitly-unsigned",
+    "provider": "none",
+    "resultDigest": null,
+    "evidencePath": ".buildchain/platform-signing-policy.json",
+    "reasonCode": "windows-authenticode-credential-not-configured"
+  },
+  "smoke": {
+    "version": {
+      "product": "agent-hub-demo",
+      "version": "0.2.0"
+    },
+    "selfVerify": {
+      "schemaVersion": 1,
+      "contract": "agent-hub-demo.self-verification/v1",
+      "ok": true,
+      "checks": [
+        {
+          "id": "kfd-manifest-digest",
+          "passed": true
+        },
+        {
+          "id": "adapter-artifact-root",
+          "passed": true
+        },
+        {
+          "id": "kfd-123-declaration",
+          "passed": true
+        }
+      ],
+      "adapterRoot": "sha256:743c297965cff14bad4f430a5cac58b1c9bc76dc33ed165b7e9c52a7be67344b",
+      "kfdManifestDigest": "sha256:dab4e93d2a662092eb51e29171dfc8bd0c400daa99899f074e69608b45cc7a59"
+    },
+    "hubCount": 2
+  }
+}

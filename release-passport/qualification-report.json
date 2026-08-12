@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.release-qualification/v1",
+  "verdict": "passed",
+  "environment": {
+    "kfdPackage": "@kungfu-tech/kfd@1.0.0-alpha.42",
+    "buildchainAuthority": "kungfu-systems/buildchain@3079091f770ce9fdca950e106259e34e5171f763",
+    "networkAccessDuringReportMutations": false,
+    "hubExecutionDuringMutations": false,
+    "privateDependencies": false
+  },
+  "positive": {
+    "status": "verified",
+    "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+    "reportContract": "kfd.agent-hub-report/v1",
+    "reportDigest": "sha256:ba92ffdac431f0557aa5abb8abd2258d45a239462c939daf331121f4344f1842"
+  },
+  "summary": {
+    "total": 12,
+    "rejectedAsExpected": 12,
+    "unexpected": 0,
+    "categories": [
+      "artifact",
+      "declaration",
+      "export-import",
+      "policy",
+      "report",
+      "root"
+    ]
+  },
+  "cases": [
+    {
+      "id": "report-contract-drift",
+      "category": "report",
+      "status": "rejected-as-expected",
+      "error": "report-contract-invalid",
+      "owner": "KFD report producer",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "report-contract",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "report-contract",
+            "passed": false,
+            "code": "report-contract-invalid"
+          }
+        ]
+      },
+      "nextStep": "Regenerate the report with the pinned public KFD package."
+    },
+    {
+      "id": "source-cut-drift",
+      "category": "root",
+      "status": "rejected-as-expected",
+      "error": "report-contract-invalid",
+      "owner": "KFD package lock owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "source-cut",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "source-cut",
+            "passed": false,
+            "code": "report-contract-invalid"
+          }
+        ]
+      },
+      "nextStep": "Restore the package manifest and release-anchor roots from the installed KFD package."
+    },
+    {
+      "id": "profile-root-drift",
+      "category": "root",
+      "status": "rejected-as-expected",
+      "error": "profile-manifest-digest-mismatch",
+      "owner": "KFD conformance profile owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "profile-root",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "profile-root",
+            "passed": false,
+            "code": "profile-manifest-digest-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Use the exact profile manifest root exported by the pinned KFD release."
+    },
+    {
+      "id": "protocol-root-drift",
+      "category": "root",
+      "status": "rejected-as-expected",
+      "error": "protocol-manifest-digest-mismatch",
+      "owner": "KFD protocol owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "protocol-root",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "protocol-root",
+            "passed": false,
+            "code": "protocol-manifest-digest-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Use the exact protocol manifest root exported by the pinned KFD release."
+    },
+    {
+      "id": "suite-root-drift",
+      "category": "root",
+      "status": "rejected-as-expected",
+      "error": "suite-vector-root-mismatch",
+      "owner": "KFD suite owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "suite-root",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "suite-root",
+            "passed": false,
+            "code": "suite-vector-root-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Regenerate results against the exact pinned 20-vector suite."
+    },
+    {
+      "id": "inventory-root-drift",
+      "category": "root",
+      "status": "rejected-as-expected",
+      "error": "failure-inventory-root-mismatch",
+      "owner": "KFD failure inventory owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "inventory-root",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "inventory-root",
+            "passed": false,
+            "code": "failure-inventory-root-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Restore the failure inventory root exported by the pinned KFD release."
+    },
+    {
+      "id": "capability-root-drift",
+      "category": "declaration",
+      "status": "rejected-as-expected",
+      "error": "capability-root-mismatch",
+      "owner": "Agent Hub adapter owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "capability-handshake-roots",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "dual-hub-capabilities",
+            "passed": false,
+            "code": "capability-document-invalid"
+          },
+          {
+            "id": "capability-handshake-roots",
+            "passed": false,
+            "code": "capability-root-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Reconcile declared capabilities with both independent Hub handshakes."
+    },
+    {
+      "id": "coverage-policy-drift",
+      "category": "policy",
+      "status": "rejected-as-expected",
+      "error": "suite-result-closure",
+      "owner": "KFD claim-boundary owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "coverage",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "coverage",
+            "passed": false,
+            "code": "suite-result-closure"
+          }
+        ]
+      },
+      "nextStep": "Require complete coverage of the exact pinned suite before release."
+    },
+    {
+      "id": "certification-scope-drift",
+      "category": "policy",
+      "status": "rejected-as-expected",
+      "error": "scope-widening",
+      "owner": "Release claim owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "scope",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "scope",
+            "passed": false,
+            "code": "scope-widening"
+          }
+        ]
+      },
+      "nextStep": "Restore the explicit non-certification and non-qualifying claim boundary."
+    },
+    {
+      "id": "export-import-result-drift",
+      "category": "export-import",
+      "status": "rejected-as-expected",
+      "error": "suite-outcome-mismatch",
+      "owner": "Agent Hub export/import owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report",
+        "expectedCheck": "actual:hub-020-reject-export-import-drift",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "actual:hub-020-reject-export-import-drift",
+            "passed": false,
+            "code": "suite-outcome-mismatch"
+          },
+          {
+            "id": "result-root",
+            "passed": false,
+            "code": "suite-result-root-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Reject mutated export/import bundles and regenerate the affected transcript."
+    },
+    {
+      "id": "adapter-artifact-drift",
+      "category": "artifact",
+      "status": "rejected-as-expected",
+      "error": "adapter-artifact-digest-mismatch",
+      "owner": "Agent Hub adapter owner",
+      "evidence": {
+        "verifier": "@kungfu-tech/kfd verify agent-hub-report --adapter",
+        "expectedCheck": "adapter-artifact",
+        "exitCode": 1,
+        "failedChecks": [
+          {
+            "id": "adapter-artifact",
+            "passed": false,
+            "code": "adapter-artifact-digest-mismatch"
+          }
+        ]
+      },
+      "nextStep": "Rebuild the report after restoring the released adapter bytes."
+    },
+    {
+      "id": "declaration-contract-drift",
+      "category": "declaration",
+      "status": "rejected-as-expected",
+      "error": "kfd-agent-hub-declaration-invalid",
+      "owner": "Buildchain adoption declaration owner",
+      "evidence": {
+        "verifier": "kungfu-systems/buildchain@3079091f770ce9fdca950e106259e34e5171f763 kfd hub inspect",
+        "expectedCheck": "kfd-agent-hub-declaration-invalid",
+        "exitCode": 1,
+        "stderr": "buildchain: kfd-agent-hub-declaration-invalid: expected kungfu-buildchain-kfd-agent-hub-adoption/v1"
+      },
+      "nextStep": "Restore the public Buildchain Agent Hub adoption contract."
+    }
+  ],
+  "claimBoundary": {
+    "claim": "First-party clean-room structural independence within the exact tested scope.",
+    "nonClaims": [
+      "No KFD certification or qualifying status.",
+      "No claim of general third-party Hub interoperability.",
+      "No security, performance, hosted-service, or production-readiness certification."
+    ],
+    "residualRisk": [
+      "The matrix verifies deliberate JSON, declaration, and adapter byte mutations; it does not enumerate every possible implementation defect.",
+      "Cross-platform runtime evidence is supplied by GitHub-hosted runners and does not cover every operating-system or filesystem variant."
+    ]
+  }
+}

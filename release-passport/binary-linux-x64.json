@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.binary-artifact/v1",
+  "platform": "linux-x64",
+  "file": "dist/agent-hub-demo-linux-x64",
+  "sha256": "2ecffae244485971ccbfa347a3b34794a5cc5c9199a3814d13d237688124a75f",
+  "size": 126094528,
+  "node": "v22.23.1",
+  "runtimeDependencies": [],
+  "executableFiles": [
+    {
+      "path": "dist/agent-hub-demo-linux-x64",
+      "sha256": "2ecffae244485971ccbfa347a3b34794a5cc5c9199a3814d13d237688124a75f"
+    }
+  ],
+  "signing": {
+    "state": "signed",
+    "profile": "detached-signature-v1",
+    "semantics": "detached-cryptographic-signature",
+    "provider": "buildchain-detached",
+    "resultDigest": "sha256:30cfd4e7c28140847ef36b05a53bd39cd527aeb1d55ee3b03b0425dcb64de800",
+    "evidencePath": ".buildchain/artifacts/signing/linux-x64/agent-hub-demo-linux-x64/result.json"
+  },
+  "smoke": {
+    "version": {
+      "product": "agent-hub-demo",
+      "version": "0.2.0"
+    },
+    "selfVerify": {
+      "schemaVersion": 1,
+      "contract": "agent-hub-demo.self-verification/v1",
+      "ok": true,
+      "checks": [
+        {
+          "id": "kfd-manifest-digest",
+          "passed": true
+        },
+        {
+          "id": "adapter-artifact-root",
+          "passed": true
+        },
+        {
+          "id": "kfd-123-declaration",
+          "passed": true
+        }
+      ],
+      "adapterRoot": "sha256:743c297965cff14bad4f430a5cac58b1c9bc76dc33ed165b7e9c52a7be67344b",
+      "kfdManifestDigest": "sha256:dab4e93d2a662092eb51e29171dfc8bd0c400daa99899f074e69608b45cc7a59"
+    },
+    "hubCount": 2
+  }
+}
