@@ -54,7 +54,7 @@ test("one reusable Buildchain job serves manual validation and promotion materia
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@d4622ccd6255445d3f9d0fff9082e7977d7549ca/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@f4f2471269521e56a6f1c2a743f8244dc2a9a557/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
@@ -102,7 +102,7 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
   for (const relative of repositoryFiles) {
     assert.doesNotMatch(read(relative), retiredInvocation, relative);
   }
-  const authority = "d4622ccd6255445d3f9d0fff9082e7977d7549ca";
+  const authority = "f4f2471269521e56a6f1c2a743f8244dc2a9a557";
   for (const relative of [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
@@ -114,7 +114,13 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
     assert.ok(refs.length > 0, relative);
     assert.ok(refs.every((match) => match[1] === authority), relative);
   }
-  assert.equal(JSON.parse(read(".buildchain/contract-lock.json")).buildchain.majorLine, "v4");
-  assert.equal(JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain.majorLine, "v4");
+  const stableLock = JSON.parse(read(".buildchain/contract-lock.json")).buildchain;
+  const alphaLock = JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain;
+  assert.equal(stableLock.majorLine, "v4");
+  assert.equal(stableLock.ref, "v4");
+  assert.equal(alphaLock.majorLine, "v4");
+  assert.equal(alphaLock.ref, "v4-alpha");
+  assert.equal(stableLock.resolvedSha, authority);
+  assert.equal(alphaLock.resolvedSha, authority);
   assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, authority);
 });
