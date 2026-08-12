@@ -30,7 +30,7 @@ test("release verification consumes final platform bytes before KFD evidence", (
   const verifier = fs.readFileSync(path.join(root, "scripts/verify-signed-binary.mjs"), "utf8");
   const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
   assert.match(workflow, /actions: read/);
-  assert.equal((workflow.match(/0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc/g) || []).length, 2);
+  assert.equal((workflow.match(/98dc8e3d628b558bc8b35a91a821ad6c97334b77/g) || []).length, 2);
   assert.match(workflow, /BUILDCHAIN_PROMOTION_TOKEN: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/);
   assert.doesNotMatch(workflow, /CERTIFICATE|PASSWORD|PRIVATE_KEY|TEAM_ID|NOTARY|TIMESTAMP_URL/);
   assert.match(workflow, /artifact-finalization-command: npm run verify:final-artifact/);
