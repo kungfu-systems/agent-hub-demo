@@ -27,7 +27,7 @@ independent facts.
 <!-- agent-hub-demo:auditable-demo:start -->
 ## Agent Hub Demo standalone binary
 
-[![Agent Hub Demo standalone binary](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/demo.gif)](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/public-evidence.json)
+[![Agent Hub Demo standalone binary](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/demo.gif)](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/public-evidence.json)
 
 Animation scenario:
 
@@ -35,16 +35,16 @@ Animation scenario:
 $ agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation
 ```
 
-Native renditions: [1080p MP4](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/demo.webm) · [720p MP4](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/demo-720p.webm)
+Native renditions: [1080p MP4](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/demo.webm) · [720p MP4](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/demo-720p.webm)
 
-[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/poster.png)
+[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/poster.png)
 
 <details>
 <summary>Evidence and claim boundary</summary>
 
 This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.
 
-[Release Passport](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/release-passport.json) · [auditable evidence](docs/evidence/auditable-demo/02efb3abf79c5aefb871fd76983af03387a53db665a0c1b1a752638cd5841fe1/agent-hub-demo/public-evidence.json)
+[Release Passport](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/release-passport.json) · [auditable evidence](docs/evidence/auditable-demo/daa77f6828e93e78e36cc4c6eb517399e9b6d11f33e0116f0bf7e2d24c298c73/agent-hub-demo/public-evidence.json)
 
 </details>
 <!-- agent-hub-demo:auditable-demo:end -->
