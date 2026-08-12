@@ -45,11 +45,11 @@ const platformPolicy = policy.platforms?.[platformId];
 if (policy.contract !== "agent-hub-demo.platform-signing-policy/v1" || !platformPolicy) {
   throw new Error(`platform signing policy is absent or invalid for ${platformId}`);
 }
-if (!("SIGNING_REQUEST_COUNT" in process.env) || !("ARTIFACT_SIGNING_STATE" in process.env)) {
+if (!("BUILDCHAIN_SIGNING_REQUEST_COUNT" in process.env) || !("BUILDCHAIN_ARTIFACT_SIGNING_STATE" in process.env)) {
   throw new Error("Buildchain finalization signing state environment is required");
 }
-const requestCount = Number(process.env.SIGNING_REQUEST_COUNT ?? resultPaths.length);
-const artifactSigningState = process.env.ARTIFACT_SIGNING_STATE || (resultPaths.length === 0 ? "unsigned" : "signed");
+const requestCount = Number(process.env.BUILDCHAIN_SIGNING_REQUEST_COUNT);
+const artifactSigningState = process.env.BUILDCHAIN_ARTIFACT_SIGNING_STATE;
 const observedDigest = `sha256:${sha256(binaryPath)}`;
 const expected = {
   "linux-x64": ["detached-signature-v1", "detached-cryptographic-signature"],

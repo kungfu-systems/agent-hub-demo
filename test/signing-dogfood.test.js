@@ -46,4 +46,6 @@ test("release verification consumes final platform bytes before KFD evidence", (
   assert.doesNotMatch(verifier, /spctl/);
   assert.match(verifier, /Get-AuthenticodeSignature/);
   assert.match(verifier, /NotSigned/);
+  assert.match(verifier, /process\.env\.BUILDCHAIN_SIGNING_REQUEST_COUNT/);
+  assert.match(verifier, /process\.env\.BUILDCHAIN_ARTIFACT_SIGNING_STATE/);
 });
