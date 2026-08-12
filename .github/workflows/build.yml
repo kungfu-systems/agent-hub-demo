@@ -40,15 +40,17 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@81ffb1b99273945696d9e17456730830fda4eb84
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@f4f2471269521e56a6f1c2a743f8244dc2a9a557
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: 81ffb1b99273945696d9e17456730830fda4eb84
+      buildchain-ref: f4f2471269521e56a6f1c2a743f8244dc2a9a557
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
       verify-command: npm run check && npm run qualify:buildchain-release
+      artifact-finalization-command: npm run verify:final-artifact
+      artifact-finalization-on-platform: true
       kfd-agent-hub: off
       require-install: true
       require-build: true
@@ -58,6 +60,7 @@ jobs:
       artifact-paths: |
         dist
         .buildchain/artifacts
+        .buildchain/platform-signing-policy.json
         .buildchain/kfd/kfd-2
         .buildchain/release-qualification
       release-candidate: true
@@ -71,11 +74,11 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@81ffb1b99273945696d9e17456730830fda4eb84
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@f4f2471269521e56a6f1c2a743f8244dc2a9a557
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: 81ffb1b99273945696d9e17456730830fda4eb84
+      buildchain-ref: f4f2471269521e56a6f1c2a743f8244dc2a9a557
       runner-preset: custom
       platforms-json: '[{"id":"linux-x64","name":"Linux x64","runner":"[\"ubuntu-24.04\"]"}]'
       node-version: "24"
@@ -103,7 +106,7 @@ jobs:
       actions: read
       contents: write
       pull-requests: write
-    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@81ffb1b99273945696d9e17456730830fda4eb84
+    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@f4f2471269521e56a6f1c2a743f8244dc2a9a557
     with:
       source-ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
       binary-artifact-name: ${{ fromJSON(needs.auditable-demo-binary.outputs.artifact-coordinates-json).artifacts[0].name }}

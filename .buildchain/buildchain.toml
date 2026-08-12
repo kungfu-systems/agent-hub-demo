@@ -46,11 +46,3 @@ profile = "auto"
 kind = "mach-o"
 platforms = ["macos"]
 required = true
-
-[[signing.artifacts]]
-id = "agent-hub-demo-windows-x64"
-path = "dist/agent-hub-demo-windows-x64.exe"
-profile = "auto"
-kind = "pe"
-platforms = ["windows-x64"]
-required = true

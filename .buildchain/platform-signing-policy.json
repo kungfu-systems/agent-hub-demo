@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.platform-signing-policy/v1",
+  "buildchainAuthority": {
+    "majorLine": "v4",
+    "exactSha": "f4f2471269521e56a6f1c2a743f8244dc2a9a557"
+  },
+  "platforms": {
+    "linux-x64": {
+      "state": "signed",
+      "profile": "detached-signature-v1",
+      "signingRequestCount": 1
+    },
+    "macos-arm64": {
+      "state": "signed",
+      "profile": "apple-developer-id",
+      "signingRequestCount": 1
+    },
+    "windows-x64": {
+      "state": "unsigned-exception",
+      "authenticode": false,
+      "timestamped": false,
+      "signingRequestCount": 0,
+      "reasonCode": "windows-authenticode-credential-not-configured",
+      "scope": "agent-hub-demo-windows-x64",
+      "releaseChannels": ["alpha", "stable"],
+      "reviewTrigger": "authenticode-credential-onboarding"
+    }
+  }
+}

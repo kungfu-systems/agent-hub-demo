@@ -45,6 +45,11 @@ test("publish evidence pairs platform KFD witnesses with exact public assets", (
     write(resolve(payload, "dist/agent-hub-demo.json"), manifest);
     write(resolve(payload, `dist/${binaryName}`), binary);
     write(resolve(payload, `dist/${binaryName}.sha256`), `${binarySha256}  ${binaryName}\n`);
+    writeJson(resolve(payload, ".buildchain/platform-signing-policy.json"), {
+      schemaVersion: 1,
+      contract: "agent-hub-demo.platform-signing-policy/v1",
+      platforms: { "windows-x64": { state: "unsigned-exception" } },
+    });
     writeJson(resolve(payload, `.buildchain/artifacts/binary-${target}.json`), {
       target,
       sha256: binarySha256,
@@ -147,4 +152,11 @@ test("publish evidence pairs platform KFD witnesses with exact public assets", (
       `.buildchain/release-passport/${binaryName}`,
     );
   }
+  assert.equal(
+    JSON.parse(readFileSync(
+      resolve(cwd, ".buildchain/release-passport/platform-signing-policy.json"),
+      "utf8",
+    )).platforms["windows-x64"].state,
+    "unsigned-exception",
+  );
 });
