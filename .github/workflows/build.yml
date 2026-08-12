@@ -68,7 +68,7 @@ jobs:
 
   auditable-demo-binary:
     name: Build exact Agent Hub Demo demo binary
-    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off' }}
     permissions:
       actions: read
       contents: read
@@ -101,7 +101,7 @@ jobs:
   auditable-demo:
     name: Consume declarative standalone-binary demo platform
     needs: auditable-demo-binary
-    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off' }}
     permissions:
       actions: read
       contents: write
@@ -117,6 +117,29 @@ jobs:
       media-profile: responsive-web-delivery-v1
       materialize: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode == 'full' && inputs.auditable-demo-materialize) || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
       materialize-base-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-base-ref || github.head_ref }}
+      artifact-retention-days: 14
+    secrets:
+      DEMO_UPDATE_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+
+  auditable-demo-promotion:
+    name: Consume production Buildchain artifact for auditable demo
+    needs: build
+    if: ${{ startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@f4f2471269521e56a6f1c2a743f8244dc2a9a557
+    with:
+      source-ref: ${{ needs.build.outputs.publish-source-sha }}
+      binary-artifact-name: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].name }}
+      binary-artifact-digest: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].digest }}
+      scenario-path: .buildchain/auditable-demo.json
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1
+      render-media: true
+      media-profile: responsive-web-delivery-v1
+      materialize: true
+      materialize-base-ref: ${{ github.head_ref }}
       artifact-retention-days: 14
     secrets:
       DEMO_UPDATE_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
