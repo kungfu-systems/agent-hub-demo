@@ -18,10 +18,10 @@
   "evidence_path": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-evidence/v0.2.0-alpha.8/evidence.json",
   "state": "finalizing",
   "previous_state": "published",
-  "actor": "dongkeren",
-  "run_id": "31603497820",
+  "actor": "kungfu-origin",
+  "run_id": "31604830965",
   "superseded_by": "",
-  "failure": "",
+  "failure": "publish evidence invalid: artifact digest mismatch: github-release:agent-hub-demo:digest",
   "artifacts": [
     {
       "group": "release",
@@ -48,5 +48,5 @@
   },
   "resume_command": "",
   "created_at": "2026-08-12T14:00:19.539Z",
-  "updated_at": "2026-08-12T14:00:26.150Z"
+  "updated_at": "2026-08-12T14:15:59.200Z"
 }
