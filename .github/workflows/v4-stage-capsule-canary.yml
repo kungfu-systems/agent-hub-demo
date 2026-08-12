@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   canary:
-    uses: kungfu-systems/buildchain/.github/workflows/v4-stage-capsule-canary.yml@47bb098a7701e55fcd1276e795acc170574d9744
+    uses: kungfu-systems/buildchain/.github/workflows/v4-stage-capsule-canary.yml@6e1ce404568ff8d45aba77369c66cf490893facc
     with:
       consumer: agent-hub-demo
       node-version: "24"
