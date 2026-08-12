@@ -1,0 +1,86 @@
+{
+  "captureRoot": "sha256:7e6aef61bcff02da1f0fa313a0eb7c3abf024b1d036d40bcd45e5cec1860de2c",
+  "demoId": "agent-hub-demo",
+  "evidenceRoot": "sha256:e5eb67758b6961dc170eb263b8b442618e17592c65addbd6b625832e3283acaa",
+  "files": [
+    {
+      "bytes": 53941,
+      "path": "demo-720p.mp4",
+      "root": "sha256:00f9fab654918a730ce569c34fe8542e0730bef760d0623d8318b70573182dfe"
+    },
+    {
+      "bytes": 42488,
+      "path": "demo-720p.webm",
+      "root": "sha256:c9675de45e28f5b73afa1ecd37d4813bd3b6362fac4416df9e16cb1fa4019a9d"
+    },
+    {
+      "bytes": 34179,
+      "path": "demo.gif",
+      "root": "sha256:beb788a1fad940363a7cafcf7d321cded5c290c91bf7d4ec4fa9c2a504052e3a"
+    },
+    {
+      "bytes": 54588,
+      "path": "demo.mp4",
+      "root": "sha256:ccd050350082702875f04e6831ce5d3bf04f2de1cb5271e00a981f92960f8162"
+    },
+    {
+      "bytes": 42360,
+      "path": "demo.webm",
+      "root": "sha256:b58643b1cadc11c5c0f42112de842174f2b875aa026b37363ce4fcd3d0552434"
+    },
+    {
+      "bytes": 3100,
+      "path": "gate-receipt.json",
+      "root": "sha256:ac45327cbe872bb2ea86b1d29b887a538501ece1f5ab63355c5630d833d8a27e"
+    },
+    {
+      "bytes": 54542,
+      "path": "manifest.json",
+      "root": "sha256:885a2920787496b56de73a99338dc7dc1407379f0b7bdd6952d2c255e2b5aa33"
+    },
+    {
+      "bytes": 2981,
+      "path": "media-inspection.json",
+      "root": "sha256:ea470b6a920964193b7d2570a078ead18ff79b509c83019745a46d4e00d5f5bb"
+    },
+    {
+      "bytes": 1130,
+      "path": "media-probe.json",
+      "root": "sha256:2c8ddf747f248ec77a06348c3daaf73cc9fdf8251764ad8d97a0bc539eef3f70"
+    },
+    {
+      "bytes": 4831,
+      "path": "media-receipt.json",
+      "root": "sha256:e6e0a3581551b8467c4f919091ec6651df42c814bbe8c2ce157f9532f5390e8a"
+    },
+    {
+      "bytes": 71466,
+      "path": "poster.png",
+      "root": "sha256:71cd564c0734a6436ac1baac67168cc9b1992e3ba0f98d0466af040c6e488382"
+    },
+    {
+      "bytes": 883,
+      "path": "renderer-checksums.sha256",
+      "root": "sha256:1cb23ed2ef637f0b53d1eae92ca46f65dd03a38ff2226dd00e98394946cda679"
+    }
+  ],
+  "gateRoot": "sha256:2585224118e375e7f226705b435f44ee41eb159e6481f6daea614168b9e70522",
+  "mediaRoot": "sha256:4d76d8f489988eddd34595c5e2be094b9cddd1ca798514c2a6fb1d6d74dde643",
+  "passportRoot": "sha256:b969a382516c0eb99c13e8721800f9b0656c902963308c60428f5f20a444d79b",
+  "scenarioRoot": "sha256:231ca53895ae32ba1e19ad463582b2a9ff412dd4cda6b7e4873bc882d4a290d9",
+  "schema": "buildchain.declarative-demo-evidence-root/v1",
+  "source": {
+    "createdAt": "2026-08-12T15:54:25Z",
+    "digest": "sha256:9ad38b2a466359e0e9f3dd79258d2e8568b2ed86dc09d09fc3a3a96267685138",
+    "expiresAt": "2026-08-26T15:54:17Z",
+    "id": "9148736631",
+    "name": "agent-hub-demo-linux-x64-1b0173bfc046",
+    "nodeId": "MDg6QXJ0aWZhY3Q5MTQ4NzM2NjMx",
+    "repository": "kungfu-systems/agent-hub-demo",
+    "runAttempt": "1",
+    "runId": "31614321136",
+    "schema": "buildchain.github-artifact-coordinate/v1",
+    "sizeInBytes": 88377695,
+    "sourceSha": "1b0173bfc046d8c24abbfba965a3e7573736ee82"
+  }
+}
