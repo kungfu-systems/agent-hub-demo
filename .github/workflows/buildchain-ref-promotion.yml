@@ -52,13 +52,13 @@ jobs:
           github.event.workflow_run.event == 'push'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc
+    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@98dc8e3d628b558bc8b35a91a821ad6c97334b77
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
       target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
       target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
-      buildchain-ref: 0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc
+      buildchain-ref: 98dc8e3d628b558bc8b35a91a821ad6c97334b77
       package-manager: npm
       artifact-name: agent-hub-demo
       release-candidate-workflow-file: build.yml

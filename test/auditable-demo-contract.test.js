@@ -54,7 +54,7 @@ test("promotion materialization consumes the sole production Buildchain job", ()
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@98dc8e3d628b558bc8b35a91a821ad6c97334b77/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
@@ -103,7 +103,7 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
   for (const relative of repositoryFiles) {
     assert.doesNotMatch(read(relative), retiredInvocation, relative);
   }
-  const authority = "0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc";
+  const authority = "98dc8e3d628b558bc8b35a91a821ad6c97334b77";
   for (const relative of [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",

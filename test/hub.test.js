@@ -178,7 +178,7 @@ test("release recovery rematerializes ephemeral Passport inputs", () => {
     new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
     "utf8",
   );
-  assert.match(workflow, /release-candidate-promote\.yml@0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc/);
+  assert.match(workflow, /release-candidate-promote\.yml@98dc8e3d628b558bc8b35a91a821ad6c97334b77/);
   assert.match(workflow, /publish-rematerialize-on-resume: true/);
 });
 
@@ -187,10 +187,10 @@ test("Verify pins the reviewed Buildchain v4 runtime", () => {
     new URL("../.github/workflows/verify.yml", import.meta.url),
     "utf8",
   );
-  assert.match(workflow, /check\.yml@0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc/);
+  assert.match(workflow, /check\.yml@98dc8e3d628b558bc8b35a91a821ad6c97334b77/);
   assert.match(
     workflow,
-    /buildchain-ref: 0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc/,
+    /buildchain-ref: 98dc8e3d628b558bc8b35a91a821ad6c97334b77/,
   );
   assert.doesNotMatch(workflow, /buildchain-ref:\s*v2(?:\s|$)/);
 });
