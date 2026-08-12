@@ -15,7 +15,8 @@ const declarationPath = resolve(cwd, valueFor("--declaration", ".buildchain/kfd/
 const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
-const buildchainVersion = "2.14.15";
+const buildchainAuthority = "3079091f770ce9fdca950e106259e34e5171f763";
+const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 const work = mkdtempSync(join(tmpdir(), "agent-hub-release-qualification-"));
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -186,12 +187,13 @@ const declaration = readJson(declarationPath);
 declaration.contract = "kungfu-buildchain-kfd-agent-hub-adoption/v0";
 writeJson(mutatedDeclaration, declaration);
 {
-  const result = run("npx", [
-    "--yes", "--package", `@kungfu-tech/buildchain@${buildchainVersion}`,
-    "buildchain", "kfd", "hub", "inspect", "--cwd", cwd,
+  const result = run(process.execPath, [
+    buildchainCli, "kfd", "hub", "inspect", "--cwd", cwd,
     "--declaration", mutatedDeclaration, "--for", "agent", "--json",
   ]);
-  const matched = result.status !== 0 && result.stderr.includes("kfd-agent-hub-declaration-invalid");
+  const stderr = result.stderr || "";
+  const diagnostic = [stderr, result.stdout || "", result.error?.message || ""].join("\n");
+  const matched = result.status !== 0 && diagnostic.includes("kfd-agent-hub-declaration-invalid");
   cases.push({
     id: "declaration-contract-drift",
     category: "declaration",
@@ -199,10 +201,10 @@ writeJson(mutatedDeclaration, declaration);
     error: matched ? "kfd-agent-hub-declaration-invalid" : "qualification-oracle-mismatch",
     owner: "Buildchain adoption declaration owner",
     evidence: {
-      verifier: `@kungfu-tech/buildchain@${buildchainVersion} kfd hub inspect`,
+      verifier: `kungfu-systems/buildchain@${buildchainAuthority} kfd hub inspect`,
       expectedCheck: "kfd-agent-hub-declaration-invalid",
       exitCode: result.status,
-      stderr: result.stderr.trim(),
+      stderr: stderr.trim(),
     },
     nextStep: "Restore the public Buildchain Agent Hub adoption contract.",
   });
@@ -215,7 +217,7 @@ const output = {
   verdict: passed === cases.length && cases.length >= 8 ? "passed" : "failed",
   environment: {
     kfdPackage: "@kungfu-tech/kfd@1.0.0-alpha.42",
-    buildchainPackage: `@kungfu-tech/buildchain@${buildchainVersion}`,
+    buildchainAuthority: `kungfu-systems/buildchain@${buildchainAuthority}`,
     networkAccessDuringReportMutations: false,
     hubExecutionDuringMutations: false,
     privateDependencies: false,
