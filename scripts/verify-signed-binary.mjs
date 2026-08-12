@@ -117,11 +117,12 @@ if (process.platform === "darwin") {
   }
 }
 if (process.platform === "win32") {
+  const securityModule = String.raw`${process.env.WINDIR}\System32\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1`;
   run("powershell.exe", [
     "-NoProfile",
     "-NonInteractive",
     "-Command",
-    `$s=Get-AuthenticodeSignature -LiteralPath '${binaryPath.replaceAll("'", "''")}'; if($s.Status -ne 'NotSigned' -or $null -ne $s.SignerCertificate -or $null -ne $s.TimeStamperCertificate){exit 1}`,
+    `Import-Module -Force '${securityModule.replaceAll("'", "''")}'; $s=Get-AuthenticodeSignature -LiteralPath '${binaryPath.replaceAll("'", "''")}'; if($s.Status -ne 'NotSigned' -or $null -ne $s.SignerCertificate -or $null -ne $s.TimeStamperCertificate){exit 1}`,
   ]);
 }
 if (process.platform !== "win32") chmodSync(binaryPath, 0o755);
