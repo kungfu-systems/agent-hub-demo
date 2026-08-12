@@ -3,9 +3,28 @@
 The Buildchain release-candidate workflow starts from a fresh GitHub checkout
 on Linux x64, macOS arm64, and Windows x64. Every runner installs the exact
 public npm dependency graph, runs the product tests and 100-delivery soak,
-builds a Node SEA executable, smoke-tests that executable without npm, and runs
-the public Agent Hub gate. Each payload contains a platform manifest and
+builds a Node SEA executable, submits only its sealed bytes to the central
+Buildchain signing authority when declared, then imports and smoke-tests the final
+executable without npm, and runs the public Agent Hub gate. Linux carries a
+detached cryptographic signature, macOS carries Developer ID plus accepted
+notarization evidence, and Windows is explicitly unsigned. Its policy requires
+zero signing requests and native `Get-AuthenticodeSignature` status `NotSigned`;
+any signing result or signed claim fails qualification. Each
+payload contains a platform manifest and
 KFD-1/KFD-2/KFD-3 evidence.
+
+The macOS artifact is a standalone Mach-O executable rather than an app
+bundle. Final-byte verification therefore uses strict `codesign` validation
+and requires the Buildchain result to prove `notarytool` acceptance plus the
+standalone online ticket; app-bundle Gatekeeper assessment and ticket stapling
+do not apply to this artifact shape.
+
+Both prerelease and stable release qualification use one independently reviewed
+exact Buildchain v4 commit as the sole production authority. Certificate rotation stays inside the
+central `buildchain-artifact-signing` environment; the consumer does not select
+an alpha- or release-specific credential environment. The bounded Windows
+exception is machine-readable in `.buildchain/platform-signing-policy.json` and
+ends when Authenticode credentials are onboarded.
 
 After a reviewed channel pull request is merged, Buildchain owns version-state
 mutation, publish-gate locking, exact and floating refs, sealed GitHub Release
@@ -21,7 +40,7 @@ Requirements: Node.js 24 or newer, npm, and Git.
 ```bash
 npm ci --registry=https://registry.npmjs.org/
 npm run check
-npx --yes --package @kungfu-tech/buildchain@2.14.15 buildchain kfd hub test --for agent
+node .buildchain/runtime/bin/buildchain.mjs kfd hub test --for agent
 npm run qualify:release
 ```
 
@@ -60,6 +79,10 @@ Release Passport. Exact prerelease and release tags are immutable evidence;
 floating tags remain Buildchain-owned channel refs. The bundle includes every
 sibling evidence document referenced by the Passport so a downloaded directory
 can be verified without the source checkout.
+
+The per-platform binary manifest records either the qualifying signature result
+or the exact unsigned-exception policy. All checksums and KFD witnesses are
+regenerated from final bytes after Buildchain finalization.
 
 ## Claim and nonclaims
 

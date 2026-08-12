@@ -59,6 +59,11 @@ function copyJsonTo(source, directory, name, transform) {
 mkdirSync(inputRoot, { recursive: true });
 mkdirSync(passportRoot, { recursive: true });
 copyTo(
+  payloadFile("windows-x64", "/.buildchain/platform-signing-policy.json"),
+  passportRoot,
+  "platform-signing-policy.json",
+);
+copyTo(
   payloadFile("linux-x64", "/dist/agent-hub-demo.json"),
   passportRoot,
   "agent-hub-demo.json",

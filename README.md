@@ -2,8 +2,15 @@
 
 Agent Hub Demo is a small reference project for shipping a KFD-compatible
 Agent Hub as Buildchain-managed standalone binaries. The release matrix
-publishes Linux x64, macOS arm64, and Windows x64 executables, KFD-1/2/3
-evidence, checksums, and one independently verifiable Release Passport.
+publishes a detached-signature Linux x64 executable, a Developer ID signed and
+notarized macOS arm64 executable, and an explicitly unsigned Windows x64
+executable, plus KFD-1/2/3 evidence, checksums, and one independently
+verifiable Release Passport. This repository declares desired signature state
+only; Buildchain owns credentials, provider jobs, and immutable result delivery.
+The exact reviewed Buildchain v4 commit pinned in every production workflow is
+the sole build, channel-promotion, publication, and release authority. The
+machine-readable Windows exception lives in
+`.buildchain/platform-signing-policy.json`; no Authenticode claim is made.
 
 The implementation uses two independent Hubs backed by separate file-based
 content-addressed stores. KFD enters through the public npm package at build
@@ -16,6 +23,31 @@ owns a distinct Ed25519 identity, capability document, content-addressed store,
 admission state, revocation set, and export bundle. The file binding records
 transport receipts while the Hub keeps delivery, admission, and completion as
 independent facts.
+
+<!-- agent-hub-demo:auditable-demo:start -->
+## Agent Hub Demo standalone binary
+
+[![Agent Hub Demo standalone binary](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/demo.gif)](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/public-evidence.json)
+
+Animation scenario:
+
+```text
+$ agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation
+```
+
+Native renditions: [1080p MP4](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/demo.mp4) · [1080p WebM](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/demo.webm) · [720p MP4](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/demo-720p.mp4) · [720p WebM](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/demo-720p.webm)
+
+[Static poster / reduced-motion fallback](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/poster.png)
+
+<details>
+<summary>Evidence and claim boundary</summary>
+
+This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.
+
+[Release Passport](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/release-passport.json) · [auditable evidence](docs/evidence/auditable-demo/817b1d2e91af2fc3fabd2fcecac91f1d6580f05d156e00d50e4bb5ca7f0cbfd1/agent-hub-demo/public-evidence.json)
+
+</details>
+<!-- agent-hub-demo:auditable-demo:end -->
 
 ## Quick start
 
@@ -62,15 +94,15 @@ This soak does not replace or qualify the separate KFD Runtime 100 profile.
 Run the public Buildchain first-class Agent Hub gate separately:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@2.14.17-alpha.8 buildchain kfd hub test --for agent
+node .buildchain/runtime/bin/buildchain.mjs kfd hub test --for agent
 ```
 
 The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
 runs the fixed public KFD Hub suite against the real adapter, and writes its
 lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`. The
-prerelease version is pinned deliberately: it is the same public Buildchain
-contract used by this release line, including the KFD-3 distribution-artifact
-binding required by the three standalone binaries.
+runtime checkout is pinned to the same exact reviewed Buildchain v4 commit used
+by the workflows, including the KFD-3 distribution-artifact binding required by
+the three standalone binaries.
 
 Run the release qualification after that positive gate:
 
@@ -128,7 +160,7 @@ publishes the executables and `SHA256SUMS`, and emits
 `buildchain.release.json`. Verify a downloaded release directory independently:
 
 ```bash
-npx --yes --package @kungfu-tech/buildchain@2.14.17-alpha.8 buildchain verify release-passport buildchain.release.json --json
+node .buildchain/runtime/bin/buildchain.mjs verify release-passport buildchain.release.json --json
 shasum -a 256 -c SHA256SUMS
 ```
 
@@ -149,6 +181,10 @@ hosted operation are outside the current claim.
   declares the limited public release claim and residual risk.
 - [`.buildchain/kfd/kfd-3/surfaces.json`](.buildchain/kfd/kfd-3/surfaces.json)
   declares the CLI and cross-platform distribution surface.
+- [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
+  the standalone-binary scenario consumed directly by Buildchain's declarative
+  demo platform; the exact binary and animation are bound to the same workflow
+  run, and this repository carries no product-specific capture glue.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
 - [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)

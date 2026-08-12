@@ -10,4 +10,5 @@ dist/
 .buildchain/release-passport/
 .buildchain/release-qualification/
 *.log
+__pycache__/
 .DS_Store

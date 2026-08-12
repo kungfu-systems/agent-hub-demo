@@ -1,6 +1,6 @@
 {
   "name": "@kungfu-tech/agent-hub-demo",
-  "version": "0.2.0-alpha.7",
+  "version": "0.2.0-alpha.8",
   "description": "A clean-room KFD Agent Hub demonstration using a file-backed content-addressed store.",
   "license": "Apache-2.0",
   "type": "module",
@@ -25,7 +25,9 @@
     "qualify:passport": "node scripts/qualify-passport.mjs",
     "qualify:release": "node scripts/qualify-release.mjs",
     "runtime100": "node src/adapter.js run --scenario runtime-100",
-    "test": "node --test"
+    "test": "node --test",
+    "verify:signed-binary": "node scripts/verify-signed-binary.mjs",
+    "verify:final-artifact": "npm run verify:signed-binary && npm run prepare:release-evidence"
   },
   "dependencies": {
     "@kungfu-tech/kfd": "1.0.0-alpha.42"
