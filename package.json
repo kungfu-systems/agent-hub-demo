@@ -1,7 +1,7 @@
 {
   "name": "@kungfu-tech/agent-hub-demo",
   "version": "0.2.0",
-  "description": "A clean-room KFD Agent Hub demonstration using a file-backed content-addressed store.",
+  "description": "A clean-room KFD Agent Hub demonstration released through Buildchain v4.",
   "license": "Apache-2.0",
   "type": "module",
   "private": true,
