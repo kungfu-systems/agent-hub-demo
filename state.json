@@ -16,18 +16,37 @@
   "state_ref": "buildchain/release-state/0-2-0",
   "state_path": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-state/v0.2.0.json",
   "evidence_path": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-evidence/v0.2.0/evidence.json",
-  "state": "publishing",
-  "previous_state": "prepared",
+  "state": "published",
+  "previous_state": "publishing",
   "actor": "kungfu-origin",
   "run_id": "31614427768",
   "superseded_by": "",
   "failure": "",
-  "artifacts": [],
-  "evidence": [],
+  "artifacts": [
+    {
+      "group": "release",
+      "kind": "github-release",
+      "name": "agent-hub-demo",
+      "ref": "v0.2.0",
+      "digest": "sha256:fd8def3475573c730f963fe841775608da6d4448d83e604e976053282e7b5555",
+      "role": "",
+      "required": true
+    }
+  ],
+  "evidence": [
+    ".buildchain/release-evidence/v0.2.0/evidence.json",
+    ".buildchain/release-evidence/v0.2.0/dist-tag-evidence.json"
+  ],
   "sealed_bundle": null,
-  "publication_state": "publishing",
-  "milestones": {},
+  "publication_state": "package-published",
+  "milestones": {
+    "package_published": {
+      "status": "complete",
+      "artifactCount": 1,
+      "sealedBundleRoot": ""
+    }
+  },
   "resume_command": "",
   "created_at": "2026-08-12T15:59:48.365Z",
-  "updated_at": "2026-08-12T15:59:49.927Z"
+  "updated_at": "2026-08-12T15:59:52.864Z"
 }
