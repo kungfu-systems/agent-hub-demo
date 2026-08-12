@@ -3,7 +3,7 @@
   "contract": "agent-hub-demo.platform-signing-policy/v1",
   "buildchainAuthority": {
     "majorLine": "v4",
-    "exactSha": "a4c247055e9ea17eee5fe5907341f6945a135a24"
+    "exactSha": "3079091f770ce9fdca950e106259e34e5171f763"
   },
   "platforms": {
     "linux-x64": {
