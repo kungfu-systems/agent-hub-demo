@@ -1,0 +1,75 @@
+{
+  "authority": {
+    "authorizationSources": [
+      "exact-release-passport",
+      "core-policy",
+      "work-or-warrant",
+      "explicit-capability-grant",
+      "runtime-isolation"
+    ],
+    "grants": [],
+    "nonAuthorities": [
+      "first-party-identity",
+      "system-identity",
+      "kfd-compliance",
+      "product-system-metadata",
+      "package-metadata",
+      "registry-history",
+      "scan-output",
+      "standalone-generation"
+    ],
+    "productSystemRole": "assembly-and-distribution-metadata-only"
+  },
+  "capture": {
+    "binary": {
+      "binaryRoot": "sha256:c5d02a085e4ffea46e1fe8e2e9c56af77285792af43a57fdf99f9a9b32ddafbd",
+      "metadataContract": "agent-hub-demo.binary-artifact/v1",
+      "metadataRoot": "sha256:e060d511f1de5c2e24a209727a2435837b86e1122bca9297856af1356ad02629",
+      "platformId": "linux-x64",
+      "runtimeDependencies": []
+    },
+    "networkIsolation": "docker-none",
+    "root": "sha256:a2573d04a4b9e56cf576eb45d2ac880bc5bb5e404c50ba16ffafb895fd3114a3"
+  },
+  "demo": {
+    "claimBoundary": "This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.",
+    "id": "agent-hub-demo",
+    "title": "Agent Hub Demo standalone binary"
+  },
+  "evidenceRoot": "sha256:de6da0f719bd2030b1d55d32c01230617ddb5c64473d2861eabba710f009a56f",
+  "gate": {
+    "root": "sha256:8e553a0218bf6b445117fdce91685e62c3a640ff5d73b7c8b6999dcecf71d8aa"
+  },
+  "media": {
+    "profile": "responsive-web-delivery-v1",
+    "qualificationRoot": "sha256:dac9d221fed93fa4db46217ba17af294ff31a8aef6ee46bb5ec991d03292b4c9",
+    "root": "sha256:27c23b3b4f41eb2b8cae7eb2ab1428fd0f031a8355cf4e9519db557c6a7beecf"
+  },
+  "passportRoot": "sha256:ebbfd4d31a8901fda5af2392232869f7feb10613082bd2ab69468febcba33d2b",
+  "product": {
+    "binaryName": "agent-hub-demo",
+    "displayName": "Agent Hub Demo",
+    "id": "agent-hub-demo"
+  },
+  "scenarioRoot": "sha256:231ca53895ae32ba1e19ad463582b2a9ff412dd4cda6b7e4873bc882d4a290d9",
+  "schema": "buildchain.declarative-demo-release-passport/v1",
+  "source": {
+    "createdAt": "2026-08-12T06:52:26Z",
+    "digest": "sha256:0ffcf6614bd382f2aebb43ef96d8bab58b359bf482cebb88d123a178a56413c4",
+    "expiresAt": "2026-08-26T06:52:18Z",
+    "id": "9131559313",
+    "name": "agent-hub-demo-linux-x64-43ec14445893",
+    "nodeId": "MDg6QXJ0aWZhY3Q5MTMxNTU5MzEz",
+    "repository": "kungfu-systems/agent-hub-demo",
+    "runAttempt": "1",
+    "runId": "31571326094",
+    "schema": "buildchain.github-artifact-coordinate/v1",
+    "sizeInBytes": 88125526,
+    "sourceSha": "43ec14445893f90642afba68a69b4c95208eef37"
+  },
+  "status": "qualified",
+  "toolchain": {
+    "buildchainSha": "44e1c35b626e4950f0b3474cb124efee75bb7310",
+    "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1"
+  }
+}
