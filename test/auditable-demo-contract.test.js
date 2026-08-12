@@ -48,7 +48,7 @@ test("declaration binds the exact standalone binary without implicit authority",
   ]);
 });
 
-test("one reusable Buildchain job serves manual validation and promotion materialization", () => {
+test("promotion materialization consumes the sole production Buildchain job", () => {
   const workflow = read(".github/workflows/build.yml");
   assert.match(workflow, /auditable-demo-materialize:[\s\S]*type: boolean/u);
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
@@ -61,7 +61,8 @@ test("one reusable Buildchain job serves manual validation and promotion materia
   assert.match(workflow, /scenario-path: \.buildchain\/auditable-demo\.json/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1/u);
   assert.doesNotMatch(workflow, /build\.yml@v3-alpha|buildchain-ref: v3-alpha/u);
-  assert.match(workflow, /github\.event_name == 'workflow_dispatch'[\s\S]*startsWith\(github\.base_ref, 'alpha\/'\)[\s\S]*startsWith\(github\.base_ref, 'release\/'\)/u);
+  assert.match(workflow, /auditable-demo-binary:[\s\S]*if: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.auditable-demo-mode != 'off' \}\}/u);
+  assert.match(workflow, /auditable-demo-promotion:[\s\S]*needs: build[\s\S]*needs\.build\.outputs\.artifact-coordinates-json/u);
   assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
 });
 
