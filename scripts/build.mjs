@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { adapterArtifact } from "../src/artifact.js";
 import { canonicalJson, digest } from "../src/canonical.js";
 import { handshake } from "../src/adapter.js";
+import { buildBinary } from "./build-binary.mjs";
 
 // Runtime identity material stays outside the publishable Buildchain artifacts.
 const root = ".demo/build-inspect";
@@ -21,3 +22,4 @@ mkdirSync(".buildchain/artifacts", { recursive: true });
 writeFileSync(join("dist", "agent-hub-demo.json"), `${canonicalJson(product)}\n`);
 writeFileSync(join(".buildchain/artifacts", "product.json"), `${canonicalJson(product)}\n`);
 process.stdout.write(`${JSON.stringify({ status: "built", root: product.root, adapterRoot: artifact.root })}\n`);
+await buildBinary();

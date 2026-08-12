@@ -6,11 +6,12 @@ import { pathToFileURL } from "node:url";
 
 import { adapterArtifact } from "./artifact.js";
 import { digest } from "./canonical.js";
+import { PRODUCT_VERSION } from "./product.js";
 import { createEnvironment, runCoreDemo, runRuntime100 } from "./scenarios.js";
 
 const ADAPTER = {
   id: "agent-hub-demo",
-  version: "0.1.0-alpha.0",
+  version: PRODUCT_VERSION,
   topology: "two-independent-file-cas-hubs",
 };
 
@@ -198,7 +199,7 @@ export function respond(request, root) {
   };
 }
 
-async function jsonl(root) {
+export async function runJsonl(root) {
   const lines = createInterface({ input: process.stdin, crlfDelay: Infinity });
   for await (const line of lines) {
     if (!line.trim()) continue;
@@ -227,19 +228,32 @@ export function isMainModule(moduleUrl, argvPath, toFileUrl = pathToFileURL) {
   return typeof argvPath === "string" && moduleUrl === toFileUrl(argvPath).href;
 }
 
-if (isMainModule(import.meta.url, process.argv[1])) {
-  const command = process.argv[2] ?? "jsonl";
+export async function runAdapterCli(argv = process.argv.slice(2)) {
+  const command = argv[0] ?? "jsonl";
+  const previousArgv = process.argv;
+  process.argv = [previousArgv[0], previousArgv[1], ...argv];
   const root = resolve(arg("--root", `.demo/adapter-${process.pid}`));
   mkdirSync(root, { recursive: true });
-  if (command === "inspect") {
-    process.stdout.write(`${JSON.stringify(handshake(join(root, "inspect")), null, 2)}\n`);
-  } else if (command === "run") {
-    const scenario = arg("--scenario", "core-demo");
-    const result = scenario === "runtime-100" ? runRuntime100(join(root, scenario)) : runCoreDemo(join(root, scenario));
-    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
-  } else if (command === "jsonl") {
-    await jsonl(root);
-  } else {
-    throw new Error(`unknown adapter command: ${command}`);
+  try {
+    if (command === "inspect") {
+      process.stdout.write(`${JSON.stringify(handshake(join(root, "inspect")), null, 2)}\n`);
+    } else if (command === "run") {
+      const scenario = arg("--scenario", "core-demo");
+      const result = scenario === "runtime-100" ? runRuntime100(join(root, scenario)) : runCoreDemo(join(root, scenario));
+      process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    } else if (command === "jsonl") {
+      await runJsonl(root);
+    } else {
+      throw new Error(`unknown adapter command: ${command}`);
+    }
+  } finally {
+    process.argv = previousArgv;
   }
+}
+
+if (isMainModule(import.meta.url, process.argv[1])) {
+  runAdapterCli().catch((error) => {
+    process.stderr.write(`${error.stack || error.message}\n`);
+    process.exitCode = 1;
+  });
 }

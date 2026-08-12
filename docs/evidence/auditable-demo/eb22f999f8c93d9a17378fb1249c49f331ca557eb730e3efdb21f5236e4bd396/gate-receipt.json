@@ -1,0 +1,57 @@
+{
+  "adapter": {
+    "argumentsRoot": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "path": "scripts/auditable-demo-adapter.mjs",
+    "sha256": "sha256:8a2ab22dc860bb901130dc09303e1491f392710e66acc62757f75cf365369bd3"
+  },
+  "qualifiedInputs": {
+    "claimBoundary": "This presentation proves one exact same-run Agent Hub Demo standalone binary completed its deterministic local demonstration. It does not grant authorization, certify security, prove production fitness, remote interoperability, external adoption, or unobserved platforms.",
+    "evidenceClass": "exact-agent-hub-demo-standalone-binary/v1",
+    "projection": "sha256:b6bd3413bef77bc488cfe7d5c4553ce6c72db55ed5e819105e2ec517c960e25d",
+    "renditionSet": {
+      "renditions": [
+        {
+          "captureRoot": "sha256:d47aff10086602e3ae945aeb9a3437618867c2c1b8e2f89117065d2de2e8e038",
+          "id": "1080p",
+          "projectionRoot": "sha256:b6bd3413bef77bc488cfe7d5c4553ce6c72db55ed5e819105e2ec517c960e25d",
+          "role": "primary",
+          "sceneRoot": "sha256:55b51590cb2b68591adaf0536dede490c709d253cafd707b2031551af17c089a",
+          "transcriptRoot": "sha256:7b8fb0ada86c25331cc22bcc24949dfab6022f0064ab8d3605db2e43af28a8ab"
+        },
+        {
+          "captureRoot": "sha256:3f90ff25053dd1da8524a3d7e73181e6f42409bb5d569438ae34bf5ed77bba76",
+          "id": "720p",
+          "projectionRoot": "sha256:97f9247108474f08870c0674bb072607520b9ed30b7a938da34fd8a2e0740be1",
+          "role": "responsive",
+          "sceneRoot": "sha256:5faa0d562d331aef183a725c313fa7dc7c1ddd3bf3d023ee279b7b3371127103",
+          "transcriptRoot": "sha256:7b8fb0ada86c25331cc22bcc24949dfab6022f0064ab8d3605db2e43af28a8ab"
+        }
+      ],
+      "root": "sha256:0884fde447a3a3f309ff6886cb197b7442e4f09f2d6875d58413df3df28370a7",
+      "schema": "kungfu.auditable-demo.rendition-set/v1"
+    },
+    "scene": "sha256:55b51590cb2b68591adaf0536dede490c709d253cafd707b2031551af17c089a",
+    "terminalCapture": {
+      "root": "sha256:d47aff10086602e3ae945aeb9a3437618867c2c1b8e2f89117065d2de2e8e038",
+      "schema": "kungfu.terminal-capture/v1"
+    },
+    "transcript": "sha256:7b8fb0ada86c25331cc22bcc24949dfab6022f0064ab8d3605db2e43af28a8ab"
+  },
+  "renderer": {
+    "image": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de",
+    "mediaProfile": "responsive-web-delivery-v1",
+    "mediaQualificationRoot": "sha256:f73cb6f925ca510da319e25490d838dd4459dde708e6df3c1247e3a7011f3591",
+    "smokeManifestRoot": "sha256:b1fef195fd09b7b59607d4ab6391c952c93412fef47e010a29c846c065bcaf59"
+  },
+  "schema": "buildchain.auditable-demo-gate/v1",
+  "sourceArtifact": {
+    "digest": "sha256:7e21689943145a13b47ddf2386202e8093ec78e62936d4d74a1e920f896deba6",
+    "expiresAt": "2026-08-16T04:43:49Z",
+    "id": "8828537464",
+    "name": "agent-hub-demo-auditable-source-0dc4570c4096-30732723139-1",
+    "runId": "30732723139"
+  },
+  "sourceRepository": "kungfu-systems/agent-hub-demo",
+  "sourceSha": "0dc4570c4096928aad8152a2caacdef1205a5058",
+  "status": "passed"
+}

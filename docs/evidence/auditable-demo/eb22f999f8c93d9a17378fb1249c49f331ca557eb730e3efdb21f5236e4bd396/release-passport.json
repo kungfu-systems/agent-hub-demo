@@ -1,0 +1,99 @@
+{
+  "authority": {
+    "authorization": {
+      "nonAuthorities": [
+        "first-party-identity",
+        "system-identity",
+        "kfd-compliance",
+        "product-system-metadata",
+        "package-metadata",
+        "registry-history",
+        "scan-output",
+        "standalone-generation"
+      ],
+      "requiredSources": [
+        "exact-release-passport",
+        "core-policy",
+        "work-or-warrant",
+        "explicit-capability-grant",
+        "runtime-isolation"
+      ],
+      "status": "not-granted-by-demo"
+    },
+    "claims": [
+      "one exact same-run Agent Hub Demo standalone binary completed its deterministic local demonstration",
+      "two independent native PTY captures passed the required Buildchain Gate"
+    ],
+    "evidenceClass": "exact-agent-hub-demo-standalone-binary/v1",
+    "grants": [],
+    "nonClaims": [
+      "KFD certification or authorization",
+      "production security or fitness",
+      "remote interoperability or external adoption",
+      "authorization from identity, compliance, metadata, or generated evidence"
+    ]
+  },
+  "capture": {
+    "artifact": {
+      "digest": "sha256:7e21689943145a13b47ddf2386202e8093ec78e62936d4d74a1e920f896deba6",
+      "expiresAt": "2026-08-16T04:43:49.000Z",
+      "id": "8828537464",
+      "name": "agent-hub-demo-auditable-source-0dc4570c4096-30732723139-1",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828537464"
+    },
+    "command": "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation",
+    "distribution": "standalone-binary",
+    "product": "agent-hub-demo",
+    "renditionPolicy": "independent-native-pty-captures/v1",
+    "root": "sha256:e3f465b70b0c0e2d3eb42364e54db690eaab6235f3ed665ca6af18d60ded09dd",
+    "runtimeDependencies": []
+  },
+  "gate": {
+    "artifact": {
+      "digest": "sha256:58a31053a984460c2c6fcbd42789dbed2ab4287af4df7455f2629aff1dbce816",
+      "expiresAt": "2026-08-16T04:44:36.000Z",
+      "id": "8828544298",
+      "name": "auditable-demo-gate-0dc4570c4096-9323a56b6d7042fc",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828544298"
+    },
+    "root": "sha256:9323a56b6d7042fc943c86272835caf054b32c13e4e8394368aca3d7842221c1",
+    "status": "passed"
+  },
+  "media": {
+    "artifact": {
+      "digest": "sha256:618420498d8f89d8d440d607e8e34dc494de6288450584368f4700c712cd3fea",
+      "expiresAt": "2026-08-16T04:46:12.000Z",
+      "id": "8828557652",
+      "name": "auditable-demo-media-0dc4570c4096-ee145220aea2c49c",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828557652"
+    },
+    "profile": "responsive-web-delivery-v1",
+    "qualificationRoot": "sha256:6ee3b0d4b8fdd7c52a46b7611bff16e8cf061ec0229aecd55ff543e07babfc2a",
+    "root": "sha256:ee145220aea2c49c1b62a952d3e1d535991976e2881f7e78ade3625bddc46e7a",
+    "status": "rendered"
+  },
+  "passportRoot": "sha256:eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396",
+  "repository": "kungfu-systems/agent-hub-demo",
+  "schema": "agent-hub-demo.auditable-demo.release-passport/v1",
+  "source": {
+    "artifact": {
+      "digest": "sha256:8dce6c27b2afe4ced81d8a07dad407de77465e0ef28b6f3ee5327f970bf1346d",
+      "expiresAt": "2026-08-16T04:42:04.000Z",
+      "id": "8828523641",
+      "name": "agent-hub-demo-auditable-binary-linux-x64-0dc4570c4096",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828523641"
+    },
+    "sha": "0dc4570c4096928aad8152a2caacdef1205a5058"
+  },
+  "status": "qualified",
+  "toolchain": {
+    "adapterPath": "scripts/auditable-demo-adapter.mjs",
+    "buildchainSha": "aa5f421f56dce2a3c8c6e2d66593b63107350a74",
+    "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de"
+  },
+  "workflow": {
+    "runAttempt": "1",
+    "runId": "30732723139",
+    "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139"
+  }
+}

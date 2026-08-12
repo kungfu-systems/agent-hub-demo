@@ -2,36 +2,144 @@ name: Build
 
 on:
   pull_request:
-  push:
-    branches: [main]
+    types: [opened, synchronize, reopened]
+    branches:
+      - dev/v*/v*.*
+      - alpha/v*/v*.*
+      - release/v*/v*.*
   workflow_dispatch:
     inputs:
-      buildchain-ref:
-        description: Temporary Buildchain runtime ref for trusted manual validation
-        required: false
-        default: ""
+      auditable-demo-mode:
+        description: Run the shared binary auditable demo logic without waiting for a release
+        required: true
+        default: "off"
+        type: choice
+        options:
+          - "off"
+          - gate
+          - full
+      auditable-demo-materialize:
+        description: Open or update the protected README media pull request after a full run
+        required: true
+        default: false
+        type: boolean
+      auditable-demo-base-ref:
+        description: Target branch for a manually requested README media pull request
+        required: true
+        default: dev/v0/v0.2
+        type: string
 
 permissions:
   contents: read
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.auditable-demo-mode == 'off' }}
     permissions:
+      actions: read
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@3079091f770ce9fdca950e106259e34e5171f763
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
-      node-version: "22"
+      buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763
+      node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
-      verify-command: npm test && npm run runtime100
-      kfd-agent-hub: auto
+      verify-command: npm run check && npm run qualify:buildchain-release
+      artifact-finalization-command: npm run verify:final-artifact
+      artifact-finalization-on-platform: true
+      kfd-agent-hub: off
       require-install: true
       require-build: true
       require-verify: true
       artifact-name: agent-hub-demo
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
       artifact-paths: |
         dist
         .buildchain/artifacts
+        .buildchain/platform-signing-policy.json
+        .buildchain/kfd/kfd-2
+        .buildchain/release-qualification
+      release-candidate: true
+      publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
+
+  auditable-demo-binary:
+    name: Build exact Agent Hub Demo demo binary
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off' }}
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@3079091f770ce9fdca950e106259e34e5171f763
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+    with:
+      buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763
+      runner-preset: custom
+      platforms-json: '[{"id":"linux-x64","name":"Linux x64","runner":"[\"ubuntu-24.04\"]"}]'
+      node-version: "24"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm run check && npm run qualify:buildchain-release
+      kfd-agent-hub: off
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo-auditable-binary
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
+      artifact-paths: |
+        dist/agent-hub-demo-linux-x64
+        dist/agent-hub-demo-linux-x64.sha256
+        .buildchain/artifacts/binary-linux-x64.json
+      release-candidate: false
+      publish-channel: none
+
+  auditable-demo:
+    name: Consume declarative standalone-binary demo platform
+    needs: auditable-demo-binary
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode != 'off' }}
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@3079091f770ce9fdca950e106259e34e5171f763
+    with:
+      source-ref: ${{ needs.auditable-demo-binary.outputs.publish-source-sha }}
+      binary-artifact-name: ${{ fromJSON(needs.auditable-demo-binary.outputs.artifact-coordinates-json).artifacts[0].name }}
+      binary-artifact-digest: ${{ fromJSON(needs.auditable-demo-binary.outputs.artifact-coordinates-json).artifacts[0].digest }}
+      scenario-path: .buildchain/auditable-demo.json
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1
+      render-media: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode == 'full') || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+      media-profile: responsive-web-delivery-v1
+      materialize: ${{ (github.event_name == 'workflow_dispatch' && inputs.auditable-demo-mode == 'full' && inputs.auditable-demo-materialize) || startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+      materialize-base-ref: ${{ github.event_name == 'workflow_dispatch' && inputs.auditable-demo-base-ref || github.head_ref }}
+      artifact-retention-days: 14
+    secrets:
+      DEMO_UPDATE_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+
+  auditable-demo-promotion:
+    name: Consume production Buildchain artifact for auditable demo
+    needs: build
+    if: ${{ startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@3079091f770ce9fdca950e106259e34e5171f763
+    with:
+      source-ref: ${{ needs.build.outputs.publish-source-sha }}
+      binary-artifact-name: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].name }}
+      binary-artifact-digest: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].digest }}
+      scenario-path: .buildchain/auditable-demo.json
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1
+      render-media: true
+      media-profile: responsive-web-delivery-v1
+      materialize: true
+      materialize-base-ref: ${{ github.head_ref }}
+      artifact-retention-days: 14
+    secrets:
+      DEMO_UPDATE_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}

@@ -2,11 +2,20 @@ import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { digest } from "../src/canonical.js";
 import { handshake, isMainModule, respond } from "../src/adapter.js";
+import { adapterArtifact } from "../src/artifact.js";
+import { PRODUCT_VERSION } from "../src/product.js";
 import { runCoreDemo, runRuntime100 } from "../src/scenarios.js";
+import {
+  matchesPayload,
+  releasePlatforms,
+} from "../scripts/release-platforms.mjs";
+import { evaluatePublicationQualification } from "../scripts/qualify-publication.mjs";
 
 function temporary(name) {
   return mkdtempSync(join(tmpdir(), `agent-hub-demo-${name}-`));
@@ -77,6 +86,8 @@ test("product-local 100-delivery soak admits every delivery", () => {
 
 test("publishable Buildchain artifacts never host Hub runtime identities", () => {
   const declaration = JSON.parse(readFileSync(new URL("../.buildchain/kfd/agent-hub.json", import.meta.url)));
+  const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url)));
+  assert.equal(declaration.adapter.version, packageJson.version);
   const strings = [];
   JSON.stringify(declaration, (_key, value) => {
     if (typeof value === "string") strings.push(value);
@@ -85,4 +96,127 @@ test("publishable Buildchain artifacts never host Hub runtime identities", () =>
   for (const value of strings) {
     assert.doesNotMatch(value, /\.buildchain\/artifacts/);
   }
+});
+
+test("public CLI exposes the same embedded facts used by standalone binaries", () => {
+  const run = (command) => {
+    const result = spawnSync(
+      process.execPath,
+      [fileURLToPath(new URL("../src/cli.js", import.meta.url)), command, "--json"],
+      { encoding: "utf8" },
+    );
+    assert.equal(result.status, 0, result.stderr);
+    return JSON.parse(result.stdout);
+  };
+  assert.equal(run("version").product, "agent-hub-demo");
+  assert.equal(run("self-verify").ok, true);
+  const description = run("self-describe");
+  assert.deepEqual(description.kfd.standards, ["KFD-1", "KFD-2", "KFD-3"]);
+  assert.equal(description.runtimeDependency, "none");
+});
+
+test("KFD-3 declares one CLI distributed as three standalone binaries", () => {
+  const registry = JSON.parse(
+    readFileSync(
+      new URL("../.buildchain/kfd/kfd-3/surfaces.json", import.meta.url),
+    ),
+  );
+  const cli = registry.surfaces.find(
+    (entry) => entry.id === "cli:agent-hub-demo",
+  );
+  assert.equal(cli.kind, "cli");
+  assert.deepEqual(
+    cli.distribution.artifacts.map((entry) => entry.platform),
+    ["linux-x64", "macos-arm64", "windows-x64"],
+  );
+  assert.deepEqual(
+    cli.distribution.artifacts.map((entry) => entry.pathGlob),
+    [
+      "dist/agent-hub-demo-linux-x64",
+      "dist/agent-hub-demo-macos-arm64",
+      "dist/agent-hub-demo-windows-x64.exe",
+    ],
+  );
+});
+
+test("release version state does not rewrite embedded protocol facts", () => {
+  const packageJson = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url)),
+  );
+  const generatedFacts = readFileSync(
+    new URL("../src/generated-facts.js", import.meta.url),
+    "utf8",
+  );
+  assert.equal(packageJson.scripts.precheck, "npm run generate:embedded");
+  assert.equal(packageJson.scripts.pretest, "npm run check:embedded");
+  assert.equal(PRODUCT_VERSION, packageJson.version);
+  assert.doesNotMatch(generatedFacts, /PRODUCT_VERSION/);
+  assert.equal(
+    adapterArtifact().files.some((entry) => entry.path === "package.json"),
+    false,
+  );
+});
+
+test("release publication separates Buildchain artifact IDs from product targets", () => {
+  assert.deepEqual(releasePlatforms, [
+    { artifact: "linux-x64", target: "linux-x64" },
+    { artifact: "macos", target: "macos-arm64" },
+    { artifact: "windows-x64", target: "windows-x64" },
+  ]);
+  assert.equal(
+    matchesPayload(
+      "/payloads/agent-hub-demo-macos-123/dist/agent-hub-demo-macos-arm64",
+      "macos",
+      "/dist/agent-hub-demo-macos-arm64",
+    ),
+    true,
+  );
+});
+
+test("release recovery rematerializes ephemeral Passport inputs", () => {
+  const workflow = readFileSync(
+    new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(workflow, /release-candidate-promote\.yml@3079091f770ce9fdca950e106259e34e5171f763/);
+  assert.match(workflow, /publish-rematerialize-on-resume: true/);
+});
+
+test("Verify pins the reviewed Buildchain v4 runtime", () => {
+  const workflow = readFileSync(
+    new URL("../.github/workflows/verify.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(workflow, /check\.yml@3079091f770ce9fdca950e106259e34e5171f763/);
+  assert.match(
+    workflow,
+    /buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763/,
+  );
+  assert.doesNotMatch(workflow, /buildchain-ref:\s*v2(?:\s|$)/);
+});
+
+test("publication qualification binds binaries to the exact governed version", () => {
+  const base = {
+    capability: {
+      target: "github-release:kungfu-systems/agent-hub-demo",
+      capabilityIds: ["github-release"],
+      version: "0.2.0-alpha.7",
+    },
+    packageJson: {
+      private: true,
+      version: "0.2.0-alpha.7",
+    },
+    missing: [],
+  };
+  assert.equal(evaluatePublicationQualification(base).allow, true);
+  assert.equal(
+    evaluatePublicationQualification({
+      ...base,
+      capability: {
+        ...base.capability,
+        version: "0.2.0-alpha.8",
+      },
+    }).allow,
+    false,
+  );
 });
