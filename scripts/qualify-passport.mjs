@@ -18,7 +18,7 @@ const outputPath = resolve(cwd, valueFor(
   "--output",
   ".buildchain/release-qualification/passport-qualification.json",
 ));
-const buildchainAuthority = "c4e699bcbcde48a3749ef0ec1b6aa92c39a0d99a";
+const buildchainAuthority = "0a0cb4e40b9d97b1353ee48c77b29dc58049d2fc";
 const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 
 function verify(path) {
