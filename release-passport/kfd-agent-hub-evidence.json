@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-kfd-agent-hub-evidence/v1",
+  "report": {
+    "path": "report.json",
+    "digest": "sha256:1a44fe83622bb6ef05c8d1847f430937ebdb1364e99e5b886ca11e9ac5a9ebd0"
+  },
+  "verification": {
+    "path": "verification.json",
+    "contract": "kungfu-buildchain-kfd-agent-hub-verification/v1",
+    "valid": true
+  },
+  "lock": {
+    "path": "adoption-lock.json",
+    "root": "sha256:4aa7ddbb3247f03df2428839532110d9423c41d2fc1bf6954133e523c47326f4"
+  },
+  "kfd": {
+    "package": {
+      "name": "@kungfu-tech/kfd",
+      "version": "1.0.0-alpha.42",
+      "packageManifestDigest": "sha256:db73d4b8733c6dc1bd7d48cfb50c926fdec775b13f91a01a6c074ddf7e8cdb67",
+      "releaseAnchorDigest": "sha256:6b474acf29ccc31702fc3b3f96ce414a80e9901fd0fc490a14c39e600cdbe4e9"
+    },
+    "profile": {
+      "id": "kfd-agent-hub-conformance",
+      "version": "0.1.0-alpha.1",
+      "manifestDigest": "sha256:d812cbe4afa7cfd0dab76d2d411fe40c2949dc606cea111ef2bc1fe9db1015d9"
+    },
+    "protocol": {
+      "id": "kfd-agent-hub",
+      "version": "0.1.0-alpha.1",
+      "manifestDigest": "sha256:dab4e93d2a662092eb51e29171dfc8bd0c400daa99899f074e69608b45cc7a59"
+    },
+    "suite": {
+      "id": "kfd-agent-hub-20",
+      "version": "0.1.0-alpha.1",
+      "vectorCount": 20,
+      "vectorRoot": "sha256:f1be3a10121fbd5389204b6e1ca70ea3920d9ba13ad20bb9f83fac078339c6b2",
+      "vectorRegistryDigest": "sha256:f1be3a10121fbd5389204b6e1ca70ea3920d9ba13ad20bb9f83fac078339c6b2"
+    },
+    "failureInventory": {
+      "root": "sha256:616df582900189eea35a3ca701d100a1aa123b89f424fba4090cf656286a74be",
+      "digest": "sha256:616df582900189eea35a3ca701d100a1aa123b89f424fba4090cf656286a74be"
+    }
+  },
+  "scope": {
+    "adapterArtifactDigest": "sha256:a78ff48f3ed9b0f826ecbafd306d6661dbcbd065c471db04cd9a020c4262582e",
+    "invocationBinding": "jsonl-stdio/v1",
+    "capabilities": {
+      "operations": [
+        "capability-advertisement",
+        "completion-assessment",
+        "fact-admission",
+        "responsibility-proposal",
+        "supersession",
+        "warrant-revocation"
+      ],
+      "topologies": [
+        "local-peer",
+        "offline-device"
+      ],
+      "hubBindings": [
+        "local-file-bundle"
+      ]
+    }
+  },
+  "qualifying": false,
+  "certification": false,
+  "claimBoundary": "A passing report is exact-scope evidence for the named adapter artifact, two declared Hub capability documents, fixed Agent Hub 20 suite, KFD package cut, platform, and retained residual risks. It is not KFD certification, a security assessment, production fitness, independent vendor adoption, or evidence that provisional semantics became normative."
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-hub-demo-product-artifact-macos-arm64",
+  "standard": "kfd-1",
+  "source": {
+    "repo": "kungfu-systems/agent-hub-demo",
+    "ref": "cce932d0aa6f355905b84e05c1aad119613063fe",
+    "package": "@kungfu-tech/agent-hub-demo"
+  },
+  "contractWorld": {
+    "id": "agent-hub-demo-product-artifact-macos-arm64",
+    "schemaId": "agent-hub-demo.product-artifact/v1",
+    "digest": "sha256:ba349e832d7e920bcaefb028cf78728f0da218453b91ce99310dbf8e88170515",
+    "owner": "kungfu-systems/agent-hub-demo maintainers",
+    "selfHosted": false
+  },
+  "surfaces": [
+    {
+      "name": "agent-hub-demo-macos-arm64",
+      "sourcePath": "",
+      "sourceSha256": "",
+      "artifactPath": ".buildchain/release-passport/agent-hub-demo-macos-arm64",
+      "expectedSha256": "0cf370b4087c7072efe7bd05ddf3d1facd2a49e9fc146af27382728b5a22fedb",
+      "byteForByte": true
+    }
+  ],
+  "responsibility": {
+    "sourceContractOwner": "kungfu-systems/agent-hub-demo maintainers",
+    "artifactVerificationOwner": "Buildchain KFD-1 release gate",
+    "releasePassportProofOwner": "Buildchain"
+  }
+}

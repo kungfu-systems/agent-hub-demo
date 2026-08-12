@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-release-passport",
+  "generatedAt": "2026-08-12T15:11:27.986Z",
+  "surfaceTimestampPolicy": {
+    "generatedAt": "2026-08-12T15:11:27.986Z",
+    "publishedAt": "2026-08-12T15:11:27.986Z",
+    "reproducible": true,
+    "timestampPolicy": "ci-injected",
+    "deterministicInputs": [
+      "release.sourceSha",
+      "release.releaseSha",
+      "release.releaseMaterialSha",
+      "artifact-evidence.json",
+      "publish evidence",
+      "release-state transaction",
+      "controller receipt references",
+      "sourceRevision",
+      "sourceDateEpoch",
+      "package content",
+      "declared Buildchain surface manifest contract"
+    ],
+    "sourceDateEpoch": "0",
+    "sourceRevision": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "timestampPolicyDetails": {
+      "contract": "kungfu-buildchain-surface-timestamp-policy",
+      "timestampFields": [
+        "generatedAt",
+        "publishedAt",
+        "surfaceTimestampPolicy.generatedAt",
+        "surfaceTimestampPolicy.publishedAt"
+      ],
+      "timestampFieldsParticipateInArtifactDigest": true,
+      "artifactDigestScope": "release passport JSON and release evidence bundle",
+      "note": "Human-readable timestamps are separate from reproducibility inputs; do not infer reproducibility from epoch timestamps."
+    }
+  },
+  "product": {
+    "name": "Agent Hub Demo",
+    "repository": "kungfu-systems/agent-hub-demo",
+    "mechanism": "product-mechanism.json"
+  },
+  "release": {
+    "tag": "v0.2.0-alpha.8",
+    "publicTag": "v0.2.0-alpha.8",
+    "internalTag": "v0.2.0-alpha.8",
+    "internalVersion": "0.2.0-alpha.8",
+    "publishedVersion": "0.2.0-alpha.8",
+    "versionLabel": "0.2.0-alpha.8",
+    "line": "v0.2",
+    "sourceSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "channel": "alpha",
+    "targetRef": "alpha/v0/v0.2",
+    "releaseSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "releaseMaterialSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "builtSourceSha": "",
+    "builtSourceTreeSha": "",
+    "promotionChannelSha": "",
+    "promotionChannelTreeSha": "",
+    "publishToolingSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "releaseStateRef": "refs/heads/buildchain/release-state/0-2-0-alpha-8",
+    "releaseStateSha": "",
+    "package": {
+      "name": "@kungfu-tech/buildchain",
+      "version": "0.2.0-alpha.8"
+    },
+    "exactRef": "refs/tags/v0.2.0-alpha.8"
+  },
+  "workflow": {
+    "name": "Buildchain Ref Promotion",
+    "runId": "31610649321",
+    "runAttempt": "1",
+    "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/31610649321"
+  },
+  "runnerPolicy": {
+    "productionDefault": "github-hosted",
+    "compatibilityFixture": "self-hosted",
+    "note": "Runner facts are recorded in artifact evidence; the protocol does not require self-hosted runners."
+  },
+  "transaction": {
+    "id": "096d837845c4be859990fcea95ee9414da559082d0112b1b72fd186420c3d246",
+    "version": "0.2.0-alpha.8",
+    "state": "complete",
+    "previousState": "finalizing",
+    "exactTag": "v0.2.0-alpha.8",
+    "releaseSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "releaseMaterialSha": "7f3450f2fb6fbc77855057039d520ad0e3c82db1",
+    "stateRef": "buildchain/release-state/0-2-0-alpha-8",
+    "statePath": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-state/v0.2.0-alpha.8.json",
+    "stateSha": "",
+    "evidencePath": "/home/runner/work/agent-hub-demo/agent-hub-demo/.buildchain/release-evidence/v0.2.0-alpha.8/evidence.json",
+    "updatedAt": "2026-08-12T15:11:26.086Z",
+    "result": {
+      "command": "finalize",
+      "validation": {
+        "valid": true,
+        "errors": []
+      }
+    }
+  },
+  "distTagPromotion": {
+    "path": "../release-evidence/v0.2.0-alpha.8/dist-tag-evidence.json",
+    "sha256": "b2d951c8f7e15486930ab173cccd82b7b9c82a0a6b3a7a60d7556c53d16e6074",
+    "fields": {
+      "schema": 1,
+      "contract": "kungfu-buildchain-dist-tag-promotion-evidence",
+      "mode": "publish-final-version",
+      "auth": "npm-token",
+      "distTag": "alpha",
+      "source": "resume-rematerialized:buildchain.toml",
+      "packages": [
+        {
+          "name": "agent-hub-demo",
+          "version": "v0.2.0-alpha.8",
+          "distTag": "alpha",
+          "role": "",
+          "digest": "sha256:b5df783a0321704f57f1b2d85448fd782e1995a07ec6f29e6407a285d3b3eefb"
+        }
+      ]
+    }
+  },
+  "versionImpact": {
+    "final": "unknown",
+    "source": "default",
+    "rationale": "No surface impact classification was supplied."
+  },
+  "surfaceImpacts": [],
+  "artifacts": [
+    {
+      "group": "release",
+      "kind": "github-release",
+      "name": "agent-hub-demo",
+      "ref": "v0.2.0-alpha.8",
+      "digest": "sha256:b5df783a0321704f57f1b2d85448fd782e1995a07ec6f29e6407a285d3b3eefb",
+      "evidence": "../release-evidence/v0.2.0-alpha.8/evidence.json"
+    }
+  ],
+  "evidence": {
+    "artifactEvidence": "artifact-evidence.json",
+    "publishEvidence": "evidence.json",
+    "transactionState": "",
+    "buildSummary": "",
+    "buildFacts": [],
+    "platformArtifactManifests": [],
+    "distTagPromotionEvidence": "../release-evidence/v0.2.0-alpha.8/dist-tag-evidence.json",
+    "kfd1": "",
+    "kfd2": "",
+    "kfd3": "",
+    "kfdAdopterManifest": "",
+    "kfdAdopterGate": "",
+    "kfdSupport": "",
+    "kfdAgentHub": "",
+    "invariantPassports": "",
+    "releaseEvidence": [],
+    "impact": "impact.json",
+    "checkReport": "check-report.json",
+    "agentIndex": "agent-index.json"
+  },
+  "recovery": {
+    "rollback": "Use the previous exact release tag or previous floating channel ref.",
+    "verify": "buildchain verify release-passport buildchain.release.json"
+  }
+}

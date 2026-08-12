@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "contract": "agent-hub-demo.binary-artifact/v1",
+  "platform": "macos-arm64",
+  "file": "dist/agent-hub-demo-macos-arm64",
+  "sha256": "0cf370b4087c7072efe7bd05ddf3d1facd2a49e9fc146af27382728b5a22fedb",
+  "size": 120780768,
+  "node": "v24.18.0",
+  "runtimeDependencies": [],
+  "executableFiles": [
+    {
+      "path": "dist/agent-hub-demo-macos-arm64",
+      "sha256": "0cf370b4087c7072efe7bd05ddf3d1facd2a49e9fc146af27382728b5a22fedb"
+    }
+  ],
+  "signing": {
+    "state": "signed",
+    "profile": "apple-developer-id",
+    "semantics": "native-platform-signature",
+    "provider": "apple",
+    "resultDigest": "sha256:256fc670707861f17883ccd0ec5bf0d13e380f8e2ba21f904ba3c6e91990853e",
+    "evidencePath": ".buildchain/artifacts/signing/macos/agent-hub-demo-macos-arm64/result.json"
+  },
+  "smoke": {
+    "version": {
+      "product": "agent-hub-demo",
+      "version": "0.2.0-alpha.8"
+    },
+    "selfVerify": {
+      "schemaVersion": 1,
+      "contract": "agent-hub-demo.self-verification/v1",
+      "ok": true,
+      "checks": [
+        {
+          "id": "kfd-manifest-digest",
+          "passed": true
+        },
+        {
+          "id": "adapter-artifact-root",
+          "passed": true
+        },
+        {
+          "id": "kfd-123-declaration",
+          "passed": true
+        }
+      ],
+      "adapterRoot": "sha256:743c297965cff14bad4f430a5cac58b1c9bc76dc33ed165b7e9c52a7be67344b",
+      "kfdManifestDigest": "sha256:dab4e93d2a662092eb51e29171dfc8bd0c400daa99899f074e69608b45cc7a59"
+    },
+    "hubCount": 2
+  }
+}
