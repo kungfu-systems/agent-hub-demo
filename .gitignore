@@ -1,11 +1,14 @@
 node_modules/
 dist/
 .demo/
+.kungfu/
 .buildchain/artifacts/
+.buildchain/sea/
 .buildchain/kfd/kfd-2/buildchain-claim-args.txt
 .buildchain/kfd/kfd-2/claims/
 .buildchain/kfd/kfd-2/release-claims.json
 .buildchain/release-passport/
 .buildchain/release-qualification/
 *.log
+__pycache__/
 .DS_Store

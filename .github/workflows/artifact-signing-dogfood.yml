@@ -1,0 +1,40 @@
+name: Artifact Signing Dogfood
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  signing-dogfood:
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+      id-token: write
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@3079091f770ce9fdca950e106259e34e5171f763
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
+    with:
+      buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763
+      node-version: "24"
+      install-command: npm ci --registry=https://registry.npmjs.org/
+      build-command: npm run build
+      verify-command: npm run check && npm run qualify:buildchain-release
+      artifact-finalization-command: npm run verify:final-artifact
+      artifact-finalization-on-platform: true
+      kfd-agent-hub: off
+      require-install: true
+      require-build: true
+      require-verify: true
+      artifact-name: agent-hub-demo
+      artifact-name-template: "{artifact}-{platform}-{shortSha}"
+      artifact-paths: |
+        dist
+        .buildchain/artifacts
+        .buildchain/platform-signing-policy.json
+        .buildchain/kfd/kfd-2
+        .buildchain/release-qualification
+      release-candidate: true
+      publish-channel: none
