@@ -13,11 +13,11 @@ jobs:
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@3079091f770ce9fdca950e106259e34e5171f763
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763
+      buildchain-ref: fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c
       node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
