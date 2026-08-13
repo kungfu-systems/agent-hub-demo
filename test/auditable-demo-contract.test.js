@@ -54,7 +54,7 @@ test("promotion materialization consumes the sole production Buildchain job", ()
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@3079091f770ce9fdca950e106259e34e5171f763/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
@@ -103,7 +103,8 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
   for (const relative of repositoryFiles) {
     assert.doesNotMatch(read(relative), retiredInvocation, relative);
   }
-  const authority = "3079091f770ce9fdca950e106259e34e5171f763";
+  const authority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
+  const alphaAuthority = "1805957f942139806f71cc89536895380f71383c";
   for (const relative of [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
@@ -122,6 +123,7 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
   assert.equal(alphaLock.majorLine, "v4");
   assert.equal(alphaLock.ref, "v4-alpha");
   assert.equal(stableLock.resolvedSha, authority);
-  assert.equal(alphaLock.resolvedSha, authority);
+  assert.equal(alphaLock.resolvedSha, alphaAuthority);
+  assert.notEqual(alphaLock.resolvedSha, authority);
   assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, authority);
 });
