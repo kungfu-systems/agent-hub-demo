@@ -35,20 +35,12 @@ test("two independent Hubs exchange facts and Episodes without inferring complet
 test("negative cases are explicit and fail closed", () => {
   const report = runCoreDemo(temporary("negative"));
   assert.deepEqual(report.results.conflict.reasonCodes, ["conflict-visible"]);
-  assert.deepEqual(report.results.idempotencyConflict.reasonCodes, [
-    "idempotency-conflict",
-  ]);
-  assert.deepEqual(report.results.amplification.reasonCodes, [
-    "authority-amplification",
-  ]);
+  assert.deepEqual(report.results.idempotencyConflict.reasonCodes, ["idempotency-conflict"]);
+  assert.deepEqual(report.results.amplification.reasonCodes, ["authority-amplification"]);
   assert.deepEqual(report.results.revoked.reasonCodes, ["authority-revoked"]);
   assert.deepEqual(report.results.expired.reasonCodes, ["authority-expired"]);
-  assert.deepEqual(report.results.unknownFeature.reasonCodes, [
-    "required-feature-unsupported",
-  ]);
-  assert.deepEqual(report.results.disclosureConflation.reasonCodes, [
-    "disclosure-insufficient",
-  ]);
+  assert.deepEqual(report.results.unknownFeature.reasonCodes, ["required-feature-unsupported"]);
+  assert.deepEqual(report.results.disclosureConflation.reasonCodes, ["disclosure-insufficient"]);
   assert.equal(report.results.driftRejected, true);
 });
 
@@ -56,21 +48,17 @@ test("adapter handshake roots match its capability documents", () => {
   const result = handshake(temporary("inspect"));
   assert.equal(result.binding, "jsonl-stdio/v1");
   assert.equal(result.hubs.length, 2);
-  for (const hub of result.hubs)
-    assert.equal(hub.capabilityRoot, digest(hub.capabilities));
+  for (const hub of result.hubs) assert.equal(hub.capabilityRoot, digest(hub.capabilities));
 });
 
 test("adapter uses the frozen request and response envelope contracts", () => {
-  const response = respond(
-    {
-      schemaVersion: 1,
-      contract: "kfd.agent-hub-adapter-request/v1",
-      requestId: "test-handshake",
-      operation: "handshake",
-      input: {},
-    },
-    temporary("jsonl"),
-  );
+  const response = respond({
+    schemaVersion: 1,
+    contract: "kfd.agent-hub-adapter-request/v1",
+    requestId: "test-handshake",
+    operation: "handshake",
+    input: {},
+  }, temporary("jsonl"));
   assert.equal(response.contract, "kfd.agent-hub-adapter-response/v1");
   assert.equal(response.code, "adapter-ready");
   assert.equal(response.hubs.length, 2);
@@ -97,12 +85,8 @@ test("product-local 100-delivery soak admits every delivery", () => {
 });
 
 test("publishable Buildchain artifacts never host Hub runtime identities", () => {
-  const declaration = JSON.parse(
-    readFileSync(new URL("../.buildchain/kfd/agent-hub.json", import.meta.url)),
-  );
-  const packageJson = JSON.parse(
-    readFileSync(new URL("../package.json", import.meta.url)),
-  );
+  const declaration = JSON.parse(readFileSync(new URL("../.buildchain/kfd/agent-hub.json", import.meta.url)));
+  const packageJson = JSON.parse(readFileSync(new URL("../package.json", import.meta.url)));
   assert.equal(declaration.adapter.version, packageJson.version);
   const strings = [];
   JSON.stringify(declaration, (_key, value) => {
@@ -118,11 +102,7 @@ test("public CLI exposes the same embedded facts used by standalone binaries", (
   const run = (command) => {
     const result = spawnSync(
       process.execPath,
-      [
-        fileURLToPath(new URL("../src/cli.js", import.meta.url)),
-        command,
-        "--json",
-      ],
+      [fileURLToPath(new URL("../src/cli.js", import.meta.url)), command, "--json"],
       { encoding: "utf8" },
     );
     assert.equal(result.status, 0, result.stderr);
@@ -195,10 +175,7 @@ test("release publication separates Buildchain artifact IDs from product targets
 
 test("release recovery rematerializes ephemeral Passport inputs", () => {
   const workflow = readFileSync(
-    new URL(
-      "../.github/workflows/buildchain-ref-promotion.yml",
-      import.meta.url,
-    ),
+    new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
     "utf8",
   );
   assert.match(workflow, /release-candidate-promote\.yml@v4/);
@@ -212,10 +189,7 @@ test("Verify selects the reviewed floating Buildchain v4 runtime", () => {
   );
   assert.match(workflow, /check\.yml@v4/);
   assert.match(workflow, /buildchain-ref: v4/);
-  assert.doesNotMatch(
-    workflow,
-    /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/,
-  );
+  assert.doesNotMatch(workflow, /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/);
   assert.doesNotMatch(workflow, /buildchain-ref:\s*v2(?:\s|$)/);
 });
 
