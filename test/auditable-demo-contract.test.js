@@ -54,7 +54,7 @@ test("promotion materialization consumes the sole production Buildchain job", ()
   assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
-    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c/u,
+    /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@v4/u,
   );
   assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
   assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
@@ -84,7 +84,7 @@ test("binary metadata binds the exact executable closure", () => {
   }
 });
 
-test("repository invokes only the exact reviewed Buildchain v4 authority", () => {
+test("repository persists only reviewed floating Buildchain v4 authorities", () => {
   const repositoryFiles = [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
@@ -103,27 +103,33 @@ test("repository invokes only the exact reviewed Buildchain v4 authority", () =>
   for (const relative of repositoryFiles) {
     assert.doesNotMatch(read(relative), retiredInvocation, relative);
   }
-  const authority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
+  const stableAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
   const alphaAuthority = "1805957f942139806f71cc89536895380f71383c";
-  for (const relative of [
+  const workflowFiles = [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
     ".github/workflows/verify.yml",
     ".github/workflows/artifact-signing-dogfood.yml",
     ".github/workflows/v4-stage-capsule-canary.yml",
-  ]) {
-    const refs = [...read(relative).matchAll(/kungfu-systems\/buildchain\/\.github\/workflows\/[^\s]+@([0-9a-f]{40})/gu)];
+    ".github/workflows/v4-adopter-delivery-qualification.yml",
+  ];
+  for (const relative of workflowFiles) {
+    const refs = [...read(relative).matchAll(/kungfu-systems\/buildchain\/\.github\/workflows\/[^\s]+@([^\s]+)/gu)];
     assert.ok(refs.length > 0, relative);
-    assert.ok(refs.every((match) => match[1] === authority), relative);
+    assert.ok(refs.every((match) => ["v4", "v4-alpha"].includes(match[1])), relative);
+    assert.doesNotMatch(read(relative), /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/u, relative);
   }
+  const qualification = read(".github/workflows/v4-adopter-delivery-qualification.yml");
+  assert.match(qualification, /v4-adopter-delivery\.yml@v4-alpha/u);
+  assert.equal((qualification.match(/@v4-alpha\b/gu) || []).length, 1);
   const stableLock = JSON.parse(read(".buildchain/contract-lock.json")).buildchain;
   const alphaLock = JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain;
   assert.equal(stableLock.majorLine, "v4");
   assert.equal(stableLock.ref, "v4");
   assert.equal(alphaLock.majorLine, "v4");
   assert.equal(alphaLock.ref, "v4-alpha");
-  assert.equal(stableLock.resolvedSha, authority);
+  assert.equal(stableLock.resolvedSha, stableAuthority);
   assert.equal(alphaLock.resolvedSha, alphaAuthority);
-  assert.notEqual(alphaLock.resolvedSha, authority);
-  assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, authority);
+  assert.notEqual(alphaLock.resolvedSha, stableAuthority);
+  assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, stableAuthority);
 });
