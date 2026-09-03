@@ -156,9 +156,12 @@ test("protected dev delivery uses the hosted Buildchain Warrant producer", () =>
   assert.match(workflow, /github-token: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/u);
 
   const bootstrap = read(".github/workflows/v4-adopter-delivery-qualification.yml");
-  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*expected-head-sha != ''/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.action == 'labeled'/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.number == 134/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.head\.ref == 'feature\/v4-floating-consumer-adoption'/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*dev-pr-auto-merge\.yml@v4-alpha/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*delivery-warrant-mode: required/u);
-  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*buildchain-ref: \$\{\{ inputs\.buildchain-ref \}\}/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*buildchain-ref: v4-alpha/u);
+  assert.doesNotMatch(bootstrap, /workflow_dispatch:[\s\S]*inputs:/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*ready-label: state\/ready/u);
 });
