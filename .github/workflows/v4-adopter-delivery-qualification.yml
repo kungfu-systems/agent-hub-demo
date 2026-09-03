@@ -61,7 +61,14 @@ jobs:
       toolchain-root: sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad
       environment-root: sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273
       affected-paths-json: '[".buildchain/kfd/agent-hub.json",".github/workflows/auditable-demo.yml",".github/workflows/build.yml",".github/workflows/native-dev-delivery.yml",".github/workflows/v4-adopter-delivery-qualification.yml",".github/workflows/verify.yml","package.json","test/auditable-demo-contract.test.js"]'
-      native-command: npm ci --registry=https://registry.npmjs.org/ && npm run check
+      native-command: >-
+        node24_bin="$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin" &&
+        test -x "$node24_bin/node" &&
+        export PATH="$node24_bin:$PATH" &&
+        node --version &&
+        npm ci --registry=https://registry.npmjs.org/ &&
+        npm run check
+      native-heartbeat-seconds: 30
       delivery-class: release
       delivery-priority: ordinary
       required-status-checks: check / check

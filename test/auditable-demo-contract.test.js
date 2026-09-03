@@ -162,6 +162,8 @@ test("protected dev delivery uses the hosted Buildchain Warrant producer", () =>
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*dev-pr-auto-merge\.yml@v4-alpha/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*delivery-warrant-mode: required/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*buildchain-ref: v4-alpha/u);
+  assert.match(bootstrap, /native-command:[\s\S]*hostedtoolcache\/node[\s\S]*node --version[\s\S]*npm run check/u);
+  assert.match(bootstrap, /native-heartbeat-seconds: 30/u);
   assert.doesNotMatch(bootstrap, /workflow_dispatch:[\s\S]*inputs:/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*ready-label: state\/ready/u);
 });
