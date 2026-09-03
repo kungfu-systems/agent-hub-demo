@@ -128,7 +128,7 @@ jobs:
       environment-root: ${{ github.event.client_payload.candidate.environmentRoot || inputs.environment-root }}
       affected-paths-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.affectedPaths) || inputs.affected-paths-json }}
       shard-evidence-roots-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.shardEvidenceRoots) || inputs.shard-evidence-roots-json || '[]' }}
-      release-blocker-priority-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.releaseBlockerPriority) || inputs.release-blocker-priority-json || '' }}
+      release-blocker-priority-json: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.releaseBlockerPriority != null && toJSON(github.event.client_payload.candidate.releaseBlockerPriority) || inputs.release-blocker-priority-json || '' }}
       native-proof-json: ${{ inputs.native-proof-json || '' }}
       native-command: ${{ github.event.client_payload.candidate.nativeCommandContract.command || inputs.native-command || '' }}
       native-command-root: ${{ github.event.client_payload.candidate.nativeCommandContract.commandRoot || inputs.native-command-root || '' }}
