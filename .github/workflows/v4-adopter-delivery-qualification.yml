@@ -5,12 +5,81 @@ on:
     branches:
       - dev/v0/v0.2
   workflow_dispatch:
+    inputs:
+      target-branch:
+        description: "Protected dev branch for an exact delivery bootstrap"
+        required: false
+        default: "dev/v0/v0.2"
+      expected-pr-number:
+        description: "Exact ready and approved PR number; omit for qualification only"
+        required: false
+        type: number
+        default: 0
+      expected-head-sha:
+        description: "Exact immutable PR head; omit for qualification only"
+        required: false
+        default: ""
+      source-workflow-run-id:
+        description: "Exact successful source workflow run"
+        required: false
+        type: number
+        default: 0
+      assignment-root:
+        description: "Native Assignment root"
+        required: false
+        default: ""
+      initiative-root:
+        description: "Parent Initiative root"
+        required: false
+        default: ""
+      source-identity-root:
+        description: "Semantic source identity root"
+        required: false
+        default: ""
+      source-patch-root:
+        description: "Semantic patch root"
+        required: false
+        default: ""
+      plan-root:
+        description: "Native qualification plan root"
+        required: false
+        default: ""
+      closure-root:
+        description: "Affected closure root"
+        required: false
+        default: ""
+      dependency-root:
+        description: "Dependency graph root"
+        required: false
+        default: ""
+      toolchain-root:
+        description: "Native toolchain root"
+        required: false
+        default: ""
+      environment-root:
+        description: "Exact native execution environment root"
+        required: false
+        default: ""
+      affected-paths-json:
+        description: "JSON array representing the affected closure"
+        required: false
+        default: "[]"
+      native-command:
+        description: "Native qualification command"
+        required: false
+        default: ""
+      delivery-class:
+        description: "Bounded delivery class"
+        required: false
+        default: "release"
 
 permissions:
   contents: read
 
 jobs:
   qualify:
+    permissions:
+      contents: read
     uses: kungfu-systems/buildchain/.github/workflows/v4-adopter-delivery.yml@v4-alpha
     with:
       consumer: agent-hub-demo
@@ -18,3 +87,43 @@ jobs:
       input-path: .buildchain/qualification/v4-adopter-delivery/input.json
       bootstrap-path: .buildchain/qualification/v4-adopter-delivery/bootstrap.json
       archive-path: .buildchain/qualification/v4-adopter-delivery/archives.json
+
+  bootstrap-delivery:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.expected-head-sha != '' }}
+    permissions:
+      actions: write
+      checks: read
+      contents: write
+      pull-requests: write
+      statuses: write
+    uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
+    with:
+      buildchain-ref: v4-alpha
+      target-branch: ${{ inputs.target-branch }}
+      expected-pr-number: ${{ inputs.expected-pr-number }}
+      expected-head-sha: ${{ inputs.expected-head-sha }}
+      source-workflow-run-id: ${{ inputs.source-workflow-run-id }}
+      handoff-workflow-id: native-dev-delivery.yml
+      source-workflow-id: verify.yml
+      delivery-warrant-mode: required
+      assignment-root: ${{ inputs.assignment-root }}
+      initiative-root: ${{ inputs.initiative-root }}
+      source-identity-root: ${{ inputs.source-identity-root }}
+      source-patch-root: ${{ inputs.source-patch-root }}
+      plan-root: ${{ inputs.plan-root }}
+      closure-root: ${{ inputs.closure-root }}
+      dependency-root: ${{ inputs.dependency-root }}
+      toolchain-root: ${{ inputs.toolchain-root }}
+      environment-root: ${{ inputs.environment-root }}
+      affected-paths-json: ${{ inputs.affected-paths-json }}
+      native-command: ${{ inputs.native-command }}
+      delivery-class: ${{ inputs.delivery-class }}
+      delivery-priority: ordinary
+      required-status-checks: check / check
+      queue-admission-context: Queue admission lease
+      active-lease-context: Queue family lease/exact
+      ready-label: state/ready
+      landing-mode: auto
+      dry-run: false
+    secrets:
+      github-token: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}

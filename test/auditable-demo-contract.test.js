@@ -133,7 +133,8 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   }
   const qualification = read(".github/workflows/v4-adopter-delivery-qualification.yml");
   assert.match(qualification, /v4-adopter-delivery\.yml@v4-alpha/u);
-  assert.equal((qualification.match(/@v4-alpha\b/gu) || []).length, 1);
+  assert.equal((qualification.match(/v4-adopter-delivery\.yml@v4-alpha\b/gu) || []).length, 1);
+  assert.equal((qualification.match(/dev-pr-auto-merge\.yml@v4-alpha\b/gu) || []).length, 1);
   const stableLock = JSON.parse(read(".buildchain/contract-lock.json")).buildchain;
   const alphaLock = JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain;
   assert.equal(stableLock.majorLine, "v4");
@@ -153,4 +154,10 @@ test("protected dev delivery uses the hosted Buildchain Warrant producer", () =>
   assert.match(workflow, /ready-label: state\/ready/u);
   assert.match(workflow, /landing-mode: auto/u);
   assert.match(workflow, /github-token: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/u);
+
+  const bootstrap = read(".github/workflows/v4-adopter-delivery-qualification.yml");
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*expected-head-sha != ''/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*dev-pr-auto-merge\.yml@v4-alpha/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*delivery-warrant-mode: required/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*ready-label: state\/ready/u);
 });
