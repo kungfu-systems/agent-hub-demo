@@ -3,7 +3,7 @@
   "contract": "kungfu-buildchain-dev-delivery-warrant-queue",
   "repository": "kungfu-systems/agent-hub-demo",
   "protectedBase": "dev/v0/v0.2",
-  "generation": 7,
+  "generation": 8,
   "fencingCounter": 2,
   "policy": {
     "agingSeconds": 900,
@@ -11,52 +11,7 @@
     "leaseSeconds": 3600,
     "emergencyPolicy": "reviewed-explicit-only"
   },
-  "activeWarrant": {
-    "schema": "kungfu.buildchain.dev-delivery-warrant/v1",
-    "phase": "provisional",
-    "repository": "kungfu-systems/agent-hub-demo",
-    "protectedBase": "dev/v0/v0.2",
-    "candidateId": "sha256:c2e5586c98ead8ce04dc3e86190a944cfbbfd46d0273cd741f4b64fe0e50f1c7",
-    "pullRequestNumber": 134,
-    "sourceHead": "fec30af88288386680f94e1d6cfdc1c73c37dba0",
-    "assignmentRoot": "sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f",
-    "initiativeRoot": "sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990",
-    "sourceIdentityRoot": "sha256:90d4abe2bf4bba4626c1074acf04ff473f66392ac83fbdd22cb46699a729ef34",
-    "sourcePatchRoot": "sha256:dcfb17a014b6d9cece93ba668b110c6130813458d987a1b71eecf3306bd81b9f",
-    "sourceProofRoot": "sha256:3edd772ff0cc51c02efbf18515fab86ad71bc8da1b673fd32f456b13edc2a3a4",
-    "planRoot": "sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888",
-    "closureRoot": "sha256:7d5684277073e71970b5f1822a5e64241b232f9f01e125d9e22793b4a63005f7",
-    "dependencyRoot": "sha256:1b2795a8e06cc392d06ac53add373c8f96e21028e119c15cfb31df2378c0146d",
-    "toolchainRoot": "sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad",
-    "environmentRoot": "sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273",
-    "nativeCommandContract": {
-      "schema": "kungfu.buildchain.native-command-contract/v1",
-      "runner": "bash-lc",
-      "command": "npm ci --registry=https://registry.npmjs.org/ && npm run check",
-      "commandRoot": "sha256:84c9aeaec6e1551cad310af83c7dd51c7c28413a50b24f21571848d66bd372a2"
-    },
-    "affectedPaths": [
-      ".buildchain/kfd/agent-hub.json",
-      ".github/workflows/auditable-demo.yml",
-      ".github/workflows/build.yml",
-      ".github/workflows/native-dev-delivery.yml",
-      ".github/workflows/v4-adopter-delivery-qualification.yml",
-      ".github/workflows/verify.yml",
-      "package.json",
-      "test/auditable-demo-contract.test.js"
-    ],
-    "shardEvidenceRoots": [],
-    "sourceWorkflowRunId": 0,
-    "deliveryClass": "release",
-    "priority": "ordinary",
-    "generation": 2,
-    "expectedOldStateRoot": "sha256:ce0a50ad8c7ddf5bea5ddbeef0e56a08532f57491c7cbaee7cb41bbd3a81e8ae",
-    "issuedAt": "2026-09-03T02:12:14.607Z",
-    "expiresAt": "2026-09-03T03:17:39.608Z",
-    "fencingToken": "sha256:4f0d3e7f559b23eae77a585082f33e9b533328f69383e6305957d8ee14d86d12",
-    "nextAction": "Run or reuse exact native proof under this fence, then atomically qualify before merge admission.",
-    "heartbeatAt": "2026-09-03T02:17:39.608Z"
-  },
+  "activeWarrant": null,
   "candidates": [
     {
       "repository": "kungfu-systems/agent-hub-demo",
@@ -116,11 +71,23 @@
       "sourceWorkflowRunId": 0,
       "priority": "ordinary",
       "enqueuedAt": "2026-09-03T02:12:10.597Z",
-      "updatedAt": "2026-09-03T02:17:39.608Z",
+      "updatedAt": "2026-09-03T02:17:58.635Z",
       "attempts": 1,
       "recoveries": 0,
-      "status": "proving",
-      "terminal": null,
+      "status": "terminal-failure",
+      "terminal": {
+        "outcome": "terminal-failure",
+        "reason": "native command failed with exit 1",
+        "evidenceRoot": "sha256:0c1586e5568797a8bd08e1d1de2f9e7ea62b68be4e98a656e902ba9b6306ab43",
+        "closedAt": "2026-09-03T02:17:58.635Z",
+        "fencingToken": "sha256:4f0d3e7f559b23eae77a585082f33e9b533328f69383e6305957d8ee14d86d12",
+        "leaseGeneration": 2,
+        "transferRoot": "sha256:bf3af415b48b43e1b7e80c2363b68a6c7e3d797ce5d27d7abde352372934cb29",
+        "finalizerBoundaryRoot": "sha256:c38c7d8cb79b0036b74b3489362e61724a9eaed5836b62a9020c6e0d3504cce9",
+        "nativeJobId": 100497351446,
+        "sealJobId": 100497413947,
+        "successorWake": null
+      },
       "affectedPaths": [
         ".buildchain/kfd/agent-hub.json",
         ".github/workflows/auditable-demo.yml",
@@ -134,6 +101,6 @@
       "shardEvidenceRoots": []
     }
   ],
-  "updatedAt": "2026-09-03T02:17:39.608Z",
-  "stateRoot": "sha256:b884a6cef4b9e397383dae57939159078869f7709c77de189ea9e65abcb541b4"
+  "updatedAt": "2026-09-03T02:17:58.635Z",
+  "stateRoot": "sha256:0c346216727811025923d861efe4db103412e471850fdcff2800ba0780ac11db"
 }
