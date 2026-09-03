@@ -1,0 +1,71 @@
+{
+  "artifact": {
+    "binaryRoot": "sha256:c911c22f935c90fa7d548fcc234ef93c725b199a82d80844ae81cb196c4b7b76",
+    "metadataContract": "agent-hub-demo.binary-artifact/v1",
+    "metadataRoot": "sha256:c9f5e2258f5f8681626951cba0f9475c63d9ecd5318c6a421273ba2769d935b4",
+    "platformId": "linux-x64",
+    "runtimeDependencies": []
+  },
+  "authority": {
+    "classification": "capture-source-evidence",
+    "grants": [],
+    "nonAuthorities": [
+      "first-party-identity",
+      "system-identity",
+      "kfd-compliance",
+      "product-system-metadata",
+      "package-metadata",
+      "registry-history",
+      "scan-output",
+      "standalone-generation"
+    ]
+  },
+  "demo": {
+    "claimBoundary": "This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.",
+    "id": "agent-hub-demo",
+    "title": "Agent Hub Demo standalone binary"
+  },
+  "execution": {
+    "durationClass": "standard"
+  },
+  "networkIsolation": "docker-none",
+  "product": {
+    "binaryName": "agent-hub-demo",
+    "displayName": "Agent Hub Demo",
+    "distribution": "standalone-binary",
+    "id": "agent-hub-demo"
+  },
+  "renditions": [
+    {
+      "columns": 150,
+      "height": 1080,
+      "id": "1080p",
+      "role": "primary",
+      "rows": 36,
+      "runSummary": "renditions/1080p/run-summary.json",
+      "runSummaryRoot": "sha256:bbd8c8b9d3fee70e772b1b497a5e05fcbec1c56a97e86dede3435cc5d174639a",
+      "terminalCapture": "renditions/1080p/terminal-capture.json",
+      "terminalCaptureRoot": "sha256:f92e7e124405d190463aa185a35cb2249cca2a03cd9c363a6b02847290dcefe1",
+      "transcript": "renditions/1080p/complete-transcript.txt",
+      "width": 1920
+    },
+    {
+      "columns": 100,
+      "height": 720,
+      "id": "720p",
+      "role": "responsive",
+      "rows": 28,
+      "runSummary": "renditions/720p/run-summary.json",
+      "runSummaryRoot": "sha256:230dc75cf02ef06ccd0776455eea0faf5aaf3b3eaaf7f293bfc85acc47de524a",
+      "terminalCapture": "renditions/720p/terminal-capture.json",
+      "terminalCaptureRoot": "sha256:f884b70f6a1e3f3746f016591aaf8d83b11d5042ffb0f51f59e08593c86a1bd0",
+      "transcript": "renditions/720p/complete-transcript.txt",
+      "width": 1280
+    }
+  ],
+  "root": "sha256:0017a874602b8076af5b9a2985407dbd172ef8afec2fb1ea3069019f06795347",
+  "scenarioRoot": "sha256:231ca53895ae32ba1e19ad463582b2a9ff412dd4cda6b7e4873bc882d4a290d9",
+  "schema": "buildchain.declarative-demo-capture/v1",
+  "sourceCoordinateRoot": "sha256:3c5b6fb440224ae7527e0ddb57afb87f04914d30cbfbe977bc993fb5cd81347d",
+  "status": "qualified"
+}
