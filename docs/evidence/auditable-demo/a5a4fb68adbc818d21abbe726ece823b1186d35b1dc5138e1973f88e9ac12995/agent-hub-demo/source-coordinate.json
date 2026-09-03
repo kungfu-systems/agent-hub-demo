@@ -1,0 +1,14 @@
+{
+  "createdAt": "2026-08-12T15:00:34Z",
+  "digest": "sha256:9412b0aac0817ae4cf4a08972e567cd436638244b0a83899047df4626fc7275d",
+  "expiresAt": "2026-08-26T15:00:27Z",
+  "id": "9146713263",
+  "name": "agent-hub-demo-linux-x64-cce932d0aa6f",
+  "nodeId": "MDg6QXJ0aWZhY3Q5MTQ2NzEzMjYz",
+  "repository": "kungfu-systems/agent-hub-demo",
+  "runAttempt": "1",
+  "runId": "31609385162",
+  "schema": "buildchain.github-artifact-coordinate/v1",
+  "sizeInBytes": 88125558,
+  "sourceSha": "cce932d0aa6f355905b84e05c1aad119613063fe"
+}
