@@ -50,19 +50,29 @@ test("declaration binds the exact standalone binary without implicit authority",
 
 test("promotion materialization consumes the sole production Buildchain job", () => {
   const workflow = read(".github/workflows/build.yml");
-  assert.match(workflow, /auditable-demo-materialize:[\s\S]*type: boolean/u);
-  assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
     /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@v4/u,
   );
-  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
-  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
+  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.build\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
+  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.build\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
   assert.match(workflow, /scenario-path: \.buildchain\/auditable-demo\.json/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1/u);
   assert.doesNotMatch(workflow, /build\.yml@v3-alpha|buildchain-ref: v3-alpha/u);
-  assert.match(workflow, /auditable-demo-binary:[\s\S]*if: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.auditable-demo-mode != 'off' \}\}/u);
   assert.match(workflow, /auditable-demo-promotion:[\s\S]*needs: build[\s\S]*needs\.build\.outputs\.artifact-coordinates-json/u);
+  assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
+  assert.equal((workflow.match(/\/build\.yml@v4\b/gu) || []).length, 1);
+});
+
+test("manual auditable demo owns one independent Buildchain invocation", () => {
+  const workflow = read(".github/workflows/auditable-demo.yml");
+  assert.match(workflow, /materialize:[\s\S]*type: boolean/u);
+  assert.match(workflow, /base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
+  assert.match(workflow, /auditable-demo-binary:[\s\S]*build\.yml@v4/u);
+  assert.match(workflow, /auditable-demo:[\s\S]*\.declarative-auditable-demo\.yml@v4/u);
+  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
+  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
+  assert.equal((workflow.match(/\/build\.yml@v4\b/gu) || []).length, 1);
   assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
 });
 
@@ -106,6 +116,7 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   const stableAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
   const alphaAuthority = "1805957f942139806f71cc89536895380f71383c";
   const workflowFiles = [
+    ".github/workflows/auditable-demo.yml",
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
     ".github/workflows/verify.yml",
