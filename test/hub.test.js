@@ -183,6 +183,7 @@ test("release recovery rematerializes ephemeral Passport inputs", () => {
   assert.match(workflow, /promote-alpha:[\s\S]*buildchain-ref: v4-alpha/);
   assert.match(workflow, /promote-stable:[\s\S]*buildchain-ref: v4/);
   assert.match(workflow, /publish-rematerialize-on-resume: true/);
+  assert.doesNotMatch(workflow, /publication-consumer-qualification-command:/);
 });
 
 test("Verify selects the reviewed floating Buildchain v4 runtime", () => {
