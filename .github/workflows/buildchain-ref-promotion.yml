@@ -59,8 +59,6 @@ jobs:
         )
       }}
     uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v4-alpha
-    secrets:
-      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
       target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
       target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
@@ -122,8 +120,6 @@ jobs:
         )
       }}
     uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v4
-    secrets:
-      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
       target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
       target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
