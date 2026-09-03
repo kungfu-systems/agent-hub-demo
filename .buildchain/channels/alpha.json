@@ -1,0 +1,12 @@
+{
+  "schema": "kungfu.buildchain.signed-channel/v1",
+  "subject": {
+    "repository": "kungfu-systems/agent-hub-demo",
+    "sourceSha": "6f44f008240d3dcf4717064cedd724e551d95dfc",
+    "version": "0.2.0-alpha.9",
+    "tag": "v0.2.0-alpha.9",
+    "channel": "alpha"
+  },
+  "qualificationRoot": "sha256:0e088fd54760291b515824c061c7f08cb48a36842e1131bf94661af3a2e25a04",
+  "releaseAssetsRoot": "sha256:604ff5fc019126cbb5c3efaf12765fc1e4eecf8a8b6bb2ed69baec8150f13dd1"
+}
