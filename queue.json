@@ -3,15 +3,59 @@
   "contract": "kungfu-buildchain-dev-delivery-warrant-queue",
   "repository": "kungfu-systems/agent-hub-demo",
   "protectedBase": "dev/v0/v0.2",
-  "generation": 9,
-  "fencingCounter": 2,
+  "generation": 10,
+  "fencingCounter": 3,
   "policy": {
     "agingSeconds": 900,
     "maxPriority": 2,
     "leaseSeconds": 3600,
     "emergencyPolicy": "reviewed-explicit-only"
   },
-  "activeWarrant": null,
+  "activeWarrant": {
+    "schema": "kungfu.buildchain.dev-delivery-warrant/v1",
+    "phase": "provisional",
+    "repository": "kungfu-systems/agent-hub-demo",
+    "protectedBase": "dev/v0/v0.2",
+    "candidateId": "sha256:b00ddfc48b3a128c18c592a6d4653350060a881da4be96f11471acc0af3e337f",
+    "pullRequestNumber": 134,
+    "sourceHead": "553880d54595803acd9ddb1f0058a399510f1fff",
+    "assignmentRoot": "sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f",
+    "initiativeRoot": "sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990",
+    "sourceIdentityRoot": "sha256:90d4abe2bf4bba4626c1074acf04ff473f66392ac83fbdd22cb46699a729ef34",
+    "sourcePatchRoot": "sha256:dcfb17a014b6d9cece93ba668b110c6130813458d987a1b71eecf3306bd81b9f",
+    "sourceProofRoot": "sha256:4898120a378f50c378e932683e86557d4b8f7bae0f2397fd1dc917d3b0b55c2a",
+    "planRoot": "sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888",
+    "closureRoot": "sha256:7d5684277073e71970b5f1822a5e64241b232f9f01e125d9e22793b4a63005f7",
+    "dependencyRoot": "sha256:1b2795a8e06cc392d06ac53add373c8f96e21028e119c15cfb31df2378c0146d",
+    "toolchainRoot": "sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad",
+    "environmentRoot": "sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273",
+    "nativeCommandContract": {
+      "schema": "kungfu.buildchain.native-command-contract/v1",
+      "runner": "bash-lc",
+      "command": "node24_bin=\"$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin\" && test -x \"$node24_bin/node\" && export PATH=\"$node24_bin:$PATH\" && node --version && npm ci --registry=https://registry.npmjs.org/ && npm run check",
+      "commandRoot": "sha256:a114c1de5656d89c80da138270ee0716d4df95340d6a6a227a85b6962f1ae396"
+    },
+    "affectedPaths": [
+      ".buildchain/kfd/agent-hub.json",
+      ".github/workflows/auditable-demo.yml",
+      ".github/workflows/build.yml",
+      ".github/workflows/native-dev-delivery.yml",
+      ".github/workflows/v4-adopter-delivery-qualification.yml",
+      ".github/workflows/verify.yml",
+      "package.json",
+      "test/auditable-demo-contract.test.js"
+    ],
+    "shardEvidenceRoots": [],
+    "sourceWorkflowRunId": 0,
+    "deliveryClass": "release",
+    "priority": "ordinary",
+    "generation": 3,
+    "expectedOldStateRoot": "sha256:4d848dcc0470d1eb65e1c87272b4b4a44d604a82bf642b0acb1eb685f7310219",
+    "issuedAt": "2026-09-03T02:26:16.889Z",
+    "expiresAt": "2026-09-03T03:26:16.889Z",
+    "fencingToken": "sha256:57ba4754047d4211977bcadc6a0a529a0d7bbe59040ec504f76b83d879e54be1",
+    "nextAction": "Run or reuse exact native proof under this fence, then atomically qualify before merge admission."
+  },
   "candidates": [
     {
       "repository": "kungfu-systems/agent-hub-demo",
@@ -128,10 +172,10 @@
       "sourceWorkflowRunId": 0,
       "priority": "ordinary",
       "enqueuedAt": "2026-09-03T02:26:13.872Z",
-      "updatedAt": "2026-09-03T02:26:13.872Z",
+      "updatedAt": "2026-09-03T02:26:16.889Z",
       "attempts": 1,
       "recoveries": 0,
-      "status": "queued",
+      "status": "selected",
       "terminal": null,
       "affectedPaths": [
         ".buildchain/kfd/agent-hub.json",
@@ -146,6 +190,6 @@
       "shardEvidenceRoots": []
     }
   ],
-  "updatedAt": "2026-09-03T02:26:13.872Z",
-  "stateRoot": "sha256:4d848dcc0470d1eb65e1c87272b4b4a44d604a82bf642b0acb1eb685f7310219"
+  "updatedAt": "2026-09-03T02:26:16.889Z",
+  "stateRoot": "sha256:6b61492eb316c91b9f3c2a53906717617abd91ee012ff2ec073c1341252b1c87"
 }
