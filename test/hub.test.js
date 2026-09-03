@@ -178,7 +178,10 @@ test("release recovery rematerializes ephemeral Passport inputs", () => {
     new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
     "utf8",
   );
+  assert.match(workflow, /release-candidate-promote\.yml@v4-alpha/);
   assert.match(workflow, /release-candidate-promote\.yml@v4/);
+  assert.match(workflow, /promote-alpha:[\s\S]*buildchain-ref: v4-alpha/);
+  assert.match(workflow, /promote-stable:[\s\S]*buildchain-ref: v4/);
   assert.match(workflow, /publish-rematerialize-on-resume: true/);
 });
 
