@@ -32,7 +32,7 @@ jobs:
         github.event_name == 'pull_request' &&
         github.event.action == 'labeled' &&
         github.event.label.name == 'state/ready' &&
-        github.event.pull_request.number == 134 &&
+        github.event.pull_request.number == 139 &&
         github.event.pull_request.head.ref == 'feature/v4-floating-consumer-adoption'
       }}
     permissions:
@@ -53,14 +53,14 @@ jobs:
       delivery-warrant-mode: required
       assignment-root: sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f
       initiative-root: sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990
-      source-identity-root: sha256:90d4abe2bf4bba4626c1074acf04ff473f66392ac83fbdd22cb46699a729ef34
-      source-patch-root: sha256:dcfb17a014b6d9cece93ba668b110c6130813458d987a1b71eecf3306bd81b9f
+      source-identity-root: sha256:0bcbbc2747c4267f03d471cc3b9112e3806944decbe20faf760aa31f81064554
+      source-patch-root: sha256:c1597fe3393294304070f34218bac0f6da05081fa4d0a152765a8a76f2690b50
       plan-root: sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888
-      closure-root: sha256:7d5684277073e71970b5f1822a5e64241b232f9f01e125d9e22793b4a63005f7
-      dependency-root: sha256:1b2795a8e06cc392d06ac53add373c8f96e21028e119c15cfb31df2378c0146d
+      closure-root: sha256:c48bac5365af3e0e421871a2c3c71e3ad6a8f550c5473969a0b1aa62d001219c
+      dependency-root: sha256:ebd477d1ee17f1c57d413fa97f20cd45515e03d4d8554d4963b977950779446c
       toolchain-root: sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad
       environment-root: sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273
-      affected-paths-json: '[".buildchain/kfd/agent-hub.json",".github/workflows/auditable-demo.yml",".github/workflows/build.yml",".github/workflows/native-dev-delivery.yml",".github/workflows/v4-adopter-delivery-qualification.yml",".github/workflows/verify.yml","package.json","test/auditable-demo-contract.test.js"]'
+      affected-paths-json: '[".github/workflows/buildchain-ref-promotion.yml",".github/workflows/v4-adopter-delivery-qualification.yml","test/auditable-demo-contract.test.js"]'
       native-command: >-
         node24_bin="$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin" &&
         test -x "$node24_bin/node" &&
