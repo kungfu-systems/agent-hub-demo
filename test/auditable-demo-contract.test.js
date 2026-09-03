@@ -157,8 +157,8 @@ test("protected dev delivery uses the hosted Buildchain Warrant producer", () =>
 
   const bootstrap = read(".github/workflows/v4-adopter-delivery-qualification.yml");
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.action == 'labeled'/u);
-  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.number == 144/u);
-  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.head\.ref == 'fix\/v4-alpha-promotion-admission'/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.number == 147/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.head\.ref == 'fix\/v4-declarative-promotion-inputs'/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*dev-pr-auto-merge\.yml@v4-alpha/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*delivery-warrant-mode: required/u);
   assert.match(bootstrap, /bootstrap-delivery:[\s\S]*buildchain-ref: v4-alpha/u);
