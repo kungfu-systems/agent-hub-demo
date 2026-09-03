@@ -72,6 +72,13 @@ jobs:
         agent-hub-demo-linux-x64-*
         agent-hub-demo-macos-*
         agent-hub-demo-windows-x64-*
+      github-release-payload-patterns: |
+        agent-hub-demo-linux-x64
+        agent-hub-demo-linux-x64.sha256
+        agent-hub-demo-macos-arm64
+        agent-hub-demo-macos-arm64.sha256
+        agent-hub-demo-windows-x64.exe
+        agent-hub-demo-windows-x64.exe.sha256
       required-artifact-count: 3
       publish-artifact-kind: custom
       publish-target: github-release
@@ -133,6 +140,13 @@ jobs:
         agent-hub-demo-linux-x64-*
         agent-hub-demo-macos-*
         agent-hub-demo-windows-x64-*
+      github-release-payload-patterns: |
+        agent-hub-demo-linux-x64
+        agent-hub-demo-linux-x64.sha256
+        agent-hub-demo-macos-arm64
+        agent-hub-demo-macos-arm64.sha256
+        agent-hub-demo-windows-x64.exe
+        agent-hub-demo-windows-x64.exe.sha256
       required-artifact-count: 3
       publish-artifact-kind: custom
       publish-target: github-release
