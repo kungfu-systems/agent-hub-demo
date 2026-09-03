@@ -32,8 +32,8 @@ jobs:
         github.event_name == 'pull_request' &&
         github.event.action == 'labeled' &&
         github.event.label.name == 'state/ready' &&
-        github.event.pull_request.number == 144 &&
-        github.event.pull_request.head.ref == 'fix/v4-alpha-promotion-admission'
+        github.event.pull_request.number == 147 &&
+        github.event.pull_request.head.ref == 'fix/v4-declarative-promotion-inputs'
       }}
     permissions:
       actions: write
@@ -53,11 +53,11 @@ jobs:
       delivery-warrant-mode: required
       assignment-root: sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f
       initiative-root: sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990
-      source-identity-root: sha256:3a186eecb48790de950becc4d12ff4e5e705338bcbc115b76e216554cb6f1d5c
-      source-patch-root: sha256:4a33c85a8995fa1f67fdcfda3db5d1a180082fa53fc2e9658aef24067343e297
+      source-identity-root: sha256:4f584c47d51cd60ea46ac571f546986da5ff195a343257e21a285661f33f2db0
+      source-patch-root: sha256:efd992c05350d851205ccd774debdd7b903ad8da915f49fbcf0d39509fbcff45
       plan-root: sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888
-      closure-root: sha256:59fa000728afadf06861920cf4edf249af7808f0dbb14b0b8454627211c5ce2a
-      dependency-root: sha256:2c981f2a336f66b08a49936193625d49fe910f3a81b2cb748d23d8c20627f688
+      closure-root: sha256:b1e73233106d86ce21d74eb72d4bf572b1bfb0cb073bf1652f1e3d53db69a298
+      dependency-root: sha256:4b3e14dd2235c36dc0fdfebd4aa7fdde530e7238cb139d93815d3d8569f35ddd
       toolchain-root: sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad
       environment-root: sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273
       affected-paths-json: '[".github/workflows/buildchain-ref-promotion.yml",".github/workflows/v4-adopter-delivery-qualification.yml","test/auditable-demo-contract.test.js","test/hub.test.js"]'
