@@ -6,6 +6,10 @@ on:
       - dev/v0/v0.2
   workflow_dispatch:
     inputs:
+      buildchain-ref:
+        description: "Trusted non-persistent v4 delivery runtime selector"
+        required: false
+        default: "v4-alpha"
       target-branch:
         description: "Protected dev branch for an exact delivery bootstrap"
         required: false
@@ -98,7 +102,7 @@ jobs:
       statuses: write
     uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
     with:
-      buildchain-ref: v4-alpha
+      buildchain-ref: ${{ inputs.buildchain-ref }}
       target-branch: ${{ inputs.target-branch }}
       expected-pr-number: ${{ inputs.expected-pr-number }}
       expected-head-sha: ${{ inputs.expected-head-sha }}
