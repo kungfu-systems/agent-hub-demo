@@ -3,7 +3,7 @@
   "contract": "kungfu-buildchain-dev-delivery-warrant-queue",
   "repository": "kungfu-systems/agent-hub-demo",
   "protectedBase": "dev/v0/v0.2",
-  "generation": 32,
+  "generation": 33,
   "fencingCounter": 6,
   "policy": {
     "agingSeconds": 900,
@@ -11,53 +11,7 @@
     "leaseSeconds": 3600,
     "emergencyPolicy": "reviewed-explicit-only"
   },
-  "activeWarrant": {
-    "schema": "kungfu.buildchain.dev-delivery-warrant/v1",
-    "phase": "qualified",
-    "repository": "kungfu-systems/agent-hub-demo",
-    "protectedBase": "dev/v0/v0.2",
-    "candidateId": "sha256:41b660cf62dc9483017ff64776c9142055240d27bdf7ef19ca8faf9e1082e12e",
-    "pullRequestNumber": 147,
-    "sourceHead": "7a42660f914f08a270ad6294a554e940f80d8f08",
-    "assignmentRoot": "sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f",
-    "initiativeRoot": "sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990",
-    "sourceIdentityRoot": "sha256:4f584c47d51cd60ea46ac571f546986da5ff195a343257e21a285661f33f2db0",
-    "sourcePatchRoot": "sha256:efd992c05350d851205ccd774debdd7b903ad8da915f49fbcf0d39509fbcff45",
-    "sourceProofRoot": "sha256:a15223f4fe2c052b4f9a55fe0617e46cf4ca7c05bcd139a80505c9d478efa413",
-    "planRoot": "sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888",
-    "closureRoot": "sha256:b1e73233106d86ce21d74eb72d4bf572b1bfb0cb073bf1652f1e3d53db69a298",
-    "dependencyRoot": "sha256:4b3e14dd2235c36dc0fdfebd4aa7fdde530e7238cb139d93815d3d8569f35ddd",
-    "toolchainRoot": "sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad",
-    "environmentRoot": "sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273",
-    "nativeCommandContract": {
-      "schema": "kungfu.buildchain.native-command-contract/v1",
-      "runner": "bash-lc",
-      "command": "node24_bin=\"$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin\" && test -x \"$node24_bin/node\" && export PATH=\"$node24_bin:$PATH\" && node --version && npm ci --registry=https://registry.npmjs.org/ && npm run check",
-      "commandRoot": "sha256:a114c1de5656d89c80da138270ee0716d4df95340d6a6a227a85b6962f1ae396"
-    },
-    "affectedPaths": [
-      ".github/workflows/buildchain-ref-promotion.yml",
-      ".github/workflows/v4-adopter-delivery-qualification.yml",
-      "test/auditable-demo-contract.test.js",
-      "test/hub.test.js"
-    ],
-    "shardEvidenceRoots": [],
-    "sourceWorkflowRunId": 0,
-    "deliveryClass": "release",
-    "priority": "ordinary",
-    "generation": 6,
-    "expectedOldStateRoot": "sha256:1498566af52bc40e5ed0d2d77e7359aa4dfe25f6aa7640f31c3f052e5a42e4ba",
-    "issuedAt": "2026-09-03T04:54:55.623Z",
-    "expiresAt": "2026-09-03T05:55:45.650Z",
-    "fencingToken": "sha256:d80c19bca38e86c9b403269311177f34489815db7e2305526498227102a5fc94",
-    "nextAction": "Enter the GitHub merge queue at the exact fenced PR head; merge_group remains final authority.",
-    "heartbeatAt": "2026-09-03T04:55:45.650Z",
-    "nativeProofRoot": "sha256:eb68bdc0c39c4f4b3b179b83d99fa054a465547e22775dd282e2ded852dfbeb2",
-    "nativeExecutionReceiptRoot": "sha256:e00e5ce280bce29e78aff20d2edbdaf7b8b098ff66126aeebb67e3df24bb477d",
-    "nativeProofReuseRoot": "sha256:658cb1dac82d66f4a763dce3c0e9c700ce6136025286f4735efd885b0c4022d2",
-    "qualificationReceiptRoot": "sha256:53b66085d12489c6d3fac114f494661c6e5ba9d25b590d4648e5a9deddeaafdf",
-    "qualifiedAt": "2026-09-03T04:56:10.045Z"
-  },
+  "activeWarrant": null,
   "candidates": [
     {
       "repository": "kungfu-systems/agent-hub-demo",
@@ -349,11 +303,19 @@
       "sourceWorkflowRunId": 0,
       "priority": "ordinary",
       "enqueuedAt": "2026-09-03T04:54:52.880Z",
-      "updatedAt": "2026-09-03T04:56:10.045Z",
+      "updatedAt": "2026-09-03T04:58:27.567Z",
       "attempts": 1,
       "recoveries": 0,
-      "status": "qualified",
-      "terminal": null,
+      "status": "merged",
+      "terminal": {
+        "outcome": "merged",
+        "reason": "PR #147 merged at exact protected head with verified integration proof",
+        "evidenceRoot": "sha256:71587dbac0ad8e796a62d6a69e4d21f97004bfa95923f6733b06900c78683f87",
+        "closedAt": "2026-09-03T04:58:27.567Z",
+        "fencingToken": "sha256:d80c19bca38e86c9b403269311177f34489815db7e2305526498227102a5fc94",
+        "leaseGeneration": 6,
+        "successorWake": null
+      },
       "affectedPaths": [
         ".github/workflows/buildchain-ref-promotion.yml",
         ".github/workflows/v4-adopter-delivery-qualification.yml",
@@ -363,6 +325,6 @@
       "shardEvidenceRoots": []
     }
   ],
-  "updatedAt": "2026-09-03T04:56:10.045Z",
-  "stateRoot": "sha256:981deaf1495d22e24452a285e434fccd337ca3877b03f9c4cee0333674e1a6ea"
+  "updatedAt": "2026-09-03T04:58:27.567Z",
+  "stateRoot": "sha256:565b46aa6abb14c435971b0cbfded8edac5746a1dd72a1c8fa8b26cffa8325eb"
 }
