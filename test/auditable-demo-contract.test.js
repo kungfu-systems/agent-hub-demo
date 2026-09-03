@@ -50,19 +50,29 @@ test("declaration binds the exact standalone binary without implicit authority",
 
 test("promotion materialization consumes the sole production Buildchain job", () => {
   const workflow = read(".github/workflows/build.yml");
-  assert.match(workflow, /auditable-demo-materialize:[\s\S]*type: boolean/u);
-  assert.match(workflow, /auditable-demo-base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
   assert.match(
     workflow,
     /uses: kungfu-systems\/buildchain\/\.github\/workflows\/\.declarative-auditable-demo\.yml@v4/u,
   );
-  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
-  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
+  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.build\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
+  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.build\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
   assert.match(workflow, /scenario-path: \.buildchain\/auditable-demo\.json/u);
   assert.match(workflow, /renderer-image: ghcr\.io\/kungfu-systems\/build-images\/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1/u);
   assert.doesNotMatch(workflow, /build\.yml@v3-alpha|buildchain-ref: v3-alpha/u);
-  assert.match(workflow, /auditable-demo-binary:[\s\S]*if: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.auditable-demo-mode != 'off' \}\}/u);
   assert.match(workflow, /auditable-demo-promotion:[\s\S]*needs: build[\s\S]*needs\.build\.outputs\.artifact-coordinates-json/u);
+  assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
+  assert.equal((workflow.match(/\/build\.yml@v4\b/gu) || []).length, 1);
+});
+
+test("manual auditable demo owns one independent Buildchain invocation", () => {
+  const workflow = read(".github/workflows/auditable-demo.yml");
+  assert.match(workflow, /materialize:[\s\S]*type: boolean/u);
+  assert.match(workflow, /base-ref:[\s\S]*default: dev\/v0\/v0\.2/u);
+  assert.match(workflow, /auditable-demo-binary:[\s\S]*build\.yml@v4/u);
+  assert.match(workflow, /auditable-demo:[\s\S]*\.declarative-auditable-demo\.yml@v4/u);
+  assert.match(workflow, /binary-artifact-name: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.name \}\}/u);
+  assert.match(workflow, /binary-artifact-digest: \$\{\{ fromJSON\(needs\.auditable-demo-binary\.outputs\.artifact-coordinates-json\)\.artifacts\[0\]\.digest \}\}/u);
+  assert.equal((workflow.match(/\/build\.yml@v4\b/gu) || []).length, 1);
   assert.doesNotMatch(workflow, /capture-auditable-demo|auditable-demo-passport|resolve-auditable-demo-source/u);
 });
 
@@ -88,6 +98,7 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   const repositoryFiles = [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
+    ".github/workflows/native-dev-delivery.yml",
     ".github/workflows/verify.yml",
     ".buildchain/alpha-contract-lock.json",
     ".buildchain/contract-lock.json",
@@ -106,6 +117,7 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   const stableAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
   const alphaAuthority = "1805957f942139806f71cc89536895380f71383c";
   const workflowFiles = [
+    ".github/workflows/auditable-demo.yml",
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
     ".github/workflows/verify.yml",
@@ -121,7 +133,8 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   }
   const qualification = read(".github/workflows/v4-adopter-delivery-qualification.yml");
   assert.match(qualification, /v4-adopter-delivery\.yml@v4-alpha/u);
-  assert.equal((qualification.match(/@v4-alpha\b/gu) || []).length, 1);
+  assert.equal((qualification.match(/v4-adopter-delivery\.yml@v4-alpha\b/gu) || []).length, 1);
+  assert.equal((qualification.match(/dev-pr-auto-merge\.yml@v4-alpha\b/gu) || []).length, 1);
   const stableLock = JSON.parse(read(".buildchain/contract-lock.json")).buildchain;
   const alphaLock = JSON.parse(read(".buildchain/alpha-contract-lock.json")).buildchain;
   assert.equal(stableLock.majorLine, "v4");
@@ -132,4 +145,25 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   assert.equal(alphaLock.resolvedSha, alphaAuthority);
   assert.notEqual(alphaLock.resolvedSha, stableAuthority);
   assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, stableAuthority);
+});
+
+test("protected dev delivery uses the hosted Buildchain Warrant producer", () => {
+  const workflow = read(".github/workflows/native-dev-delivery.yml");
+  assert.match(workflow, /dev-pr-auto-merge\.yml@v4-alpha/u);
+  assert.match(workflow, /delivery-warrant-mode: required/u);
+  assert.match(workflow, /ready-label: state\/ready/u);
+  assert.match(workflow, /landing-mode: auto/u);
+  assert.match(workflow, /github-token: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/u);
+
+  const bootstrap = read(".github/workflows/v4-adopter-delivery-qualification.yml");
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.action == 'labeled'/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.number == 134/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*github\.event\.pull_request\.head\.ref == 'feature\/v4-floating-consumer-adoption'/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*dev-pr-auto-merge\.yml@v4-alpha/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*delivery-warrant-mode: required/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*buildchain-ref: v4-alpha/u);
+  assert.match(bootstrap, /native-command:[\s\S]*hostedtoolcache\/node[\s\S]*node --version[\s\S]*npm run check/u);
+  assert.match(bootstrap, /native-heartbeat-seconds: 30/u);
+  assert.doesNotMatch(bootstrap, /workflow_dispatch:[\s\S]*inputs:/u);
+  assert.match(bootstrap, /bootstrap-delivery:[\s\S]*ready-label: state\/ready/u);
 });
