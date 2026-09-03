@@ -58,7 +58,7 @@ jobs:
     with:
       target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
       target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
-      buildchain-ref: v4
+      buildchain-ref: ${{ startsWith(github.event.workflow_run.head_branch || inputs['target-ref'], 'alpha/') && 'v4-alpha' || 'v4' }}
       package-manager: npm
       artifact-name: agent-hub-demo
       release-candidate-workflow-file: build.yml
