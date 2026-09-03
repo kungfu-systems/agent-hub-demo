@@ -10,12 +10,14 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
+  pull-requests: read
 
 jobs:
   check:
-    uses: kungfu-systems/buildchain/.github/workflows/check.yml@3079091f770ce9fdca950e106259e34e5171f763
+    uses: kungfu-systems/buildchain/.github/workflows/check.yml@v4
     with:
-      buildchain-ref: 3079091f770ce9fdca950e106259e34e5171f763
+      buildchain-ref: v4
       require-version-state: true
       upload-artifacts: true
