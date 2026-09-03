@@ -3,7 +3,7 @@
   "contract": "kungfu-buildchain-dev-delivery-warrant-queue",
   "repository": "kungfu-systems/agent-hub-demo",
   "protectedBase": "dev/v0/v0.2",
-  "generation": 13,
+  "generation": 14,
   "fencingCounter": 3,
   "policy": {
     "agingSeconds": 900,
@@ -194,8 +194,46 @@
         "test/auditable-demo-contract.test.js"
       ],
       "shardEvidenceRoots": []
+    },
+    {
+      "repository": "kungfu-systems/agent-hub-demo",
+      "protectedBase": "dev/v0/v0.2",
+      "pullRequestNumber": 139,
+      "assignmentRoot": "sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f",
+      "initiativeRoot": "sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990",
+      "sourceIdentityRoot": "sha256:0bcbbc2747c4267f03d471cc3b9112e3806944decbe20faf760aa31f81064554",
+      "deliveryClass": "release",
+      "candidateId": "sha256:377da33cdf1fba7153fbdfe2bba86d2257447c65d03e1f47d393e2bb148839fb",
+      "sourceHead": "672cbd2036f7deff99c10b31503ba355bdd17218",
+      "sourcePatchRoot": "sha256:c1597fe3393294304070f34218bac0f6da05081fa4d0a152765a8a76f2690b50",
+      "sourceProofRoot": "sha256:8696340f8d906c9d9647039ee60802633c60c5225ed839625f2137dadb284e93",
+      "planRoot": "sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888",
+      "closureRoot": "sha256:c48bac5365af3e0e421871a2c3c71e3ad6a8f550c5473969a0b1aa62d001219c",
+      "dependencyRoot": "sha256:ebd477d1ee17f1c57d413fa97f20cd45515e03d4d8554d4963b977950779446c",
+      "toolchainRoot": "sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad",
+      "environmentRoot": "sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273",
+      "nativeCommandContract": {
+        "schema": "kungfu.buildchain.native-command-contract/v1",
+        "runner": "bash-lc",
+        "command": "node24_bin=\"$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin\" && test -x \"$node24_bin/node\" && export PATH=\"$node24_bin:$PATH\" && node --version && npm ci --registry=https://registry.npmjs.org/ && npm run check",
+        "commandRoot": "sha256:a114c1de5656d89c80da138270ee0716d4df95340d6a6a227a85b6962f1ae396"
+      },
+      "sourceWorkflowRunId": 0,
+      "priority": "ordinary",
+      "enqueuedAt": "2026-09-03T03:22:02.080Z",
+      "updatedAt": "2026-09-03T03:22:02.080Z",
+      "attempts": 1,
+      "recoveries": 0,
+      "status": "queued",
+      "terminal": null,
+      "affectedPaths": [
+        ".github/workflows/buildchain-ref-promotion.yml",
+        ".github/workflows/v4-adopter-delivery-qualification.yml",
+        "test/auditable-demo-contract.test.js"
+      ],
+      "shardEvidenceRoots": []
     }
   ],
-  "updatedAt": "2026-09-03T02:27:34.900Z",
-  "stateRoot": "sha256:5fc723f25b95a08f2ba75f86080e1d175b1777a7bf021fb7d0346f902edf58c3"
+  "updatedAt": "2026-09-03T03:22:02.080Z",
+  "stateRoot": "sha256:55dc2a231a133335ca8d3efaecf10e7d7c750060b3de77cba30faade31c5e83b"
 }
