@@ -3,7 +3,7 @@
   "contract": "kungfu-buildchain-dev-delivery-warrant-queue",
   "repository": "kungfu-systems/agent-hub-demo",
   "protectedBase": "dev/v0/v0.2",
-  "generation": 12,
+  "generation": 13,
   "fencingCounter": 3,
   "policy": {
     "agingSeconds": 900,
@@ -13,7 +13,7 @@
   },
   "activeWarrant": {
     "schema": "kungfu.buildchain.dev-delivery-warrant/v1",
-    "phase": "provisional",
+    "phase": "qualified",
     "repository": "kungfu-systems/agent-hub-demo",
     "protectedBase": "dev/v0/v0.2",
     "candidateId": "sha256:b00ddfc48b3a128c18c592a6d4653350060a881da4be96f11471acc0af3e337f",
@@ -54,8 +54,13 @@
     "issuedAt": "2026-09-03T02:26:16.889Z",
     "expiresAt": "2026-09-03T03:27:07.558Z",
     "fencingToken": "sha256:57ba4754047d4211977bcadc6a0a529a0d7bbe59040ec504f76b83d879e54be1",
-    "nextAction": "Run or reuse exact native proof under this fence, then atomically qualify before merge admission.",
-    "heartbeatAt": "2026-09-03T02:27:07.558Z"
+    "nextAction": "Enter the GitHub merge queue at the exact fenced PR head; merge_group remains final authority.",
+    "heartbeatAt": "2026-09-03T02:27:07.558Z",
+    "nativeProofRoot": "sha256:fc1be28050e884c1f09257d50bb0faf3e5d01ba489b6ea5da7586ec4655c6ac6",
+    "nativeExecutionReceiptRoot": "sha256:7b17e71489d26a9657abd7101570efb26573cd01559d0e87d90b74460248dc9a",
+    "nativeProofReuseRoot": "sha256:c11ae6c40e501d70e70132e0d36edeed15908f9e37551ddd8c93d1ff7273dbb4",
+    "qualificationReceiptRoot": "sha256:770a050dbb09d8e7abd440c3ae04ca726063eb83f90fb2b05c1db40ae5177375",
+    "qualifiedAt": "2026-09-03T02:27:34.900Z"
   },
   "candidates": [
     {
@@ -173,10 +178,10 @@
       "sourceWorkflowRunId": 0,
       "priority": "ordinary",
       "enqueuedAt": "2026-09-03T02:26:13.872Z",
-      "updatedAt": "2026-09-03T02:27:07.558Z",
+      "updatedAt": "2026-09-03T02:27:34.900Z",
       "attempts": 1,
       "recoveries": 0,
-      "status": "proving",
+      "status": "qualified",
       "terminal": null,
       "affectedPaths": [
         ".buildchain/kfd/agent-hub.json",
@@ -191,6 +196,6 @@
       "shardEvidenceRoots": []
     }
   ],
-  "updatedAt": "2026-09-03T02:27:07.558Z",
-  "stateRoot": "sha256:13ba7e60ee3bc585a550e3dcee14fbffb3356bfdc5b79a4d2472ecce010e6934"
+  "updatedAt": "2026-09-03T02:27:34.900Z",
+  "stateRoot": "sha256:5fc723f25b95a08f2ba75f86080e1d175b1777a7bf021fb7d0346f902edf58c3"
 }
