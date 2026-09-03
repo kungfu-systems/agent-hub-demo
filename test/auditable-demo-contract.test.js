@@ -98,6 +98,7 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   const repositoryFiles = [
     ".github/workflows/build.yml",
     ".github/workflows/buildchain-ref-promotion.yml",
+    ".github/workflows/native-dev-delivery.yml",
     ".github/workflows/verify.yml",
     ".buildchain/alpha-contract-lock.json",
     ".buildchain/contract-lock.json",
@@ -143,4 +144,13 @@ test("repository persists only reviewed floating Buildchain v4 authorities", () 
   assert.equal(alphaLock.resolvedSha, alphaAuthority);
   assert.notEqual(alphaLock.resolvedSha, stableAuthority);
   assert.equal(JSON.parse(read(".buildchain/platform-signing-policy.json")).buildchainAuthority.exactSha, stableAuthority);
+});
+
+test("protected dev delivery uses the hosted Buildchain Warrant producer", () => {
+  const workflow = read(".github/workflows/native-dev-delivery.yml");
+  assert.match(workflow, /dev-pr-auto-merge\.yml@v4-alpha/u);
+  assert.match(workflow, /delivery-warrant-mode: required/u);
+  assert.match(workflow, /ready-label: state\/ready/u);
+  assert.match(workflow, /landing-mode: auto/u);
+  assert.match(workflow, /github-token: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/u);
 });
