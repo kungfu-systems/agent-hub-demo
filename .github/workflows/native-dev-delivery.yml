@@ -109,32 +109,33 @@ jobs:
     uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
     with:
       buildchain-ref: ${{ inputs.buildchain-ref || 'v4-alpha' }}
-      target-branch: ${{ github.event.client_payload.candidate.targetBranch || inputs.target-branch }}
-      expected-pr-number: ${{ github.event.client_payload.candidate.pullRequestNumber || inputs.expected-pr-number }}
-      expected-head-sha: ${{ github.event.client_payload.candidate.sourceHead || inputs.expected-head-sha }}
-      source-workflow-run-id: ${{ github.event.client_payload.candidate.sourceWorkflowRunId || inputs.source-workflow-run-id || github.run_id }}
+      target-branch: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.targetBranch || inputs.target-branch }}
+      expected-pr-number: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.pullRequestNumber || inputs.expected-pr-number }}
+      expected-head-sha: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceHead || inputs.expected-head-sha }}
+      source-workflow-run-id: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceWorkflowRunId || inputs.source-workflow-run-id || github.run_id }}
       legacy-active-owner-binding-json: ${{ inputs.legacy-active-owner-binding-json || '' }}
       delivery-warrant-mode: required
       handoff-workflow-id: native-dev-delivery.yml
       source-workflow-id: ${{ inputs.source-workflow-id || '' }}
-      assignment-root: ${{ github.event.client_payload.candidate.assignmentRoot || inputs.assignment-root }}
-      initiative-root: ${{ github.event.client_payload.candidate.initiativeRoot || inputs.initiative-root }}
-      source-identity-root: ${{ github.event.client_payload.candidate.sourceIdentityRoot || inputs.source-identity-root }}
-      source-patch-root: ${{ github.event.client_payload.candidate.sourcePatchRoot || inputs.source-patch-root }}
-      plan-root: ${{ github.event.client_payload.candidate.planRoot || inputs.plan-root }}
-      closure-root: ${{ github.event.client_payload.candidate.closureRoot || inputs.closure-root }}
-      dependency-root: ${{ github.event.client_payload.candidate.dependencyRoot || inputs.dependency-root }}
-      toolchain-root: ${{ github.event.client_payload.candidate.toolchainRoot || inputs.toolchain-root }}
-      environment-root: ${{ github.event.client_payload.candidate.environmentRoot || inputs.environment-root }}
+      assignment-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.assignmentRoot || inputs.assignment-root }}
+      initiative-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.initiativeRoot || inputs.initiative-root }}
+      source-identity-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceIdentityRoot || inputs.source-identity-root }}
+      source-patch-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourcePatchRoot || inputs.source-patch-root }}
+      project-cut-proof-json: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.projectCutProofJson || '' }}
+      plan-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.planRoot || inputs.plan-root }}
+      closure-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.closureRoot || inputs.closure-root }}
+      dependency-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.dependencyRoot || inputs.dependency-root }}
+      toolchain-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.toolchainRoot || inputs.toolchain-root }}
+      environment-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.environmentRoot || inputs.environment-root }}
       affected-paths-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.affectedPaths) || inputs.affected-paths-json }}
       shard-evidence-roots-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.shardEvidenceRoots) || inputs.shard-evidence-roots-json || '[]' }}
-      release-blocker-priority-json: ${{ github.event_name == 'repository_dispatch' && toJSON(github.event.client_payload.candidate.releaseBlockerPriority) || inputs.release-blocker-priority-json || '' }}
+      release-blocker-priority-json: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.releaseBlockerPriority != null && toJSON(github.event.client_payload.candidate.releaseBlockerPriority) || inputs.release-blocker-priority-json || '' }}
       native-proof-json: ${{ inputs.native-proof-json || '' }}
-      native-command: ${{ github.event.client_payload.candidate.nativeCommandContract.command || inputs.native-command || '' }}
-      native-command-root: ${{ github.event.client_payload.candidate.nativeCommandContract.commandRoot || inputs.native-command-root || '' }}
+      native-command: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.nativeCommandContract.command || inputs.native-command || '' }}
+      native-command-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.nativeCommandContract.commandRoot || inputs.native-command-root || '' }}
       native-heartbeat-seconds: ${{ inputs.native-heartbeat-seconds || 300 }}
-      delivery-class: ${{ github.event.client_payload.candidate.deliveryClass || inputs.delivery-class || 'native-proof-required' }}
-      delivery-priority: ${{ github.event.client_payload.candidate.priority || inputs.delivery-priority || 'ordinary' }}
+      delivery-class: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.deliveryClass || inputs.delivery-class || 'native-proof-required' }}
+      delivery-priority: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.priority || inputs.delivery-priority || 'ordinary' }}
       queue-admission-context: Queue admission lease
       active-lease-context: Queue family lease/exact
       ready-label: state/ready
