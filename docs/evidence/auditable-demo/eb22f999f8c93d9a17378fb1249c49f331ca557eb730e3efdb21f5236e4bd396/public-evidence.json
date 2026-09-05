@@ -1,0 +1,102 @@
+{
+  "authority": {
+    "authorization": {
+      "nonAuthorities": [
+        "first-party-identity",
+        "system-identity",
+        "kfd-compliance",
+        "product-system-metadata",
+        "package-metadata",
+        "registry-history",
+        "scan-output",
+        "standalone-generation"
+      ],
+      "requiredSources": [
+        "exact-release-passport",
+        "core-policy",
+        "work-or-warrant",
+        "explicit-capability-grant",
+        "runtime-isolation"
+      ],
+      "status": "not-granted-by-demo"
+    },
+    "claims": [
+      "one exact same-run Agent Hub Demo standalone binary completed its deterministic local demonstration",
+      "two independent native PTY captures passed the required Buildchain Gate"
+    ],
+    "evidenceClass": "exact-agent-hub-demo-standalone-binary/v1",
+    "grants": [],
+    "nonClaims": [
+      "KFD certification or authorization",
+      "production security or fitness",
+      "remote interoperability or external adoption",
+      "authorization from identity, compliance, metadata, or generated evidence"
+    ]
+  },
+  "command": "agent-hub-demo demo --root ./agent-hub-demo-run --output ./agent-hub-demo-run/report.json --presentation",
+  "evidenceRoot": "sha256:5989bca5b0f438bb55c8875e71a15e2e18d4fbf373063254401aabe7f4607199",
+  "files": {
+    "demo-720p.mp4": {
+      "digest": "sha256:3bd9b2534f48a9fd9e525aaaf6636e2d86edf7f92f7e7fdf8ef07c8d0561b8a8",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.mp4"
+    },
+    "demo-720p.webm": {
+      "digest": "sha256:7f6e900f94fd6db0ccc25c0a7eb6ffb68b1d8388ae059249d6b5a2a594971bb2",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo-720p.webm"
+    },
+    "demo.gif": {
+      "digest": "sha256:dbb08922d35785df80c933a5f05ad3b4e4be7d41adc6593a86d80452b163682a",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.gif"
+    },
+    "demo.mp4": {
+      "digest": "sha256:3b2a8f85f882aa6640fefd274c7eedf04aac763509c6a61dec9cb54d927dafca",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.mp4"
+    },
+    "demo.webm": {
+      "digest": "sha256:6fb5036ed2c8563adac97e6c2344f5ed4bf39cb440fc4e271861243e99fe5d38",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/demo.webm"
+    },
+    "poster.png": {
+      "digest": "sha256:31263b44b20fb41e08dcfaa2f74f56dc70ed4a08ca0e0560d69c23f357e188e4",
+      "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/poster.png"
+    }
+  },
+  "gate": {
+    "artifact": {
+      "digest": "sha256:58a31053a984460c2c6fcbd42789dbed2ab4287af4df7455f2629aff1dbce816",
+      "expiresAt": "2026-08-16T04:44:36.000Z",
+      "id": "8828544298",
+      "name": "auditable-demo-gate-0dc4570c4096-9323a56b6d7042fc",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828544298"
+    },
+    "root": "sha256:9323a56b6d7042fc943c86272835caf054b32c13e4e8394368aca3d7842221c1",
+    "status": "passed"
+  },
+  "media": {
+    "artifact": {
+      "digest": "sha256:618420498d8f89d8d440d607e8e34dc494de6288450584368f4700c712cd3fea",
+      "expiresAt": "2026-08-16T04:46:12.000Z",
+      "id": "8828557652",
+      "name": "auditable-demo-media-0dc4570c4096-ee145220aea2c49c",
+      "url": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139/artifacts/8828557652"
+    },
+    "profile": "responsive-web-delivery-v1",
+    "qualificationRoot": "sha256:6ee3b0d4b8fdd7c52a46b7611bff16e8cf061ec0229aecd55ff543e07babfc2a",
+    "root": "sha256:ee145220aea2c49c1b62a952d3e1d535991976e2881f7e78ade3625bddc46e7a",
+    "status": "rendered"
+  },
+  "passport": {
+    "path": "docs/evidence/auditable-demo/eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396/release-passport.json",
+    "root": "sha256:eb22f999f8c93d9a17378fb1249c49f331ca557eb730e3efdb21f5236e4bd396"
+  },
+  "renditionPolicy": "independent-native-pty-captures/v1",
+  "schema": "agent-hub-demo.auditable-demo.public-evidence/v1",
+  "sourceSha": "0dc4570c4096928aad8152a2caacdef1205a5058",
+  "status": "qualified",
+  "toolchain": {
+    "adapterPath": "scripts/auditable-demo-adapter.mjs",
+    "buildchainSha": "aa5f421f56dce2a3c8c6e2d66593b63107350a74",
+    "rendererImage": "ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:32f5079f14ec0380c27f0df39448cb931e87fe744cc867fbd3d61cfd8a5e18de"
+  },
+  "workflowUrl": "https://github.com/kungfu-systems/agent-hub-demo/actions/runs/30732723139"
+}

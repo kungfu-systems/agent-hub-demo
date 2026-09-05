@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-v4-adopter-delivery/v1",
+  "driverSelector": "json-assertion",
+  "artifactProfileSelector": "git-commit",
+  "request": {
+    "schemaVersion": 1,
+    "contract": "kungfu-buildchain-adopter-delivery-request",
+    "protocol": {
+      "id": "buildchain.adopter/json-assertion",
+      "version": "1.0.0"
+    },
+    "artifactProfile": {
+      "id": "buildchain.artifact/git-commit",
+      "version": "1.0.0"
+    },
+    "project": {
+      "instanceId": "kungfu-systems/agent-hub-demo@0.2.0-alpha.8",
+      "adopterId": "kungfu-systems/agent-hub-demo"
+    },
+    "artifact": {
+      "kind": "git-commit",
+      "coordinate": "kungfu-systems/agent-hub-demo@a9a2dc762a4f9f2f198f2c2f373f768809b132c0",
+      "root": "sha256:64e51a64276de1d9823225a63573a5faa2b26dfe5ebaace44745ae1b7b04003f"
+    },
+    "declaration": {
+      "valid": true
+    }
+  },
+  "context": {
+    "qualification": "floating-v4-alpha"
+  }
+}

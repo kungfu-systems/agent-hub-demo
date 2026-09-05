@@ -15,11 +15,8 @@ const declarationPath = resolve(cwd, valueFor("--declaration", ".buildchain/kfd/
 const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
-const buildchainVersion = "2.14.15";
-const npmExecPath = process.env.npm_execpath || "";
-const npxCli = npmExecPath.replace(/npm-cli\.js$/, "npx-cli.js");
-const npxCommand = npxCli !== npmExecPath ? process.execPath : "npx";
-const npxPrefix = npxCli !== npmExecPath ? [npxCli] : [];
+const buildchainAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
+const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 const work = mkdtempSync(join(tmpdir(), "agent-hub-release-qualification-"));
 
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
@@ -190,10 +187,8 @@ const declaration = readJson(declarationPath);
 declaration.contract = "kungfu-buildchain-kfd-agent-hub-adoption/v0";
 writeJson(mutatedDeclaration, declaration);
 {
-  const result = run(npxCommand, [
-    ...npxPrefix,
-    "--yes", "--package", `@kungfu-tech/buildchain@${buildchainVersion}`,
-    "buildchain", "kfd", "hub", "inspect", "--cwd", cwd,
+  const result = run(process.execPath, [
+    buildchainCli, "kfd", "hub", "inspect", "--cwd", cwd,
     "--declaration", mutatedDeclaration, "--for", "agent", "--json",
   ]);
   const stderr = result.stderr || "";
@@ -206,7 +201,7 @@ writeJson(mutatedDeclaration, declaration);
     error: matched ? "kfd-agent-hub-declaration-invalid" : "qualification-oracle-mismatch",
     owner: "Buildchain adoption declaration owner",
     evidence: {
-      verifier: `@kungfu-tech/buildchain@${buildchainVersion} kfd hub inspect`,
+      verifier: `kungfu-systems/buildchain@${buildchainAuthority} kfd hub inspect`,
       expectedCheck: "kfd-agent-hub-declaration-invalid",
       exitCode: result.status,
       stderr: stderr.trim(),
@@ -222,7 +217,7 @@ const output = {
   verdict: passed === cases.length && cases.length >= 8 ? "passed" : "failed",
   environment: {
     kfdPackage: "@kungfu-tech/kfd@1.0.0-alpha.42",
-    buildchainPackage: `@kungfu-tech/buildchain@${buildchainVersion}`,
+    buildchainAuthority: `kungfu-systems/buildchain@${buildchainAuthority}`,
     networkAccessDuringReportMutations: false,
     hubExecutionDuringMutations: false,
     privateDependencies: false,

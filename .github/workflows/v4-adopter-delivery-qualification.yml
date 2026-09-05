@@ -1,0 +1,81 @@
+name: V4 Alpha Adopter Delivery Qualification
+
+on:
+  pull_request:
+    branches:
+      - dev/v0/v0.2
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    permissions:
+      contents: read
+    uses: kungfu-systems/buildchain/.github/workflows/v4-adopter-delivery.yml@v4-alpha
+    with:
+      consumer: agent-hub-demo
+      node-version: "24"
+      input-path: .buildchain/qualification/v4-adopter-delivery/input.json
+      bootstrap-path: .buildchain/qualification/v4-adopter-delivery/bootstrap.json
+      archive-path: .buildchain/qualification/v4-adopter-delivery/archives.json
+
+  bootstrap-delivery:
+    if: >-
+      ${{
+        github.event_name == 'pull_request' &&
+        github.event.action == 'labeled' &&
+        github.event.label.name == 'state/ready' &&
+        github.event.pull_request.number == 147 &&
+        github.event.pull_request.head.ref == 'fix/v4-declarative-promotion-inputs'
+      }}
+    permissions:
+      actions: write
+      checks: read
+      contents: write
+      pull-requests: write
+      statuses: write
+    uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
+    with:
+      buildchain-ref: v4-alpha
+      target-branch: dev/v0/v0.2
+      expected-pr-number: ${{ github.event.pull_request.number }}
+      expected-head-sha: ${{ github.event.pull_request.head.sha }}
+      source-workflow-run-id: 0
+      handoff-workflow-id: native-dev-delivery.yml
+      source-workflow-id: verify.yml
+      delivery-warrant-mode: required
+      assignment-root: sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f
+      initiative-root: sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990
+      source-identity-root: sha256:4f584c47d51cd60ea46ac571f546986da5ff195a343257e21a285661f33f2db0
+      source-patch-root: sha256:efd992c05350d851205ccd774debdd7b903ad8da915f49fbcf0d39509fbcff45
+      plan-root: sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888
+      closure-root: sha256:b1e73233106d86ce21d74eb72d4bf572b1bfb0cb073bf1652f1e3d53db69a298
+      dependency-root: sha256:4b3e14dd2235c36dc0fdfebd4aa7fdde530e7238cb139d93815d3d8569f35ddd
+      toolchain-root: sha256:48d09bc488ba0989be885d208e8e7f901b79db1a1895f68f5225bd4a241507ad
+      environment-root: sha256:f604c0a63ac3cdfa49d67bd2162339f8f25171ec88907c8f5edb4643a2c3e273
+      affected-paths-json: '[".github/workflows/buildchain-ref-promotion.yml",".github/workflows/v4-adopter-delivery-qualification.yml","test/auditable-demo-contract.test.js","test/hub.test.js"]'
+      native-command: >-
+        node24_bin="$(find /opt/hostedtoolcache/node -mindepth 1 -maxdepth 1 -type d -name '24.*' -print | sort -V | tail -n 1)/x64/bin" &&
+        test -x "$node24_bin/node" &&
+        export PATH="$node24_bin:$PATH" &&
+        node --version &&
+        npm ci --registry=https://registry.npmjs.org/ &&
+        npm run check
+      native-heartbeat-seconds: 30
+      delivery-class: release
+      delivery-priority: ordinary
+      required-status-checks: check / check
+      queue-admission-context: Queue admission lease
+      active-lease-context: Queue family lease/exact
+      ready-label: state/ready
+      landing-mode: auto
+      dry-run: false
+    secrets:
+      github-token: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}

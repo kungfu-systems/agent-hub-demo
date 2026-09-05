@@ -1,0 +1,84 @@
+{
+  "schema": "buildchain.declarative-binary-demo/v1",
+  "compositionMode": "terminal-fill",
+  "product": {
+    "id": "agent-hub-demo",
+    "displayName": "Agent Hub Demo",
+    "binaryName": "agent-hub-demo"
+  },
+  "artifact": {
+    "platformId": "linux-x64",
+    "binaryPath": "dist/agent-hub-demo-linux-x64",
+    "metadataPath": ".buildchain/artifacts/binary-linux-x64.json",
+    "metadataContract": "agent-hub-demo.binary-artifact/v1",
+    "runtimeDependencies": []
+  },
+  "execution": {
+    "deterministic": true,
+    "network": "none",
+    "secrets": "none",
+    "totalTimeoutSeconds": 60,
+    "environment": {}
+  },
+  "renditions": [
+    {"id": "1080p", "role": "primary", "columns": 150, "rows": 36, "width": 1920, "height": 1080},
+    {"id": "720p", "role": "responsive", "columns": 100, "rows": 28, "width": 1280, "height": 720}
+  ],
+  "demos": [
+    {
+      "id": "agent-hub-demo",
+      "title": "Agent Hub Demo standalone binary",
+      "claimBoundary": "This animation records one exact same-run standalone binary completing its deterministic local demonstration; it does not certify production security or grant authority from identity, compliance, metadata, scans, registry history, or generation.",
+      "steps": [
+        {
+          "id": "demonstrate",
+          "argv": ["demo", "--root", "./agent-hub-demo-run", "--output", "./agent-hub-demo-run/report.json", "--presentation"],
+          "timeoutSeconds": 60,
+          "expectedExitCodes": [0],
+          "stdoutIncludes": [
+            "Agent Hub Demo  PASSED",
+            "Fact delivery             admitted",
+            "Episode delivery          admitted",
+            "Semantic conflict         visible",
+            "Authority amplification   rejected",
+            "Export/import recovery    verified"
+          ],
+          "fileAssertions": [
+            {
+              "path": "agent-hub-demo-run/report.json",
+              "jsonEquals": {
+                "contract": "agent-hub-demo.report/v1",
+                "results.fact.status": "admitted",
+                "results.episode.status": "admitted",
+                "results.duplicate.duplicate": true,
+                "results.conflict.status": "conflicted",
+                "results.amplification.status": "rejected",
+                "results.expired.status": "rejected",
+                "results.revoked.status": "rejected",
+                "results.driftRejected": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "publication": {
+    "evidencePath": "docs/evidence/auditable-demo",
+    "readmePath": "README.md",
+    "marker": "agent-hub-demo:auditable-demo"
+  },
+  "authority": {
+    "grants": [],
+    "nonAuthorities": [
+      "first-party-identity",
+      "system-identity",
+      "kfd-compliance",
+      "product-system-metadata",
+      "package-metadata",
+      "registry-history",
+      "scan-output",
+      "standalone-generation"
+    ]
+  }
+}

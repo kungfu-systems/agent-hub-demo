@@ -8,11 +8,6 @@ on:
       - alpha/v*/v*.*
       - release/v*/v*.*
   workflow_dispatch:
-    inputs:
-      buildchain-ref:
-        description: Temporary Buildchain runtime ref for trusted manual validation
-        required: false
-        default: ""
 
 permissions:
   contents: read
@@ -20,16 +15,21 @@ permissions:
 jobs:
   build:
     permissions:
+      actions: read
       contents: read
       issues: write
       id-token: write
-    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v2
+    uses: kungfu-systems/buildchain/.github/workflows/build.yml@v4
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || '' }}
-      node-version: "22"
+      buildchain-ref: v4
+      node-version: "24"
       install-command: npm ci --registry=https://registry.npmjs.org/
       build-command: npm run build
       verify-command: npm run check && npm run qualify:buildchain-release
+      artifact-finalization-command: npm run verify:final-artifact
+      artifact-finalization-on-platform: true
       kfd-agent-hub: off
       require-install: true
       require-build: true
@@ -39,7 +39,31 @@ jobs:
       artifact-paths: |
         dist
         .buildchain/artifacts
+        .buildchain/platform-signing-policy.json
         .buildchain/kfd/kfd-2
         .buildchain/release-qualification
       release-candidate: true
       publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
+
+  auditable-demo-promotion:
+    name: Consume production Buildchain artifact for auditable demo
+    needs: build
+    if: ${{ startsWith(github.base_ref, 'alpha/') || startsWith(github.base_ref, 'release/') }}
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@v4
+    with:
+      source-ref: ${{ needs.build.outputs.publish-source-sha }}
+      binary-artifact-name: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].name }}
+      binary-artifact-digest: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].digest }}
+      scenario-path: .buildchain/auditable-demo.json
+      renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1
+      render-media: true
+      media-profile: responsive-web-delivery-v1
+      materialize: true
+      materialize-base-ref: ${{ github.head_ref }}
+      artifact-retention-days: 14
+    secrets:
+      DEMO_UPDATE_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}

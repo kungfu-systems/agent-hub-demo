@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "contract": "kungfu-buildchain-impact",
+  "release": {
+    "version": "0.2.0-alpha.0",
+    "line": "v0.2"
+  },
+  "versionImpact": {
+    "final": "minor",
+    "source": "agent-hub-demo-release-decision",
+    "rationale": "The new v0.2 alpha line adds a standalone public CLI and cross-platform binary distribution while preserving the Agent Hub protocol and non-certification boundary."
+  },
+  "surfaceImpacts": [
+    {
+      "id": "cross-platform-standalone-cli",
+      "impact": "minor",
+      "class": "binary-distribution",
+      "rationale": "Linux x64, macOS arm64, and Windows x64 runners package and smoke-test the same public CLI as self-contained Node SEA executables.",
+      "source": "scripts/build-binary.mjs"
+    },
+    {
+      "id": "kfd-123-release-passport-reference",
+      "impact": "minor",
+      "class": "evidence-contract",
+      "rationale": "Per-platform KFD-1 and KFD-3 witnesses, the bounded KFD-2 claim, checksums, manifests, and exact release-candidate roots are collected into a Buildchain Release Passport.",
+      "source": "scripts/write-publish-evidence.mjs"
+    },
+    {
+      "id": "buildchain-binary-auditable-demo",
+      "impact": "minor",
+      "class": "binary-distribution",
+      "rationale": "A declarative Buildchain v3 demo contract records the exact same-run standalone binary into independent native 1080p and 720p terminal captures and publishes receipt-bound responsive media.",
+      "source": ".buildchain/auditable-demo.json"
+    }
+  ],
+  "classification": "minor",
+  "breaking": false,
+  "security": false,
+  "migrationRequired": false,
+  "summary": "Publish Agent Hub Demo as a Buildchain-managed cross-platform binary and auditable animation reference."
+}

@@ -8,9 +8,13 @@
   },
   "adapter": {
     "id": "agent-hub-demo",
-    "version": "0.1.0-alpha.0",
+    "version": "0.2.0-alpha.9",
     "path": "src/adapter.js",
-    "build": ["npm", "run", "build"]
+    "build": [
+      "npm",
+      "run",
+      "build"
+    ]
   },
   "capabilities": {
     "operations": [
@@ -21,7 +25,12 @@
       "completion-assessment",
       "warrant-revocation"
     ],
-    "topologies": ["local-peer", "offline-device"],
-    "hubBindings": ["local-file-bundle"]
+    "topologies": [
+      "local-peer",
+      "offline-device"
+    ],
+    "hubBindings": [
+      "local-file-bundle"
+    ]
   }
 }
