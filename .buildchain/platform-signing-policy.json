@@ -3,7 +3,7 @@
   "contract": "agent-hub-demo.platform-signing-policy/v1",
   "buildchainAuthority": {
     "majorLine": "v4",
-    "exactSha": "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c"
+    "exactSha": "73cee1f6ad6fd679fe29a2faf94f09d729bd04e7"
   },
   "platforms": {
     "linux-x64": {
@@ -23,7 +23,10 @@
       "signingRequestCount": 0,
       "reasonCode": "windows-authenticode-credential-not-configured",
       "scope": "agent-hub-demo-windows-x64",
-      "releaseChannels": ["alpha", "stable"],
+      "releaseChannels": [
+        "alpha",
+        "stable"
+      ],
       "reviewTrigger": "authenticode-credential-onboarding"
     }
   }

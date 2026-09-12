@@ -19,31 +19,10 @@ jobs:
       contents: read
       issues: write
       id-token: write
+      attestations: write
     uses: kungfu-systems/buildchain/.github/workflows/build.yml@v4
     secrets:
       BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
-    with:
-      buildchain-ref: v4
-      node-version: "24"
-      install-command: npm ci --registry=https://registry.npmjs.org/
-      build-command: npm run build
-      verify-command: npm run check && npm run qualify:buildchain-release
-      artifact-finalization-command: npm run verify:final-artifact
-      artifact-finalization-on-platform: true
-      kfd-agent-hub: off
-      require-install: true
-      require-build: true
-      require-verify: true
-      artifact-name: agent-hub-demo
-      artifact-name-template: "{artifact}-{platform}-{shortSha}"
-      artifact-paths: |
-        dist
-        .buildchain/artifacts
-        .buildchain/platform-signing-policy.json
-        .buildchain/kfd/kfd-2
-        .buildchain/release-qualification
-      release-candidate: true
-      publish-channel: ${{ startsWith(github.base_ref, 'release/') && 'release' || (startsWith(github.base_ref, 'alpha/') && 'alpha' || 'none') }}
 
   auditable-demo-promotion:
     name: Consume production Buildchain artifact for auditable demo
@@ -53,11 +32,11 @@ jobs:
       actions: read
       contents: write
       pull-requests: write
-    uses: kungfu-systems/buildchain/.github/workflows/.declarative-auditable-demo.yml@v4
+    uses: kungfu-systems/buildchain/.github/workflows/public-build-demo.yml@v4
     with:
-      source-ref: ${{ needs.build.outputs.publish-source-sha }}
-      binary-artifact-name: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].name }}
-      binary-artifact-digest: ${{ fromJSON(needs.build.outputs.artifact-coordinates-json).artifacts[0].digest }}
+      source-ref: ${{ fromJSON(needs.build.outputs.result).source.sha }}
+      binary-artifact-name: ${{ fromJSON(needs.build.outputs.result).artifacts.payloads[0].name }}
+      binary-artifact-digest: ${{ fromJSON(needs.build.outputs.result).artifacts.payloads[0].digest }}
       scenario-path: .buildchain/auditable-demo.json
       renderer-image: ghcr.io/kungfu-systems/build-images/demo-renderer@sha256:3a49708163fedaaabe07b45bba910026a1828151b5d4e9bbdaf0d62e75c927c1
       render-media: true

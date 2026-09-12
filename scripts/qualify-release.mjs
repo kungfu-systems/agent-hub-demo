@@ -15,7 +15,7 @@ const declarationPath = resolve(cwd, valueFor("--declaration", ".buildchain/kfd/
 const adapterPath = resolve(cwd, valueFor("--adapter", "src/adapter.js"));
 const outputPath = resolve(cwd, valueFor("--output", ".buildchain/release-qualification/qualification-report.json"));
 const kfdCli = resolve(cwd, "node_modules/@kungfu-tech/kfd/bin/kfd.mjs");
-const buildchainAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
+const buildchainVersion = JSON.parse(readFileSync(resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "package.json"), "utf8")).version;
 const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
 const work = mkdtempSync(join(tmpdir(), "agent-hub-release-qualification-"));
 
@@ -201,7 +201,7 @@ writeJson(mutatedDeclaration, declaration);
     error: matched ? "kfd-agent-hub-declaration-invalid" : "qualification-oracle-mismatch",
     owner: "Buildchain adoption declaration owner",
     evidence: {
-      verifier: `kungfu-systems/buildchain@${buildchainAuthority} kfd hub inspect`,
+      verifier: `@kungfu-tech/buildchain@${buildchainVersion} kfd hub inspect`,
       expectedCheck: "kfd-agent-hub-declaration-invalid",
       exitCode: result.status,
       stderr: stderr.trim(),
@@ -217,7 +217,7 @@ const output = {
   verdict: passed === cases.length && cases.length >= 8 ? "passed" : "failed",
   environment: {
     kfdPackage: "@kungfu-tech/kfd@1.0.0-alpha.42",
-    buildchainAuthority: `kungfu-systems/buildchain@${buildchainAuthority}`,
+    buildchainAuthority: `@kungfu-tech/buildchain@${buildchainVersion}`,
     networkAccessDuringReportMutations: false,
     hubExecutionDuringMutations: false,
     privateDependencies: false,

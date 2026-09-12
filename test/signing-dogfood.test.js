@@ -31,12 +31,14 @@ test("release verification consumes final platform bytes before KFD evidence", (
   const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
   assert.match(workflow, /actions: read/);
   assert.match(workflow, /build\.yml@v4/);
-  assert.match(workflow, /buildchain-ref: v4/);
+  assert.doesNotMatch(workflow, /buildchain-ref:/);
   assert.doesNotMatch(workflow, /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/);
   assert.match(workflow, /BUILDCHAIN_PROMOTION_TOKEN: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/);
   assert.doesNotMatch(workflow, /CERTIFICATE|PASSWORD|PRIVATE_KEY|TEAM_ID|NOTARY|TIMESTAMP_URL/);
-  assert.match(workflow, /artifact-finalization-command: npm run verify:final-artifact/);
-  assert.match(workflow, /artifact-finalization-on-platform: true/);
+  const config = fs.readFileSync(path.join(root, ".buildchain/buildchain.toml"), "utf8");
+  assert.match(config, /\[build\.finalization\][\s\S]*command = "npm run verify:final-artifact"/);
+  assert.match(config, /on_platform = true/);
+  assert.doesNotMatch(workflow, /verify-command:|artifact-finalization-command:/);
   assert.match(packageJson.scripts["verify:final-artifact"], /verify:signed-binary.*prepare:release-evidence/);
   assert.match(verifier, /detached-signature-v1/);
   assert.match(verifier, /apple-developer-id/);

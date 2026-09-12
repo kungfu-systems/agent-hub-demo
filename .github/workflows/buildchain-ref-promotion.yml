@@ -58,58 +58,43 @@ jobs:
           'alpha/'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v4-alpha
+    uses: kungfu-systems/buildchain/.github/workflows/public-release-promote.yml@v4-alpha
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
-      target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
-      buildchain-ref: v4-alpha
-      package-manager: npm
-      artifact-name: agent-hub-demo
-      release-candidate-workflow-file: build.yml
-      release-candidate-workflow-name: Build
-      required-status-check: "check / check"
-      artifact-patterns: |
-        agent-hub-demo-linux-x64-*
-        agent-hub-demo-macos-*
-        agent-hub-demo-windows-x64-*
-      github-release-payload-patterns: |
-        agent-hub-demo-linux-x64
-        agent-hub-demo-linux-x64.sha256
-        agent-hub-demo-macos-arm64
-        agent-hub-demo-macos-arm64.sha256
-        agent-hub-demo-windows-x64.exe
-        agent-hub-demo-windows-x64.exe.sha256
-      required-artifact-count: 3
-      publish-artifact-kind: custom
-      publish-target: github-release
-      publish-rematerialize-on-resume: true
-      publish-required-artifacts-json: >-
-        [{"group":"release","kind":"github-release","name":"agent-hub-demo","ref_template":"v{version}"}]
-      trusted-publishing: false
-      release-passport: true
-      release-passport-product-name: Agent Hub Demo
-      release-passport-kfd-1-witness-jsons: |
-        .buildchain/release-inputs/kfd-1-witness-linux-x64.json
-        .buildchain/release-inputs/kfd-1-witness-macos-arm64.json
-        .buildchain/release-inputs/kfd-1-witness-windows-x64.json
-      release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
-      release-passport-kfd-3-prebuild-witness-jsons: |
-        .buildchain/release-inputs/kfd-3-prebuild-linux-x64.json
-        .buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json
-        .buildchain/release-inputs/kfd-3-prebuild-windows-x64.json
-      release-passport-kfd-3-artifact-witness-jsons: |
-        .buildchain/release-inputs/kfd-3-artifact-linux-x64.json
-        .buildchain/release-inputs/kfd-3-artifact-macos-arm64.json
-        .buildchain/release-inputs/kfd-3-artifact-windows-x64.json
-      github-release: true
-      github-release-notes: Buildchain-managed standalone binaries, KFD-1/2/3 evidence, and Release Passport.
-      publication-auto-admission: true
-      publication-auto-no-gate: true
-      publication-publisher-workflow-path: .github/workflows/buildchain-ref-promotion.yml
-      publication-product: Agent Hub Demo
-      publication-target: github-release:kungfu-systems/agent-hub-demo
-      publication-package-name: ""
-      dry-run: ${{ github.event_name == 'workflow_dispatch' }}
+      request-json: >-
+        {
+          "schema": "buildchain.promotion-request/v1",
+          "target-ref": "${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}",
+          "target-sha": "${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}",
+          "package-manager": "npm",
+          "artifact-name": "agent-hub-demo",
+          "release-candidate-workflow-file": "build.yml",
+          "release-candidate-workflow-name": "Build",
+          "required-status-check": "check / check",
+          "artifact-patterns": "agent-hub-demo-final-linux-x64-*\nagent-hub-demo-final-macos-*\nagent-hub-demo-final-windows-x64-*\n",
+          "github-release-payload-patterns": "agent-hub-demo-linux-x64\nagent-hub-demo-linux-x64.sha256\nagent-hub-demo-macos-arm64\nagent-hub-demo-macos-arm64.sha256\nagent-hub-demo-windows-x64.exe\nagent-hub-demo-windows-x64.exe.sha256\n",
+          "required-artifact-count": 3,
+          "publish-artifact-kind": "custom",
+          "publish-target": "github-release",
+          "publish-rematerialize-on-resume": true,
+          "publish-required-artifacts-json": "[{\"group\":\"release\",\"kind\":\"github-release\",\"name\":\"agent-hub-demo\",\"ref_template\":\"v{version}\"}]",
+          "trusted-publishing": false,
+          "release-passport": true,
+          "release-passport-product-name": "Agent Hub Demo",
+          "release-passport-kfd-1-witness-jsons": ".buildchain/release-inputs/kfd-1-witness-linux-x64.json\n.buildchain/release-inputs/kfd-1-witness-macos-arm64.json\n.buildchain/release-inputs/kfd-1-witness-windows-x64.json\n",
+          "release-passport-kfd-2-claim-jsons": ".buildchain/release-inputs/kfd-2-claim.json",
+          "release-passport-kfd-3-prebuild-witness-jsons": ".buildchain/release-inputs/kfd-3-prebuild-linux-x64.json\n.buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json\n.buildchain/release-inputs/kfd-3-prebuild-windows-x64.json\n",
+          "release-passport-kfd-3-artifact-witness-jsons": ".buildchain/release-inputs/kfd-3-artifact-linux-x64.json\n.buildchain/release-inputs/kfd-3-artifact-macos-arm64.json\n.buildchain/release-inputs/kfd-3-artifact-windows-x64.json\n",
+          "github-release": true,
+          "publication-auto-admission": true,
+          "publication-auto-no-gate": true,
+          "publication-publisher-workflow-path": ".github/workflows/buildchain-ref-promotion.yml",
+          "publication-product": "Agent Hub Demo",
+          "publication-target": "github-release:kungfu-systems/agent-hub-demo",
+          "publication-package-name": "",
+          "dry-run": ${{ toJSON(github.event_name == 'workflow_dispatch') }}
+        }
 
   promote-stable:
     if: >-
@@ -126,55 +111,40 @@ jobs:
           'release/'
         )
       }}
-    uses: kungfu-systems/buildchain/.github/workflows/release-candidate-promote.yml@v4
+    uses: kungfu-systems/buildchain/.github/workflows/public-release-promote.yml@v4
+    secrets:
+      BUILDCHAIN_PROMOTION_TOKEN: ${{ secrets.BUILDCHAIN_PROMOTION_TOKEN }}
     with:
-      target-ref: ${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}
-      target-sha: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
-      buildchain-ref: v4
-      package-manager: npm
-      artifact-name: agent-hub-demo
-      release-candidate-workflow-file: build.yml
-      release-candidate-workflow-name: Build
-      required-status-check: "check / check"
-      artifact-patterns: |
-        agent-hub-demo-linux-x64-*
-        agent-hub-demo-macos-*
-        agent-hub-demo-windows-x64-*
-      github-release-payload-patterns: |
-        agent-hub-demo-linux-x64
-        agent-hub-demo-linux-x64.sha256
-        agent-hub-demo-macos-arm64
-        agent-hub-demo-macos-arm64.sha256
-        agent-hub-demo-windows-x64.exe
-        agent-hub-demo-windows-x64.exe.sha256
-      required-artifact-count: 3
-      publish-artifact-kind: custom
-      publish-target: github-release
-      publish-rematerialize-on-resume: true
-      publish-required-artifacts-json: >-
-        [{"group":"release","kind":"github-release","name":"agent-hub-demo","ref_template":"v{version}"}]
-      trusted-publishing: false
-      release-passport: true
-      release-passport-product-name: Agent Hub Demo
-      release-passport-kfd-1-witness-jsons: |
-        .buildchain/release-inputs/kfd-1-witness-linux-x64.json
-        .buildchain/release-inputs/kfd-1-witness-macos-arm64.json
-        .buildchain/release-inputs/kfd-1-witness-windows-x64.json
-      release-passport-kfd-2-claim-jsons: .buildchain/release-inputs/kfd-2-claim.json
-      release-passport-kfd-3-prebuild-witness-jsons: |
-        .buildchain/release-inputs/kfd-3-prebuild-linux-x64.json
-        .buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json
-        .buildchain/release-inputs/kfd-3-prebuild-windows-x64.json
-      release-passport-kfd-3-artifact-witness-jsons: |
-        .buildchain/release-inputs/kfd-3-artifact-linux-x64.json
-        .buildchain/release-inputs/kfd-3-artifact-macos-arm64.json
-        .buildchain/release-inputs/kfd-3-artifact-windows-x64.json
-      github-release: true
-      github-release-notes: Buildchain-managed standalone binaries, KFD-1/2/3 evidence, and Release Passport.
-      publication-auto-admission: true
-      publication-auto-no-gate: true
-      publication-publisher-workflow-path: .github/workflows/buildchain-ref-promotion.yml
-      publication-product: Agent Hub Demo
-      publication-target: github-release:kungfu-systems/agent-hub-demo
-      publication-package-name: ""
-      dry-run: ${{ github.event_name == 'workflow_dispatch' }}
+      request-json: >-
+        {
+          "schema": "buildchain.promotion-request/v1",
+          "target-ref": "${{ github.event.workflow_run.head_branch || inputs['target-ref'] }}",
+          "target-sha": "${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}",
+          "package-manager": "npm",
+          "artifact-name": "agent-hub-demo",
+          "release-candidate-workflow-file": "build.yml",
+          "release-candidate-workflow-name": "Build",
+          "required-status-check": "check / check",
+          "artifact-patterns": "agent-hub-demo-final-linux-x64-*\nagent-hub-demo-final-macos-*\nagent-hub-demo-final-windows-x64-*\n",
+          "github-release-payload-patterns": "agent-hub-demo-linux-x64\nagent-hub-demo-linux-x64.sha256\nagent-hub-demo-macos-arm64\nagent-hub-demo-macos-arm64.sha256\nagent-hub-demo-windows-x64.exe\nagent-hub-demo-windows-x64.exe.sha256\n",
+          "required-artifact-count": 3,
+          "publish-artifact-kind": "custom",
+          "publish-target": "github-release",
+          "publish-rematerialize-on-resume": true,
+          "publish-required-artifacts-json": "[{\"group\":\"release\",\"kind\":\"github-release\",\"name\":\"agent-hub-demo\",\"ref_template\":\"v{version}\"}]",
+          "trusted-publishing": false,
+          "release-passport": true,
+          "release-passport-product-name": "Agent Hub Demo",
+          "release-passport-kfd-1-witness-jsons": ".buildchain/release-inputs/kfd-1-witness-linux-x64.json\n.buildchain/release-inputs/kfd-1-witness-macos-arm64.json\n.buildchain/release-inputs/kfd-1-witness-windows-x64.json\n",
+          "release-passport-kfd-2-claim-jsons": ".buildchain/release-inputs/kfd-2-claim.json",
+          "release-passport-kfd-3-prebuild-witness-jsons": ".buildchain/release-inputs/kfd-3-prebuild-linux-x64.json\n.buildchain/release-inputs/kfd-3-prebuild-macos-arm64.json\n.buildchain/release-inputs/kfd-3-prebuild-windows-x64.json\n",
+          "release-passport-kfd-3-artifact-witness-jsons": ".buildchain/release-inputs/kfd-3-artifact-linux-x64.json\n.buildchain/release-inputs/kfd-3-artifact-macos-arm64.json\n.buildchain/release-inputs/kfd-3-artifact-windows-x64.json\n",
+          "github-release": true,
+          "publication-auto-admission": true,
+          "publication-auto-no-gate": true,
+          "publication-publisher-workflow-path": ".github/workflows/buildchain-ref-promotion.yml",
+          "publication-product": "Agent Hub Demo",
+          "publication-target": "github-release:kungfu-systems/agent-hub-demo",
+          "publication-package-name": "",
+          "dry-run": ${{ toJSON(github.event_name == 'workflow_dispatch') }}
+        }

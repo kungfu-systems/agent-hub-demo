@@ -7,7 +7,10 @@ export const releasePlatforms = [
 export function matchesPayload(path, artifact, suffix) {
   const normalized = path.replaceAll("\\", "/");
   return (
-    normalized.includes(`agent-hub-demo-${artifact}-`) &&
+    normalized.split("/").slice(0, -1).some((segment) =>
+      segment.startsWith(`agent-hub-demo-${artifact}-`) ||
+      segment.startsWith(`agent-hub-demo-final-${artifact}-`)
+    ) &&
     normalized.endsWith(suffix)
   );
 }

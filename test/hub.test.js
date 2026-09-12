@@ -173,16 +173,27 @@ test("release publication separates Buildchain artifact IDs from product targets
   );
 });
 
+test("release payload matching accepts final artifacts and rejects another platform", () => {
+  assert.equal(matchesPayload(
+    "/payloads/agent-hub-demo-final-linux-x64-123/dist/agent-hub-demo.json",
+    "linux-x64", "/dist/agent-hub-demo.json",
+  ), true);
+  assert.equal(matchesPayload(
+    "/payloads/agent-hub-demo-final-windows-x64-123/dist/agent-hub-demo-linux-x64.sha256",
+    "linux-x64", "/dist/agent-hub-demo-linux-x64.sha256",
+  ), false);
+});
+
 test("release recovery rematerializes ephemeral Passport inputs", () => {
   const workflow = readFileSync(
     new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
     "utf8",
   );
-  assert.match(workflow, /release-candidate-promote\.yml@v4-alpha/);
-  assert.match(workflow, /release-candidate-promote\.yml@v4/);
-  assert.match(workflow, /promote-alpha:[\s\S]*buildchain-ref: v4-alpha/);
-  assert.match(workflow, /promote-stable:[\s\S]*buildchain-ref: v4/);
-  assert.match(workflow, /publish-rematerialize-on-resume: true/);
+  assert.match(workflow, /public-release-promote\.yml@v4-alpha/);
+  assert.match(workflow, /public-release-promote\.yml@v4/);
+  assert.match(workflow, /promote-alpha:[\s\S]*public-release-promote\.yml@v4-alpha/);
+  assert.match(workflow, /promote-stable:[\s\S]*public-release-promote\.yml@v4/);
+  assert.match(workflow, /"publish-rematerialize-on-resume": true/);
   assert.doesNotMatch(workflow, /publication-consumer-qualification-command:/);
 });
 
@@ -192,7 +203,7 @@ test("Verify selects the reviewed floating Buildchain v4 runtime", () => {
     "utf8",
   );
   assert.match(workflow, /check\.yml@v4/);
-  assert.match(workflow, /buildchain-ref: v4/);
+  assert.doesNotMatch(workflow, /buildchain-ref:/);
   assert.doesNotMatch(workflow, /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/);
   assert.doesNotMatch(workflow, /buildchain-ref:\s*v2(?:\s|$)/);
 });
