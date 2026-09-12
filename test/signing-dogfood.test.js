@@ -53,3 +53,10 @@ test("release verification consumes final platform bytes before KFD evidence", (
   assert.match(verifier, /process\.env\.BUILDCHAIN_SIGNING_REQUEST_COUNT/);
   assert.match(verifier, /process\.env\.BUILDCHAIN_ARTIFACT_SIGNING_STATE/);
 });
+
+test("product payload declarations exclude mutable Buildchain diagnostics", () => {
+  const config = fs.readFileSync(path.join(root, ".buildchain/buildchain.toml"), "utf8");
+  assert.doesNotMatch(config, /["']\.buildchain\/artifacts["']/);
+  assert.match(config, /"\.buildchain\/artifacts\/binary-\*\.json"/);
+  assert.match(config, /"\.buildchain\/artifacts\/kfd-agent-hub"/);
+});

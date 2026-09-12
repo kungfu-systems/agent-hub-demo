@@ -11,13 +11,13 @@ next = "auto"
 
 [[version.files]]
 type = "json"
-path = "package.json"
-key = "version"
+path = ".buildchain/kfd/agent-hub.json"
+key = "adapter.version"
 
 [[version.files]]
 type = "json"
-path = ".buildchain/kfd/agent-hub.json"
-key = "adapter.version"
+path = "package.json"
+key = "version"
 
 [lifecycle.install]
 command = "npm ci --registry=https://registry.npmjs.org/"
@@ -52,7 +52,7 @@ node = "24"
 
 [build.artifacts]
 name = "agent-hub-demo"
-paths = ["dist", ".buildchain/artifacts", ".buildchain/platform-signing-policy.json", ".buildchain/kfd/kfd-2", ".buildchain/release-qualification"]
+paths = ["dist", ".buildchain/artifacts/binary-*.json", ".buildchain/artifacts/kfd-agent-hub", ".buildchain/platform-signing-policy.json", ".buildchain/kfd/kfd-2", ".buildchain/release-qualification"]
 release_candidate = true
 
 [build.finalization]

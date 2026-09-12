@@ -157,6 +157,15 @@ test("release version state does not rewrite embedded protocol facts", () => {
   );
 });
 
+test("release candidate version agrees across package, lockfile and adapter", () => {
+  const readJson = (relative) => JSON.parse(readFileSync(new URL(relative, import.meta.url)));
+  const version = readJson("../package.json").version;
+  const lock = readJson("../package-lock.json");
+  assert.equal(lock.version, version);
+  assert.equal(lock.packages[""].version, version);
+  assert.equal(readJson("../.buildchain/kfd/agent-hub.json").adapter.version, version);
+});
+
 test("release publication separates Buildchain artifact IDs from product targets", () => {
   assert.deepEqual(releasePlatforms, [
     { artifact: "linux-x64", target: "linux-x64" },
