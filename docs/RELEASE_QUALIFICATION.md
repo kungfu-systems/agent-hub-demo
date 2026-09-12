@@ -52,7 +52,7 @@ allowing only an `authority/v4/...` branch does not admit that public entry.
 If a signing job reports that tag `v4` is not allowed to deploy, resolve the
 upstream environment policy with its owner before retrying. Do not change the
 consumer signing policy or treat the unsigned build as a completed release.
-See the upstream [signing contract](https://github.com/kungfu-systems/buildchain/blob/v4.1.2/docs/reusable-build-surface.md#artifact-signing-authority)
+See the upstream [signing contract](https://github.com/kungfu-systems/buildchain/blob/v4.1.2/docs/reusable-build-surface.md#project-configuration)
 and the [observed environment rejection](https://github.com/kungfu-systems/buildchain/actions/runs/34666038376).
 
 After a reviewed channel pull request is merged, Buildchain owns version-state
