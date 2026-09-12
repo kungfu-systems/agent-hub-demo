@@ -38,7 +38,7 @@ test("publish evidence pairs platform KFD witnesses with exact public assets", (
   const manifest = '{"version":"0.2.0-alpha.1"}\n';
 
   for (const { artifact, target, extension } of platforms) {
-    const payload = resolve(payloadRoot, `agent-hub-demo-${artifact}-fixture`);
+    const payload = resolve(payloadRoot, `agent-hub-demo-final-${artifact}-fixture`);
     const binaryName = `agent-hub-demo-${target}${extension}`;
     const binary = Buffer.from(`binary:${target}`);
     const binarySha256 = sha256(binary);

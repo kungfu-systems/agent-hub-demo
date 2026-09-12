@@ -18,13 +18,10 @@ jobs:
   qualify:
     permissions:
       contents: read
-    uses: kungfu-systems/buildchain/.github/workflows/v4-adopter-delivery.yml@v4-alpha
+    uses: kungfu-systems/buildchain/.github/workflows/public-build-adopter-qualification.yml@v4-alpha
     with:
       consumer: agent-hub-demo
-      node-version: "24"
       input-path: .buildchain/qualification/v4-adopter-delivery/input.json
-      bootstrap-path: .buildchain/qualification/v4-adopter-delivery/bootstrap.json
-      archive-path: .buildchain/qualification/v4-adopter-delivery/archives.json
 
   bootstrap-delivery:
     if: >-
@@ -41,18 +38,15 @@ jobs:
       contents: write
       pull-requests: write
       statuses: write
-    uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
+    uses: kungfu-systems/buildchain/.github/workflows/public-ops-dev-auto-merge.yml@v4-alpha
     with:
-      buildchain-ref: v4-alpha
       target-branch: dev/v0/v0.2
       expected-pr-number: ${{ github.event.pull_request.number }}
       expected-head-sha: ${{ github.event.pull_request.head.sha }}
       source-workflow-run-id: 0
       handoff-workflow-id: native-dev-delivery.yml
-      source-workflow-id: verify.yml
       delivery-warrant-mode: required
-      assignment-root: sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f
-      initiative-root: sha256:f4c5ba0457c25f6a54234a6fc189b8498dcf76afae6e670d9069300a30342990
+      source-root: sha256:493892932992b823e9741d949a49db3ddf428b297c48c5b542463a2b40ee763f
       source-identity-root: sha256:4f584c47d51cd60ea46ac571f546986da5ff195a343257e21a285661f33f2db0
       source-patch-root: sha256:efd992c05350d851205ccd774debdd7b903ad8da915f49fbcf0d39509fbcff45
       plan-root: sha256:58a7da79b198473f16d1e86183d5b5f10ff68e02a5ad7b6898d0ed0eb780a888

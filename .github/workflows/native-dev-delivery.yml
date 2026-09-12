@@ -106,19 +106,16 @@ permissions:
 
 jobs:
   deliver:
-    uses: kungfu-systems/buildchain/.github/workflows/dev-pr-auto-merge.yml@v4-alpha
+    uses: kungfu-systems/buildchain/.github/workflows/public-ops-dev-auto-merge.yml@v4-alpha
     with:
-      buildchain-ref: ${{ inputs.buildchain-ref || 'v4-alpha' }}
+      runtime-ref: ${{ inputs.buildchain-ref || 'v4-alpha' }}
       target-branch: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.targetBranch || inputs.target-branch }}
       expected-pr-number: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.pullRequestNumber || inputs.expected-pr-number }}
       expected-head-sha: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceHead || inputs.expected-head-sha }}
       source-workflow-run-id: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceWorkflowRunId || inputs.source-workflow-run-id || github.run_id }}
-      legacy-active-owner-binding-json: ${{ inputs.legacy-active-owner-binding-json || '' }}
       delivery-warrant-mode: required
       handoff-workflow-id: native-dev-delivery.yml
-      source-workflow-id: ${{ inputs.source-workflow-id || '' }}
-      assignment-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.assignmentRoot || inputs.assignment-root }}
-      initiative-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.initiativeRoot || inputs.initiative-root }}
+      source-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceRoot || inputs['assignment-root'] }}
       source-identity-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourceIdentityRoot || inputs.source-identity-root }}
       source-patch-root: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.sourcePatchRoot || inputs.source-patch-root }}
       project-cut-proof-json: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.candidate.projectCutProofJson || '' }}

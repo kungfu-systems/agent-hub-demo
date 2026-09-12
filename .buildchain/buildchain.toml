@@ -11,13 +11,13 @@ next = "auto"
 
 [[version.files]]
 type = "json"
-path = "package.json"
-key = "version"
+path = ".buildchain/kfd/agent-hub.json"
+key = "adapter.version"
 
 [[version.files]]
 type = "json"
-path = ".buildchain/kfd/agent-hub.json"
-key = "adapter.version"
+path = "package.json"
+key = "version"
 
 [lifecycle.install]
 command = "npm ci --registry=https://registry.npmjs.org/"
@@ -26,7 +26,7 @@ command = "npm ci --registry=https://registry.npmjs.org/"
 command = "npm run build"
 
 [lifecycle.verify]
-command = "npm run check"
+command = "npm run check && npm run qualify:buildchain-release"
 
 [lifecycle.publish]
 command = "node scripts/write-publish-evidence.mjs"
@@ -46,3 +46,15 @@ profile = "auto"
 kind = "mach-o"
 platforms = ["macos"]
 required = true
+
+[build.tools]
+node = "24"
+
+[build.artifacts]
+name = "agent-hub-demo"
+paths = ["dist", ".buildchain/artifacts/binary-*.json", ".buildchain/artifacts/kfd-agent-hub", ".buildchain/platform-signing-policy.json", ".buildchain/kfd/kfd-2", ".buildchain/release-qualification"]
+release_candidate = true
+
+[build.finalization]
+command = "npm run verify:final-artifact"
+on_platform = true
