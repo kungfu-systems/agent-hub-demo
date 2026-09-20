@@ -24,7 +24,7 @@
         "target": "src/cli.js"
       },
       "distribution": {
-        "registrar": "Buildchain release-candidate promotion",
+        "registrar": "Buildchain public pipeline",
         "tasks": [
           "build",
           "self-verify",

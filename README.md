@@ -1,16 +1,40 @@
+---
+status: draft
+period: ongoing
+theme: agent-hub-demo-release
+doc_type: guide
+source_level: local-files
+confidence: medium
+sensitivity: public
+evidence_grade: B
+review_state: unreviewed
+last_reviewed: 2026-09-20
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-20
+  visible_context: Consumer source and published Buildchain contract.
+  invisible_context_boundary: No signing credentials or unpublished execution results inspected.
+---
+
 # Agent Hub Demo
 
 Agent Hub Demo is a small reference project for shipping a KFD-compatible
-Agent Hub as Buildchain-managed standalone binaries. The release matrix
-publishes a detached-signature Linux x64 executable, a Developer ID signed and
-notarized macOS arm64 executable, and an explicitly unsigned Windows x64
-executable, plus KFD-1/2/3 evidence, checksums, and one independently
-verifiable Release Passport. This repository declares desired signature state
-only; Buildchain owns credentials, provider jobs, and immutable result delivery.
-The exact reviewed Buildchain v4 commit pinned in every production workflow is
-the sole build, channel-promotion, publication, and release authority. The
-machine-readable Windows exception lives in
-`.buildchain/platform-signing-policy.json`; no Authenticode claim is made.
+Agent Hub as Buildchain-managed standalone binaries.
+
+This branch migrates to exactly two workflow callers:
+[buildchain.yml](.github/workflows/buildchain.yml) for normal delivery and
+[buildchain-recover.yml](.github/workflows/buildchain-recover.yml) for recovery
+of an exact attempt. Product commands, archive outputs and protected channel
+routes are declared in [buildchain.toml](.buildchain/buildchain.toml).
+
+**Signed publication is blocked upstream.** The published Buildchain 4.1.3
+dual-entry contract does not yet deliver native signing/finalization evidence.
+Linux x64 still requires a detached signature, macOS arm64 still requires
+Developer ID signing and notarization, and Windows x64 retains its explicit
+unsigned exception. The verifier rejects absent evidence before packaging;
+this migration is not proof of a new release. See
+[release qualification and migration blockers](docs/RELEASE_QUALIFICATION.md).
 
 The implementation uses two independent Hubs backed by separate file-based
 content-addressed stores. KFD enters through the public npm package at build
@@ -51,7 +75,7 @@ This animation records one exact same-run standalone binary completing its deter
 
 ## Quick start
 
-Download the executable for your platform from the latest GitHub Release and
+Existing GitHub Releases provide the executable for your platform. Download and
 run:
 
 ```bash
@@ -94,15 +118,14 @@ This soak does not replace or qualify the separate KFD Runtime 100 profile.
 Run the public Buildchain first-class Agent Hub gate separately:
 
 ```bash
-node .buildchain/runtime/bin/buildchain.mjs kfd hub test --for agent
+node node_modules/@kungfu-tech/buildchain/bin/buildchain.mjs kfd hub test --for agent
 ```
 
 The gate reads [`.buildchain/kfd/agent-hub.json`](.buildchain/kfd/agent-hub.json),
 runs the fixed public KFD Hub suite against the real adapter, and writes its
 lock and verified report under `.buildchain/artifacts/kfd-agent-hub/`. The
-runtime checkout is pinned to the same exact reviewed Buildchain v4 commit used
-by the workflows, including the KFD-3 distribution-artifact binding required by
-the three standalone binaries.
+local verifier is the public npm CLI pinned in package-lock.json. Hosted
+orchestration remains owned by the standard Buildchain v4 entrypoints.
 
 Run the release qualification after that positive gate:
 
@@ -155,14 +178,11 @@ The reference release demonstrates three bounded adoption layers:
 - KFD-3 declares the participant-facing CLI plus its three-platform
   distribution tasks and artifacts.
 
-Buildchain collects those witnesses with the exact release-candidate manifests,
-publishes the executables and `SHA256SUMS`, and emits
-`buildchain.release.json`. Verify a downloaded release directory independently:
-
-```bash
-node .buildchain/runtime/bin/buildchain.mjs verify release-passport buildchain.release.json --json
-shasum -a 256 -c SHA256SUMS
-```
+The new product packaging command preserves executable and KFD evidence bytes
+in one platform archive. The executable remains under `dist/` after extraction.
+Existing published releases retain their original assets and Release Passports;
+this branch has not qualified a new hosted release or Passport. Signature and
+KFD verification must pass before `npm run package:product` is reached.
 
 It is not KFD certification, a production security assessment, independent
 vendor adoption, plural-vendor interoperability, or proof of production
@@ -182,13 +202,12 @@ hosted operation are outside the current claim.
 - [`.buildchain/kfd/kfd-3/surfaces.json`](.buildchain/kfd/kfd-3/surfaces.json)
   declares the CLI and cross-platform distribution surface.
 - [`.buildchain/auditable-demo.json`](.buildchain/auditable-demo.json) declares
-  the standalone-binary scenario consumed directly by Buildchain's declarative
-  demo platform; the exact binary and animation are bound to the same workflow
-  run, and this repository carries no product-specific capture glue.
+  the retained standalone-binary animation scenario. Existing media above is
+  historical evidence; automatic regeneration is not wired into the two callers.
 - [`scripts/build-binary.mjs`](scripts/build-binary.mjs) owns the per-platform
   Node SEA build and binary smoke checks.
-- [`scripts/write-publish-evidence.mjs`](scripts/write-publish-evidence.mjs)
-  assembles the exact three-platform GitHub Release and Passport inputs.
+- [`scripts/package-product.mjs`](scripts/package-product.mjs)
+  assembles each product archive with an explicit evidence inventory.
 - [`src/hub.js`](src/hub.js) is the product implementation.
 - [`src/adapter.js`](src/adapter.js) is the black-box KFD adapter.
 

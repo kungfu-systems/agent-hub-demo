@@ -1,14 +1,20 @@
 ---
-status: active
+status: draft
 period: ongoing
-theme: agent-hub-demo-versioning
-doc_type: process-rule
+theme: agent-hub-demo-release
+doc_type: guide
 source_level: local-files
-confidence: high
+confidence: medium
 sensitivity: public
 evidence_grade: B
-review_state: self-reviewed
-last_reviewed: 2026-08-12
+review_state: unreviewed
+last_reviewed: 2026-09-20
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-20
+  visible_context: Consumer source and published Buildchain contract.
+  invisible_context_boundary: No signing credentials or unpublished execution results inspected.
 ---
 
 # Versioning
@@ -26,11 +32,11 @@ Buildchain-managed merge targets, not development branches. Exact tags such as
 `v0.1.0-alpha.0` are immutable evidence; floating tags are moved only by
 Buildchain promotion.
 
-The exact reviewed Buildchain v4 release-candidate authority seals both exact npm targets
-and exact caller-bound GitHub Release targets. Agent Hub Demo uses only
-`github-release:kungfu-systems/agent-hub-demo`, an empty npm package identity,
-and a credentialless product predicate. Manual promotion remains dry-run-only;
-successful Verify runs on reviewed alpha/release channel commits may publish.
+The standard Buildchain v4 pipeline owns channel selection, version mutation,
+review and publication. The schema 2 product contract declares GitHub Release
+archive targets only; the npm package remains private. This consumer-only
+migration is blocked on upstream signing/finalization and must not publish an
+unsigned substitute. See [release qualification](RELEASE_QUALIFICATION.md).
 
 ## Version transaction boundary
 
@@ -45,9 +51,8 @@ deliberately exclude both the product version and `package.json`.
 Each reviewed release candidate predeclares the exact next transaction version
 in both configured version-state files before its cross-platform binaries are
 built. Buildchain independently recomputes that next version and owns the tag,
-release-state ref, and publication transaction. The consumer publication
-predicate rejects any capability whose version differs from the candidate
-source version, so an older binary cannot be published under a newer tag.
+release-state ref, and publication transaction. The product archive builder rejects executable smoke-test metadata whose version
+differs from the governed source version, so an older binary cannot be published under a newer tag.
 
 This separation is a release invariant. After Buildchain selects a version,
 `npm run check` may rebuild ignored artifacts, but it must not rewrite tracked
@@ -67,3 +72,8 @@ not commit transaction output or bypass the promotion gate.
 | 2026-07-23 | Bind candidate binaries to the governed release version | `v0.2` | patch | Reviewed candidates predeclare the exact next version, while Buildchain independently verifies that version and owns the tag and publication transaction; the product predicate denies mismatches. |
 | 2026-08-02 | Add declarative binary animation publication | `v0.2` | minor | The then-current Buildchain authority consumes the exact same-run standalone Linux binary, verifies its product metadata and embedded facts, captures independent native 1080p and 720p terminal sessions, and binds rendered media to a Release Passport. Source launchers and other products are outside this demo contract. |
 | 2026-08-12 | Adopt Buildchain v4 as sole production authority | `v0.2` | patch | Every production workflow pins one independently reviewed v4 commit. Linux and macOS remain signed; Windows is published only under a machine-readable zero-request unsigned exception and cannot be represented as Authenticode-signed. |
+
+The 2026-09-20 consumer migration preserves both governed version files and the
+runtime protocol. It changes the proposed release asset layout to one archive
+per platform, preserving executable and evidence paths inside each archive.
+No version bump or new release is asserted by this migration.

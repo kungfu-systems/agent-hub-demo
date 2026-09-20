@@ -1,10 +1,29 @@
+---
+status: draft
+period: ongoing
+theme: agent-hub-demo-release
+doc_type: guide
+source_level: local-files
+confidence: medium
+sensitivity: public
+evidence_grade: B
+review_state: unreviewed
+last_reviewed: 2026-09-20
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-20
+  visible_context: Consumer source and published Buildchain contract.
+  invisible_context_boundary: No signing credentials or unpublished execution results inspected.
+---
+
 # Contributing
 
 Thank you for improving Agent Hub Demo.
 
 ## Development
 
-Use Node.js 22 or newer and the public npm registry:
+Use Node.js 24 or newer and the public npm registry:
 
 ```bash
 npm ci --registry=https://registry.npmjs.org/
@@ -38,3 +57,16 @@ Pull requests should explain behavior, tests, contract impact, and residual
 risk. Complete the repository governance checklist in the pull request
 template. Never include credentials, tokens, private logs, private paths, or
 production data.
+
+## Dual-entry migration status
+
+The only workflow callers are `buildchain.yml` and `buildchain-recover.yml`.
+The TOML declares product commands and protected routes; the recovery caller
+accepts an exact attempt and an optional repaired runtime ref. Do not restore
+retired channel, signing, canary or rendering workflows as release fallbacks.
+
+Local `npm run check` does not qualify publication. Native signatures and final
+KFD evidence remain mandatory, and the published dual-entry runtime does not
+yet supply the required signing evidence. Keep the migration PR in draft until
+[the upstream blockers](docs/RELEASE_QUALIFICATION.md) are resolved and all three
+hosted platforms have passed. Upstream infrastructure repair is outside this PR.

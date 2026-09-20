@@ -18,6 +18,7 @@
     "demo": "node src/cli.js demo",
     "generate:embedded": "node scripts/generate-embedded-facts.mjs",
     "inspect": "node src/adapter.js inspect",
+    "package:product": "node scripts/package-product.mjs",
     "precheck": "npm run generate:embedded",
     "pretest": "npm run check:embedded",
     "prepare:release-evidence": "node scripts/prepare-release-evidence.mjs",
@@ -27,7 +28,7 @@
     "runtime100": "node src/adapter.js run --scenario runtime-100",
     "test": "node --test",
     "verify:signed-binary": "node scripts/verify-signed-binary.mjs",
-    "verify:final-artifact": "npm run verify:signed-binary && npm run prepare:release-evidence"
+    "verify:final-artifact": "npm run verify:signed-binary && npm run qualify:buildchain-release && npm run package:product"
   },
   "dependencies": {
     "@kungfu-tech/kfd": "1.0.0-alpha.42"
@@ -41,7 +42,9 @@
     "url": "git+https://github.com/kungfu-systems/agent-hub-demo.git"
   },
   "devDependencies": {
+    "@kungfu-tech/buildchain": "4.1.3",
     "esbuild": "0.28.1",
-    "postject": "1.0.0-alpha.6"
+    "postject": "1.0.0-alpha.6",
+    "smol-toml": "1.7.0"
   }
 }
