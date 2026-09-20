@@ -1,3 +1,22 @@
+---
+status: draft
+period: ongoing
+theme: agent-hub-demo-release
+doc_type: guide
+source_level: local-files
+confidence: medium
+sensitivity: public
+evidence_grade: B
+review_state: unreviewed
+last_reviewed: 2026-09-20
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-20
+  visible_context: Consumer source and published Buildchain contract.
+  invisible_context_boundary: No signing credentials or unpublished execution results inspected.
+---
+
 # Documentation map
 
 ## Use the product
@@ -21,19 +40,16 @@
   audit boundary, responsibility, and residual risk.
 - `.buildchain/kfd/kfd-3/surfaces.json` — registered public collaboration
   surfaces used by the release witness.
-- `.buildchain/buildchain.toml` — semver/auto version state, lifecycle
-  commands, the two signed-platform declarations, and the machine-readable
-  Windows unsigned exception.
-- `.github/workflows/build.yml` — PR-stage Buildchain release-candidate build.
-- `.github/workflows/artifact-signing-dogfood.yml` — protected, channel-neutral
-  Buildchain artifact-signing authority dogfood.
-- `.github/workflows/verify.yml` — stable protected-branch check surface.
-- `.github/workflows/buildchain-ref-promotion.yml` — thin Buildchain-owned
-  promotion planner; dry-run-only until Buildchain supports sealed
-  GitHub-Release-only admission.
+- `.buildchain/buildchain.toml` — schema 2 products, archive targets, governed
+  versions, protected routes and review requirements.
+- `.buildchain/platform-signing-policy.json` — required Linux/macOS signatures
+  and the bounded Windows unsigned exception.
+- `.github/workflows/buildchain.yml` — standard Buildchain pipeline caller.
+- `.github/workflows/buildchain-recover.yml` — recovery of an exact attempt.
+- `scripts/package-product.mjs` — explicit per-platform archive inventory.
 - `scripts/qualify-release.mjs` — offline fail-closed mutation oracle.
 - `scripts/qualify-buildchain-release.mjs` — product-specific KFD evidence run
-  inside the Buildchain release-candidate lifecycle.
+  through the public, lockfile-pinned Buildchain CLI.
 - `scripts/verify-signed-binary.mjs` — final-byte platform signature and product
   smoke verification before KFD and Passport evidence is sealed.
 - `docs/RELEASE_QUALIFICATION.md` — exact release evidence and claim limits.

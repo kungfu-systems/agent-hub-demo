@@ -1,48 +1,90 @@
-schema = 1
+schema = 2
 
-[project]
-type = "package"
-name = "agent-hub-demo"
-
+# Native signing/finalization is blocked upstream. Verification must fail closed
+# until Buildchain delivers the required platform evidence; see release docs.
 [version]
-required = true
 strategy = "semver"
-next = "auto"
+files = [
+  { path = "package.json", format = "json", key = "version" },
+  { path = ".buildchain/kfd/agent-hub.json", format = "json", key = "adapter.version" },
+]
 
-[[version.files]]
-type = "json"
-path = "package.json"
-key = "version"
+[review]
+minimum_approvals = 1
+code_owners = true
+merge_queue = true
 
-[[version.files]]
-type = "json"
-path = ".buildchain/kfd/agent-hub.json"
-key = "adapter.version"
+[[channels]]
+from = "feature/*"
+to = "dev/v0/v0.2"
+operation = "develop"
 
-[lifecycle.install]
-command = "npm ci --registry=https://registry.npmjs.org/"
+[[channels]]
+from = "fix/*"
+to = "dev/v0/v0.2"
+operation = "develop"
 
-[lifecycle.build]
-command = "npm run build"
+[[channels]]
+from = "chore/*"
+to = "dev/v0/v0.2"
+operation = "develop"
 
-[lifecycle.verify]
-command = "npm run check"
+[[channels]]
+from = "docs/*"
+to = "dev/v0/v0.2"
+operation = "develop"
 
-[lifecycle.publish]
-command = "node scripts/write-publish-evidence.mjs"
+[[channels]]
+from = "ci/*"
+to = "dev/v0/v0.2"
+operation = "develop"
 
-[[signing.artifacts]]
+[[channels]]
+from = "refactor/*"
+to = "dev/v0/v0.2"
+operation = "develop"
+
+[[channels]]
+from = "dev/v0/v0.2"
+to = "alpha/v0/v0.2"
+operation = "alpha"
+
+[[channels]]
+from = "alpha/v0/v0.2"
+to = "release/v0/v0.2"
+operation = "stable"
+
+[[channels]]
+from = "release/v0/v0.2"
+to = "publish-gate/major"
+operation = "major"
+
+[[products]]
 id = "agent-hub-demo-linux-x64"
-path = "dist/agent-hub-demo-linux-x64"
-profile = "auto"
-kind = "binary"
+type = "binary"
 platforms = ["linux-x64"]
-required = true
+install = ["npm ci --registry=https://registry.npmjs.org/"]
+build = ["npm run check"]
+verify = ["npm run verify:signed-binary", "npm run qualify:buildchain-release", "npm run package:product"]
+artifacts = [{ id = "agent-hub-demo-linux-x64", path = "dist/packages/agent-hub-demo-linux-x64.tar.gz", kind = "archive", filename = "agent-hub-demo-linux-x64.tar.gz" }]
+targets = [{ provider = "github-release", artifacts = ["agent-hub-demo-linux-x64"] }]
 
-[[signing.artifacts]]
+[[products]]
 id = "agent-hub-demo-macos-arm64"
-path = "dist/agent-hub-demo-macos-arm64"
-profile = "auto"
-kind = "mach-o"
-platforms = ["macos"]
-required = true
+type = "binary"
+platforms = ["macos-arm64"]
+install = ["npm ci --registry=https://registry.npmjs.org/"]
+build = ["npm run check"]
+verify = ["npm run verify:signed-binary", "npm run qualify:buildchain-release", "npm run package:product"]
+artifacts = [{ id = "agent-hub-demo-macos-arm64", path = "dist/packages/agent-hub-demo-macos-arm64.tar.gz", kind = "archive", filename = "agent-hub-demo-macos-arm64.tar.gz" }]
+targets = [{ provider = "github-release", artifacts = ["agent-hub-demo-macos-arm64"] }]
+
+[[products]]
+id = "agent-hub-demo-windows-x64"
+type = "binary"
+platforms = ["windows-x64"]
+install = ["npm ci --registry=https://registry.npmjs.org/"]
+build = ["npm run check"]
+verify = ["npm run verify:signed-binary", "npm run qualify:buildchain-release", "npm run package:product"]
+artifacts = [{ id = "agent-hub-demo-windows-x64", path = "dist/packages/agent-hub-demo-windows-x64.tar.gz", kind = "archive", filename = "agent-hub-demo-windows-x64.tar.gz" }]
+targets = [{ provider = "github-release", artifacts = ["agent-hub-demo-windows-x64"] }]

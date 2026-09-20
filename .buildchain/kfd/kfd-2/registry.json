@@ -14,12 +14,12 @@
     "tagPrefix": "v"
   },
   "buildchain": {
-    "checkCommand": "node .buildchain/runtime/bin/buildchain.mjs kfd 2 product-claims check --json"
+    "checkCommand": "node node_modules/@kungfu-tech/buildchain/bin/buildchain.mjs kfd 2 product-claims check --json"
   },
   "claims": [
     {
       "id": "first-party-clean-room-structural-independence",
-      "statement": "The first-party demo uses two independently initialized file-backed content-addressed Hub stores, embeds the exact public KFD Agent Hub profile facts into three standalone platform binaries, and binds those binaries to one Buildchain Release Passport.",
+      "statement": "The first-party demo uses two independently initialized file-backed content-addressed Hub stores, embeds the exact public KFD Agent Hub profile facts into three standalone platform binaries, and binds those binaries to one Buildchain-managed Release Passport.",
       "category": "first-party-structure",
       "source": {
         "path": "README.md"
@@ -38,7 +38,7 @@
           "description": "Node SEA build and smoke-verification entrypoint used independently on Linux, macOS, and Windows runners."
         },
         {
-          "path": ".github/workflows/buildchain-ref-promotion.yml",
+          "path": ".github/workflows/buildchain.yml",
           "description": "Buildchain-owned publication authority, KFD witness collection, GitHub Release, and Release Passport route."
         }
       ],

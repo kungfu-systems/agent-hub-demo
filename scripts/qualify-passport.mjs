@@ -18,8 +18,8 @@ const outputPath = resolve(cwd, valueFor(
   "--output",
   ".buildchain/release-qualification/passport-qualification.json",
 ));
-const buildchainAuthority = "fea8e21dcec2cbf21b9e7fca8fefb537b6b6999c";
-const buildchainCli = resolve(cwd, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime", "bin/buildchain.mjs");
+const buildchainAuthority = "npm:@kungfu-tech/buildchain@4.1.3";
+const buildchainCli = resolve(cwd, "node_modules/@kungfu-tech/buildchain/bin/buildchain.mjs");
 
 function verify(path) {
   const result = spawnSync(process.execPath, [
@@ -59,14 +59,14 @@ const output = {
   verdict: rejected ? "passed" : "failed",
   positive: {
     status: "verified",
-    verifier: `kungfu-systems/buildchain@${buildchainAuthority} verify release-passport`,
+    verifier: `${buildchainAuthority} verify release-passport`,
   },
   mutation: {
     id: "release-passport-agent-hub-report-root-drift",
     category: "release-passport",
     status: rejected ? "rejected-as-expected" : "unexpected-result",
     error: rejected ? issue.code : "qualification-oracle-mismatch",
-    owner: "Buildchain Release Passport and consumer release owner",
+    owner: "Buildchain-managed Release Passport and consumer release owner",
     evidence: {
       exitCode: negative.result.status,
       issue,

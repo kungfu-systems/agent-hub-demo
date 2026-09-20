@@ -1,53 +1,35 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
+import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { parse } from "smol-toml";
 
-const root = path.resolve(import.meta.dirname, "..");
+const root = new URL("../", import.meta.url);
+const read = file => readFileSync(new URL(file, root), "utf8");
 
-test("consumer signs Linux and macOS and declares Windows unsigned without credentials", () => {
-  const config = fs.readFileSync(path.join(root, ".buildchain/buildchain.toml"), "utf8");
-  const policy = JSON.parse(fs.readFileSync(path.join(root, ".buildchain/platform-signing-policy.json"), "utf8"));
-  assert.equal((config.match(/\[\[signing\.artifacts\]\]/g) || []).length, 2);
-  assert.match(config, /kind = "binary"[\s\S]*platforms = \["linux-x64"\]/);
-  assert.match(config, /kind = "mach-o"[\s\S]*platforms = \["macos"\]/);
-  assert.doesNotMatch(config, /kind = "pe"|platforms = \["windows-x64"\]/);
-  assert.deepEqual(policy.platforms["windows-x64"], {
-    state: "unsigned-exception",
-    authenticode: false,
-    timestamped: false,
-    signingRequestCount: 0,
-    reasonCode: "windows-authenticode-credential-not-configured",
-    scope: "agent-hub-demo-windows-x64",
-    releaseChannels: ["alpha", "stable"],
-    reviewTrigger: "authenticode-credential-onboarding",
-  });
-  assert.doesNotMatch(config, /certificate|password|private.?key|team.?id|notary|timestamp.?url|environment/iu);
+test("all product lanes require final signature verification before KFD evidence and packaging", () => {
+  const config = parse(read(".buildchain/buildchain.toml"));
+  const policy = JSON.parse(read(".buildchain/platform-signing-policy.json"));
+  assert.deepEqual(config.products.flatMap(product => product.platforms), ["linux-x64", "macos-arm64", "windows-x64"]);
+  for (const product of config.products) {
+    assert.deepEqual(product.verify, ["npm run verify:signed-binary", "npm run qualify:buildchain-release", "npm run package:product"]);
+  }
+  assert.equal(policy.platforms["linux-x64"].profile, "detached-signature-v1");
+  assert.equal(policy.platforms["macos-arm64"].profile, "apple-developer-id");
+  for (const platform of ["linux-x64", "macos-arm64"]) {
+    assert.equal(policy.platforms[platform].state, "signed");
+    assert.equal(policy.platforms[platform].signingRequestCount, 1);
+  }
+  assert.equal(policy.platforms["windows-x64"].state, "unsigned-exception");
+  assert.equal(policy.platforms["windows-x64"].authenticode, false);
+  assert.equal(policy.platforms["windows-x64"].signingRequestCount, 0);
 });
 
-test("release verification consumes final platform bytes before KFD evidence", () => {
-  const workflow = fs.readFileSync(path.join(root, ".github/workflows/artifact-signing-dogfood.yml"), "utf8");
-  const verifier = fs.readFileSync(path.join(root, "scripts/verify-signed-binary.mjs"), "utf8");
-  const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
-  assert.match(workflow, /actions: read/);
-  assert.match(workflow, /build\.yml@v4/);
-  assert.match(workflow, /buildchain-ref: v4/);
-  assert.doesNotMatch(workflow, /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/);
-  assert.match(workflow, /BUILDCHAIN_PROMOTION_TOKEN: \$\{\{ secrets\.BUILDCHAIN_PROMOTION_TOKEN \}\}/);
-  assert.doesNotMatch(workflow, /CERTIFICATE|PASSWORD|PRIVATE_KEY|TEAM_ID|NOTARY|TIMESTAMP_URL/);
-  assert.match(workflow, /artifact-finalization-command: npm run verify:final-artifact/);
-  assert.match(workflow, /artifact-finalization-on-platform: true/);
-  assert.match(packageJson.scripts["verify:final-artifact"], /verify:signed-binary.*prepare:release-evidence/);
-  assert.match(verifier, /detached-signature-v1/);
-  assert.match(verifier, /apple-developer-id/);
-  assert.match(verifier, /unsigned-exception/);
-  assert.match(verifier, /explicitly-unsigned/);
-  assert.match(verifier, /codesign/);
-  assert.match(verifier, /notarytool-accepted/);
-  assert.match(verifier, /standalone-notary-ticket-online/);
-  assert.doesNotMatch(verifier, /spctl/);
-  assert.match(verifier, /Get-AuthenticodeSignature/);
-  assert.match(verifier, /NotSigned/);
-  assert.match(verifier, /process\.env\.BUILDCHAIN_SIGNING_REQUEST_COUNT/);
-  assert.match(verifier, /process\.env\.BUILDCHAIN_ARTIFACT_SIGNING_STATE/);
+test("published dual-entry runtime cannot silently bypass missing finalization evidence", () => {
+  const env = { ...process.env };
+  delete env.BUILDCHAIN_SIGNING_REQUEST_COUNT;
+  delete env.BUILDCHAIN_ARTIFACT_SIGNING_STATE;
+  const result = spawnSync(process.execPath, ["scripts/verify-signed-binary.mjs"], { cwd: root, env, encoding: "utf8" });
+  assert.equal(result.status, 1, result.stderr);
+  assert.match(result.stderr, /Buildchain finalization signing state environment is required/u);
 });

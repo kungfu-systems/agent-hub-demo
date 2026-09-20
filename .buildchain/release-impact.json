@@ -22,8 +22,8 @@
       "id": "kfd-123-release-passport-reference",
       "impact": "minor",
       "class": "evidence-contract",
-      "rationale": "Per-platform KFD-1 and KFD-3 witnesses, the bounded KFD-2 claim, checksums, manifests, and exact release-candidate roots are collected into a Buildchain Release Passport.",
-      "source": "scripts/write-publish-evidence.mjs"
+      "rationale": "Per-platform KFD-1 and KFD-3 witnesses, the bounded KFD-2 claim, checksums, manifests, and exact release-candidate roots are collected into a Buildchain-managed Release Passport.",
+      "source": "scripts/package-product.mjs"
     },
     {
       "id": "buildchain-binary-auditable-demo",

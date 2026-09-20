@@ -11,11 +11,7 @@ import { handshake, isMainModule, respond } from "../src/adapter.js";
 import { adapterArtifact } from "../src/artifact.js";
 import { PRODUCT_VERSION } from "../src/product.js";
 import { runCoreDemo, runRuntime100 } from "../src/scenarios.js";
-import {
-  matchesPayload,
-  releasePlatforms,
-} from "../scripts/release-platforms.mjs";
-import { evaluatePublicationQualification } from "../scripts/qualify-publication.mjs";
+
 
 function temporary(name) {
   return mkdtempSync(join(tmpdir(), `agent-hub-demo-${name}-`));
@@ -153,72 +149,6 @@ test("release version state does not rewrite embedded protocol facts", () => {
   assert.doesNotMatch(generatedFacts, /PRODUCT_VERSION/);
   assert.equal(
     adapterArtifact().files.some((entry) => entry.path === "package.json"),
-    false,
-  );
-});
-
-test("release publication separates Buildchain artifact IDs from product targets", () => {
-  assert.deepEqual(releasePlatforms, [
-    { artifact: "linux-x64", target: "linux-x64" },
-    { artifact: "macos", target: "macos-arm64" },
-    { artifact: "windows-x64", target: "windows-x64" },
-  ]);
-  assert.equal(
-    matchesPayload(
-      "/payloads/agent-hub-demo-macos-123/dist/agent-hub-demo-macos-arm64",
-      "macos",
-      "/dist/agent-hub-demo-macos-arm64",
-    ),
-    true,
-  );
-});
-
-test("release recovery rematerializes ephemeral Passport inputs", () => {
-  const workflow = readFileSync(
-    new URL("../.github/workflows/buildchain-ref-promotion.yml", import.meta.url),
-    "utf8",
-  );
-  assert.match(workflow, /release-candidate-promote\.yml@v4-alpha/);
-  assert.match(workflow, /release-candidate-promote\.yml@v4/);
-  assert.match(workflow, /promote-alpha:[\s\S]*buildchain-ref: v4-alpha/);
-  assert.match(workflow, /promote-stable:[\s\S]*buildchain-ref: v4/);
-  assert.match(workflow, /publish-rematerialize-on-resume: true/);
-  assert.doesNotMatch(workflow, /publication-consumer-qualification-command:/);
-});
-
-test("Verify selects the reviewed floating Buildchain v4 runtime", () => {
-  const workflow = readFileSync(
-    new URL("../.github/workflows/verify.yml", import.meta.url),
-    "utf8",
-  );
-  assert.match(workflow, /check\.yml@v4/);
-  assert.match(workflow, /buildchain-ref: v4/);
-  assert.doesNotMatch(workflow, /@[0-9a-f]{40}\b|buildchain-ref:\s*[0-9a-f]{40}\b/);
-  assert.doesNotMatch(workflow, /buildchain-ref:\s*v2(?:\s|$)/);
-});
-
-test("publication qualification binds binaries to the exact governed version", () => {
-  const base = {
-    capability: {
-      target: "github-release:kungfu-systems/agent-hub-demo",
-      capabilityIds: ["github-release"],
-      version: "0.2.0-alpha.7",
-    },
-    packageJson: {
-      private: true,
-      version: "0.2.0-alpha.7",
-    },
-    missing: [],
-  };
-  assert.equal(evaluatePublicationQualification(base).allow, true);
-  assert.equal(
-    evaluatePublicationQualification({
-      ...base,
-      capability: {
-        ...base.capability,
-        version: "0.2.0-alpha.8",
-      },
-    }).allow,
     false,
   );
 });

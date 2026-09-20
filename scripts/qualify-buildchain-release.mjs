@@ -3,9 +3,10 @@ import { resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const root = process.cwd();
-const runtimeRoot = resolve(root, process.env.BUILDCHAIN_RUNTIME_ROOT || ".buildchain/runtime");
-const buildchain = resolve(runtimeRoot, "bin/buildchain.mjs");
-const sourceSha = process.env.BUILDCHAIN_SOURCE_SHA || process.env.GITHUB_SHA || "unknown";
+const buildchain = resolve(root, "node_modules/@kungfu-tech/buildchain/bin/buildchain.mjs");
+const source = spawnSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" });
+if (source.error || source.status !== 0) throw new Error("release evidence requires the checked-out source commit");
+const sourceSha = source.stdout.trim();
 const { version } = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
 const releaseTag = `v${version}`;
 

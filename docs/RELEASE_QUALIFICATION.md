@@ -1,53 +1,108 @@
+---
+status: draft
+period: ongoing
+theme: agent-hub-demo-release
+doc_type: guide
+source_level: local-files
+confidence: medium
+sensitivity: public
+evidence_grade: B
+review_state: unreviewed
+last_reviewed: 2026-09-20
+ai_provenance:
+  model_family: GPT-6
+  product: Codex
+  generated_at: 2026-09-20
+  visible_context: Consumer source and published Buildchain contract.
+  invisible_context_boundary: No signing credentials or unpublished execution results inspected.
+---
+
 # Release qualification
 
-The Buildchain release-candidate workflow starts from a fresh GitHub checkout
-on Linux x64, macOS arm64, and Windows x64. Every runner installs the exact
-public npm dependency graph, runs the product tests and 100-delivery soak,
-builds a Node SEA executable, submits only its sealed bytes to the central
-Buildchain signing authority when declared, then imports and smoke-tests the final
-executable without npm, and runs the public Agent Hub gate. Linux carries a
-detached cryptographic signature, macOS carries Developer ID plus accepted
-notarization evidence, and Windows is explicitly unsigned. Its policy requires
-zero signing requests and native `Get-AuthenticodeSignature` status `NotSigned`;
-any signing result or signed claim fails qualification. Each
-payload contains a platform manifest and
-KFD-1/KFD-2/KFD-3 evidence.
+## Consumer migration and blocked publication
 
-The macOS artifact is a standalone Mach-O executable rather than an app
-bundle. Final-byte verification therefore uses strict `codesign` validation
-and requires the Buildchain result to prove `notarytool` acceptance plus the
-standalone online ticket; app-bundle Gatekeeper assessment and ticket stapling
-do not apply to this artifact shape.
+The consumer has two generated callers at `@v4`: normal
+`public-ops-pipeline.yml` and attempt-based `public-ops-recover.yml`.
+`.buildchain/buildchain.toml` uses schema 2 and declares three binary products,
+GitHub Release archive targets, the two governed version files, protected
+channel routes, independent review and merge queue requirements.
 
-Both prerelease and stable release qualification use one independently reviewed
-exact Buildchain v4 commit as the sole production authority. Certificate rotation stays inside the
-central `buildchain-artifact-signing` environment; the consumer does not select
-an alpha- or release-specific credential environment. The bounded Windows
-exception is machine-readable in `.buildchain/platform-signing-policy.json` and
-ends when Authenticode credentials are onboarded.
+Each platform runs dependency installation, `npm run check`, signature
+verification, KFD qualification, then archive assembly, in that order. No
+repository script owns provider publication or channel promotion. Old payload
+collection, publication capability callbacks, contract locks and specialized
+workflows have been retired from the active consumer tree.
 
-After a reviewed channel pull request is merged, Buildchain owns version-state
-mutation, publish-gate locking, exact and floating refs, sealed GitHub Release
-admission, Release Passport generation, and immutable asset upload. The
-publication target must equal
-`github-release:kungfu-systems/agent-hub-demo`; an empty npm package identity is
-required. Repository-owned tag or release fallbacks remain forbidden.
+**Publication remains blocked.** The published Buildchain 4.1.3 contract has
+no product signing/finalization fields and its credentialless build phase does
+not deliver `BUILDCHAIN_SIGNING_REQUEST_COUNT`,
+`BUILDCHAIN_ARTIFACT_SIGNING_STATE` or native signing results. The retained
+verifier fails with `Buildchain finalization signing state environment is required`.
+The TOML intentionally uses only published fields; it does not declare an
+unmerged signing API or manufacture successful evidence.
+
+Linux requires one detached cryptographic signature. macOS requires one
+Developer ID signature, hardened runtime, accepted notarization and a standalone
+online ticket. Windows requires zero signing requests, `NotSigned` native
+status and the existing bounded unsigned exception. These requirements are in
+`.buildchain/platform-signing-policy.json` and `scripts/verify-signed-binary.mjs`.
+OIDC build attestations do not replace native executable signatures.
+
+[Buildchain PR #3870](https://github.com/kungfu-systems/buildchain/pull/3870)
+is owned by another work thread. Its proposed Apple archive signing support
+alone does not supply the Linux detached-signature requirement or prove this
+consumer's final-byte protocol. Upstream repair, release and ownership are
+outside this consumer-only change. Existing consumer
+[PR #165](https://github.com/kungfu-systems/agent-hub-demo/pull/165) is also
+separate work and is not superseded by a successful release here.
+
+Before enabling this migration, the upstream public contract must expose and
+publish the required signature/final-byte evidence, the consumer must adopt
+that published declaration, and all three hosted platforms must pass KFD and
+signature verification. Archive publication and downstream Passport binding
+must then be verified against an actual release. Keep this PR in draft while
+these conditions remain unproved.
+
+## Preserved and deferred functionality
+
+The two Hub implementation, CLI, embedded protocol facts, KFD-1/2/3 gates and
+twelve-case negative matrix remain product responsibilities. Public Buildchain
+CLI verification is pinned to npm version 4.1.3, independently of the hosted
+`@v4` orchestration selection. It uses no internal workflow checkout path.
+
+Each proposed `.tar.gz` preserves the executable under `dist/`, its checksum
+and manifest, product artifact, Agent Hub adoption/report/evidence/verification,
+KFD-1 and KFD-3 witnesses, KFD-2 claim, mutation report and declared signing
+result. Archive tests prove byte preservation and reject substitution, missing
+evidence and symlinks; they do not certify fixture signatures or KFD semantics.
+
+The pinned public CLI currently brings five npm audit findings (two moderate,
+three high), including upstream TOML parser denial of service and HTTP-client
+advisories. These are development/verification dependencies, not embedded SEA
+runtime dependencies. No automatic dependency override or upstream repair is
+included in this migration; hosted qualification must account for that risk.
+
+The old independent signing dogfood, canary, bootstrap and animation workflows
+are removed so only the two standard callers remain. The animation declaration
+and already-published media remain available, but automatic media regeneration
+is deferred pending a supported public entry capability. No new animation or
+Release Passport is claimed by the local migration tests.
 
 ## Reproduce locally
 
-Requirements: Node.js 24 or newer, npm, and Git.
+Use Node.js 24 or newer, npm and Git:
 
 ```bash
 npm ci --registry=https://registry.npmjs.org/
 npm run check
-node .buildchain/runtime/bin/buildchain.mjs kfd hub test --for agent
-npm run qualify:release
+npm run qualify:buildchain-release
+npm run verify:signed-binary
 ```
 
-The mutation phase does not start either Hub and does not use private packages,
-private services, copied evaluators, or copied Buildchain orchestration. It
-changes temporary copies only and asks the public KFD verifier or public
-Buildchain inspector to reject them.
+The final command must fail without genuine Buildchain finalization evidence.
+The KFD-only command exercises product gates on local build bytes and is not
+signature qualification. Hosted product ordering requires signatures first.
+Do not set signing-success variables to bypass the blocked release path.
 
 ## Frozen negative matrix
 
@@ -68,21 +123,6 @@ The machine-readable report contains twelve deliberate cases:
 
 Every case records its stable machine error, responsible owner, verifier
 evidence, and next action. The workflow fails unless all twelve are rejected.
-
-## Release assets
-
-Buildchain-managed releases publish three standalone executables, their
-per-platform checksum and binary manifest, `SHA256SUMS`, the product artifact,
-Agent Hub report/evidence/verification/adoption lock, all platform KFD-1 and
-KFD-3 witnesses, the KFD-2 public claim, mutation report, publish evidence, and
-Release Passport. Exact prerelease and release tags are immutable evidence;
-floating tags remain Buildchain-owned channel refs. The bundle includes every
-sibling evidence document referenced by the Passport so a downloaded directory
-can be verified without the source checkout.
-
-The per-platform binary manifest records either the qualifying signature result
-or the exact unsigned-exception policy. All checksums and KFD witnesses are
-regenerated from final bytes after Buildchain finalization.
 
 ## Claim and nonclaims
 
