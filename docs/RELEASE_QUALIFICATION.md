@@ -63,6 +63,28 @@ signature verification. Archive publication and downstream Passport binding
 must then be verified against an actual release. Keep this PR in draft while
 these conditions remain unproved.
 
+## Hosted admission and merge blockers
+
+PR [#166](https://github.com/kungfu-systems/agent-hub-demo/pull/166) reached the
+published runtime, but the controller failed before any product build:
+[`config.project: unknown field`](https://github.com/kungfu-systems/agent-hub-demo/actions/runs/35495952166/job/106038827318).
+The published controller reads channel/review policy from the protected base
+before reading the PR product plan. At protected base
+`3f5de882b63464d70c50df0fd7ca418f487b794b`, the TOML is still schema 1. The public
+4.1.3 compiler rejects those exact base bytes with the same diagnostic, while
+PR commit `2f4c0f7a208d5bf092122b833cdc7e6b3b931875` compiles as schema 2 with
+three products. This is an admission/bootstrap blocker, not a failed product
+build or proof that the signed release path ran.
+
+The live protected-branch projection also still requires `check / check` and
+`canary / Reconcile exact three-platform evidence`. The generated pair does
+not produce those old contexts. A supported, reviewed migration must establish
+the protected schema 2 policy and qualify its replacement checks without
+removing safeguards or synthesizing success statuses. Changing only PR-head
+TOML or rerunning the same controller cannot establish that trusted baseline.
+This consumer-only PR leaves branch protection and the upstream controller
+unchanged. A local green check is not permission to merge past these blockers.
+
 ## Preserved and deferred functionality
 
 The two Hub implementation, CLI, embedded protocol facts, KFD-1/2/3 gates and
